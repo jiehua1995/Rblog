@@ -48,8 +48,9 @@ po/*~
 # RStudio Connect folder
 rsconnect/
 
+# Quarto
 /.quarto/
+/_site/
 
 # Renv
 renv/
-

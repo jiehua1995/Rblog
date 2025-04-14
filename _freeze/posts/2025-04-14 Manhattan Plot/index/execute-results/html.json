@@ -1,0 +1,17 @@
+{
+  "hash": "eba2e775a2ea2af3b82a68bdb406456b",
+  "result": {
+    "engine": "knitr",
+    "markdown": "---\ntitle: \"Manhattan Plot for GWAS Results\"\nauthor: \"Jie Hua\"\ndate: \"2025-04-14\"\ndate-modified: \"2025-04-14\"\ncategories: [Plot]\n---\n\n\n\n## 参考教程\n\n1.  思问 & StatisticVision. (2025, March 14). *R语言绘图25\\|Nature曼哈顿图复现* \\[微信公众号\\]. R语言绘图25\\|Nature曼哈顿图复现. <https://mp.weixin.qq.com/s/3YlnB3Nm85v3FxE8F67oDw>\n\n## 基本信息\n\n曼哈顿图（Manhattan Plot)是基因组范围内关联研究（GWAS）中常用的可视化工具，用于展示单核苷酸多态性（SNP）与表型之间的关联。它通过在x轴上绘制基因组位置，在y轴上绘制-log10(p-value)来显示每个SNP的显著性水平。\n\n## 曼哈顿图的特点\n\n-   X轴： 基因组的位置，按照染色体编号和物理位置排列，每条染色体用不同的颜色区分\n\n-   Y轴：用-log~10~(p-value)表示SNPs的显著性水平，越高表示显著性水平越高\n\n-   阈值线：图中与X轴平行的一条线，表示不同的显著性水平，分别对应p-value的某些值，比如p\\<5x10^-8^\n\n-   点: 每一个点表示一个SNPs，其高度表示显著性程度\n\n## 相关脚本\n\n通过 @lst-loadpackages 加载了需要用到的的 R 包。\n\n\n\n::: {.cell}\n\n```{#lst-loadpackages .r .cell-code  lst-cap=\"Load required packages\"}\nlibrary(ggplot2)\nlibrary(dplyr)\n```\n:::\n\n\n\n生成模拟数据\n\n\n\n::: {.cell}\n\n```{.r .cell-code}\nset.seed(42)\ndata <- data.frame(\n  SNP=paste0(\"rs\",1:10000),\n  CHR=rep(1:22, length.out=10000),\n  BP=sample(1:1e6, 10000),\n  P=runif(10000)\n)\n```\n:::\n\n::: {.cell}\n::: {.cell-output-display}\n\n\nTable: First 6 rows of the demo data\n\n|SNP | CHR|     BP|         P|\n|:---|---:|------:|---------:|\n|rs1 |   1|  61413| 0.4715924|\n|rs2 |   2|  54425| 0.5765097|\n|rs3 |   3| 623844| 0.2229165|\n|rs4 |   4|  74362| 0.3966966|\n|rs5 |   5|  46208| 0.3641330|\n|rs6 |   6| 964632| 0.6577111|\n\n\n:::\n:::\n\n\n\n计算-log~10~(p-value)\n\n\n\n::: {.cell}\n\n```{.r .cell-code}\ndata <- data %>%\n  mutate(logP = -log10(P))\n```\n:::\n\n::: {.cell}\n::: {.cell-output-display}\n\n\nTable: First 6 rows of the demo data\n\n|SNP | CHR|     BP|         P|      logP|\n|:---|---:|------:|---------:|---------:|\n|rs1 |   1|  61413| 0.4715924| 0.3264332|\n|rs2 |   2|  54425| 0.5765097| 0.2391934|\n|rs3 |   3| 623844| 0.2229165| 0.6518579|\n|rs4 |   4|  74362| 0.3966966| 0.4015415|\n|rs5 |   5|  46208| 0.3641330| 0.4387400|\n|rs6 |   6| 964632| 0.6577111| 0.1819648|\n\n\n:::\n:::\n\n\n\n画图展示相关的数据\n\n\n\n::: {.cell}\n\n```{.r .cell-code}\nggplot(data, aes(x=BP, y=logP, color=as.factor(CHR)))+ \n  geom_point(alpha = 0.6, size = 1)+ \n  facet_grid(. ~ CHR, scales = \"free_x\", space = \"free_x\")+ \n  geom_hline(yintercept = -log10(5e-8), linetype = \"dashed\", color = \"red\")+ \n  labs(title = \"Manhattan Plot\",\n       x = \"Chromosome\",\n       y = \"-log10(p-value)\",\n       color = \"Chromosomes\" ) + \n  theme_minimal() + \n  theme(strip.text.x = element_blank(), \n        panel.spacing.x = unit(0.1, \"lines\"), \n        axis.text.x = element_blank(), \n        legend.position = \"none\")\n```\n\n::: {.cell-output-display}\n![](index_files/figure-html/unnamed-chunk-6-1.png){width=672}\n:::\n:::\n",
+    "supporting": [
+      "index_files"
+    ],
+    "filters": [
+      "rmarkdown/pagebreak.lua"
+    ],
+    "includes": {},
+    "engineDependencies": {},
+    "preserve": {},
+    "postProcess": true
+  }
+}

@@ -8,12 +8,17 @@ website:
       - about.qmd
       - icon: github
         href: https://github.com/jiehua1995
+  twitter-card: true
+  open-graph: true
+
+execute:
+  freeze: auto
 
 format:
   html:
     theme:
-      - cosmo
-      - brand
+      light: flatly
+      dark: darkly
     css: styles.css
 
 editor: visual

@@ -1,0 +1,88 @@
+---
+title: "Manhattan Plot for GWAS Results"
+author: "Jie Hua"
+date: "2025-04-14"
+date-modified: "2025-04-14"
+categories: [Plot]
+---
+
+## 参考教程
+
+1.  思问 & StatisticVision. (2025, March 14). *R语言绘图25\|Nature曼哈顿图复现* \[微信公众号\]. R语言绘图25\|Nature曼哈顿图复现. <https://mp.weixin.qq.com/s/3YlnB3Nm85v3FxE8F67oDw>
+
+## 基本信息
+
+曼哈顿图（Manhattan Plot)是基因组范围内关联研究（GWAS）中常用的可视化工具，用于展示单核苷酸多态性（SNP）与表型之间的关联。它通过在x轴上绘制基因组位置，在y轴上绘制-log10(p-value)来显示每个SNP的显著性水平。
+
+## 曼哈顿图的特点
+
+-   X轴： 基因组的位置，按照染色体编号和物理位置排列，每条染色体用不同的颜色区分
+
+-   Y轴：用-log~10~(p-value)表示SNPs的显著性水平，越高表示显著性水平越高
+
+-   阈值线：图中与X轴平行的一条线，表示不同的显著性水平，分别对应p-value的某些值，比如p\<5x10^-8^
+
+-   点: 每一个点表示一个SNPs，其高度表示显著性程度
+
+## 相关脚本
+
+通过 @lst-loadpackages 加载了需要用到的的 R 包。
+
+```{r}
+#| lst-label: lst-loadpackages
+#| lst-cap: Load required packages
+#| warning: false
+library(ggplot2)
+library(dplyr)
+```
+
+生成模拟数据
+
+```{r}
+set.seed(42)
+data <- data.frame(
+  SNP=paste0("rs",1:10000),
+  CHR=rep(1:22, length.out=10000),
+  BP=sample(1:1e6, 10000),
+  P=runif(10000)
+)
+```
+
+```{r}
+#| echo: false
+#| warning: false
+#| message: false
+knitr::kable(head(data), caption = "First 6 rows of the demo data", format = "pipe")
+```
+
+计算-log~10~(p-value)
+
+```{r}
+data <- data %>%
+  mutate(logP = -log10(P))
+```
+
+```{r}
+#| echo: false
+#| warning: false
+#| message: false
+knitr::kable(head(data), caption = "First 6 rows of the demo data", format = "pipe")
+```
+
+画图展示相关的数据
+
+```{r}
+ggplot(data, aes(x=BP, y=logP, color=as.factor(CHR)))+ 
+  geom_point(alpha = 0.6, size = 1)+ 
+  facet_grid(. ~ CHR, scales = "free_x", space = "free_x")+ 
+  geom_hline(yintercept = -log10(5e-8), linetype = "dashed", color = "red")+ 
+  labs(title = "Manhattan Plot",
+       x = "Chromosome",
+       y = "-log10(p-value)",
+       color = "Chromosomes" ) + 
+  theme_minimal() + 
+  theme(strip.text.x = element_blank(), 
+        panel.spacing.x = unit(0.1, "lines"), 
+        axis.text.x = element_blank(), 
+        legend.position = "none")
+```
