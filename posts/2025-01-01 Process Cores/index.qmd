@@ -1,0 +1,51 @@
+---
+title: "Dynamically adjust the process cores number"
+author: "Jie Hua"
+date: "2025-01-01"
+date-modified: "2025-01-01"
+categories: [Bash]
+engine: knitr
+image: "https://www.researchgate.net/publication/365885884/figure/fig2/AS:11431281104110499@1669950577039/Single-process-left-and-multiple-process-right-parallelization-schemes-for-the_W640.jpg"
+---
+
+## Introduction
+
+In high-performance computing or scripting environments, it's often useful to dynamically adjust the number of threads used based on the time of day.
+
+For example, during working hours, we might want to use fewer threads to avoid overwhelming shared systems, while at night, we can take full advantage of available resources.
+
+This tutorial demonstrates how to use a simple Bash script to determine the current time and set the number of threads accordingly.
+
+## Bash Script
+
+The following script uses the `date` command to get the current hour and then sets the number of threads based on predefined rules:
+
+```{bash}
+#| eval: false
+#| echo: true
+# Get the current hour in 24-hour format (00-23)
+hour=$(date +"%H")
+
+# Set thread number based on the time of day
+if [ "$hour" -ge 0 ] && [ "$hour" -lt 6 ]; then
+    threads=16  # Early morning: high resource usage allowed
+elif [ "$hour" -ge 6 ] && [ "$hour" -lt 12 ]; then
+    threads=8   # Morning: moderate usage
+elif [ "$hour" -ge 12 ] && [ "$hour" -lt 18 ]; then
+    threads=4   # Afternoon: light usage
+else
+    threads=12  # Evening: high usage again
+fi
+
+echo "Current hour: $hour"
+echo "Using $threads threads"
+
+```
+
+## Notes
+You can customize the thresholds and thread values based on your system and policy.
+
+This logic can be easily embedded in SLURM job scripts or any shell-based pipeline.
+
+## Conclusion
+This simple method allows you to be resource-conscious and responsive to different usage patterns throughout the day. It's a lightweight solution that works in any Unix-like environment.

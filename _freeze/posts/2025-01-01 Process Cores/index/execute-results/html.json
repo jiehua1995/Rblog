@@ -1,0 +1,15 @@
+{
+  "hash": "77a7bb1f9358e425f11bcd76dd349405",
+  "result": {
+    "engine": "knitr",
+    "markdown": "---\ntitle: \"Dynamically adjust the process cores number\"\nauthor: \"Jie Hua\"\ndate: \"2025-01-01\"\ndate-modified: \"2025-01-01\"\ncategories: [Bash]\nengine: knitr\nimage: \"https://www.researchgate.net/publication/365885884/figure/fig2/AS:11431281104110499@1669950577039/Single-process-left-and-multiple-process-right-parallelization-schemes-for-the_W640.jpg\"\n---\n\n\n\n## Introduction\n\nIn high-performance computing or scripting environments, it's often useful to dynamically adjust the number of threads used based on the time of day.\n\nFor example, during working hours, we might want to use fewer threads to avoid overwhelming shared systems, while at night, we can take full advantage of available resources.\n\nThis tutorial demonstrates how to use a simple Bash script to determine the current time and set the number of threads accordingly.\n\n## Bash Script\n\nThe following script uses the `date` command to get the current hour and then sets the number of threads based on predefined rules:\n\n\n\n::: {.cell}\n\n```{.bash .cell-code}\n# Get the current hour in 24-hour format (00-23)\nhour=$(date +\"%H\")\n\n# Set thread number based on the time of day\nif [ \"$hour\" -ge 0 ] && [ \"$hour\" -lt 6 ]; then\n    threads=16  # Early morning: high resource usage allowed\nelif [ \"$hour\" -ge 6 ] && [ \"$hour\" -lt 12 ]; then\n    threads=8   # Morning: moderate usage\nelif [ \"$hour\" -ge 12 ] && [ \"$hour\" -lt 18 ]; then\n    threads=4   # Afternoon: light usage\nelse\n    threads=12  # Evening: high usage again\nfi\n\necho \"Current hour: $hour\"\necho \"Using $threads threads\"\n\n```\n:::\n\n\n\n## Notes\nYou can customize the thresholds and thread values based on your system and policy.\n\nThis logic can be easily embedded in SLURM job scripts or any shell-based pipeline.\n\n## Conclusion\nThis simple method allows you to be resource-conscious and responsive to different usage patterns throughout the day. It's a lightweight solution that works in any Unix-like environment.\n",
+    "supporting": [],
+    "filters": [
+      "rmarkdown/pagebreak.lua"
+    ],
+    "includes": {},
+    "engineDependencies": {},
+    "preserve": {},
+    "postProcess": true
+  }
+}
