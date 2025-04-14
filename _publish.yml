@@ -1,0 +1,4 @@
+- source: project
+  netlify:
+    - id: 26b69c00-ac30-4cd3-a153-48bc7a0431bb
+      url: https://bioinfor.jiehua1995.xyz

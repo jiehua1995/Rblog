@@ -3,11 +3,14 @@ project:
 
 website:
   title: "Jie Hua's Bioinformatics Notes"
+  site-url: https://bioinfor.jiehua1995.xyz/
   navbar:
     right:
       - about.qmd
       - icon: github
         href: https://github.com/jiehua1995
+      - icon: rss
+        href: index.xml
   twitter-card: true
   open-graph: true
 
