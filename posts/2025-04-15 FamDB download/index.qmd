@@ -1,0 +1,56 @@
+---
+title: "FamDB database download"
+author: "Jie Hua"
+date: "2025-04-15"
+date-modified: "2025-04-15"
+categories: [Annotation]
+engine: knitr
+image: "https://cdn.bsky.app/img/avatar/plain/did:plc:k52pn3ganzkhpapnu7jufnsl/bafkreiekfrh77ku2ukwhv2ftt65f2y4ajnrr6nvn4vyb2l5ge3d7f5pf4u@jpeg"
+---
+
+```{bash}
+#| eval: false
+#| echo: true
+# 设置 URL 列表
+URLS=(
+"https://www.dfam.org/releases/current/families/FamDB/dfam39_full.0.h5.gz"
+"https://www.dfam.org/releases/current/families/FamDB/dfam39_full.0.h5.gz.md5"
+"https://www.dfam.org/releases/current/families/FamDB/dfam39_full.1.h5.gz"
+"https://www.dfam.org/releases/current/families/FamDB/dfam39_full.1.h5.gz.md5"
+"https://www.dfam.org/releases/current/families/FamDB/dfam39_full.7.h5.gz"
+"https://www.dfam.org/releases/current/families/FamDB/dfam39_full.7.h5.gz.md5"
+)
+
+# 使用 aria2c 多线程下载
+for url in "${URLS[@]}"; do
+    echo "Downloading $url ..."
+    aria2c -x 16 -s 16 -k 1M "$url"
+done
+# 校验 MD5
+for file in *.gz; do
+    echo "Checking MD5 for $file ..."
+    md5file="${file}.md5"
+    if [ -f "$md5file" ]; then
+        # 格式转换为标准 md5sum 可读格式
+        hash=$(cut -d ' ' -f 1 "$md5file")
+        echo "$hash  $file" > check.md5
+        md5sum -c check.md5
+        if [ $? -ne 0 ]; then
+            echo "❌ MD5 check failed for $file"
+            exit 1
+        else
+            echo "✅ MD5 check passed for $file"
+        fi
+        rm check.md5
+    else
+        echo "⚠️ Warning: MD5 file not found for $file"
+    fi
+done
+# 解压缩
+for file in *.gz; do
+    echo "Unzipping $file ..."
+    gunzip -k "$file"
+done
+echo "✅ All files downloaded, verified, and unzipped successfully."
+
+```

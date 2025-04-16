@@ -1,0 +1,61 @@
+---
+title: "Git Push every repo in a folder"
+author: "Jie Hua"
+date: "2025-04-15"
+date-modified: "2025-04-15"
+categories: [Bash]
+engine: knitr
+image: "https://miro.medium.com/v2/resize:fit:1100/1*CWFkh5z8oa6dZfn5_gkKKQ.jpeg"
+---
+
+## Introduction
+
+When working with multiple Git repositories inside a single parent folder, it can be tedious to `git pull` or `git push` each one individually. This guide shows you how to automate these tasks using simple shell scripts.
+
+## Prerequisites
+
+-   A Unix-like shell (Linux/macOS or Git Bash on Windows)
+-   Git installed and configured
+-   All subdirectories must be Git repositories (i.e., each one has a `.git` folder)
+
+## Step 1: Batch `git pull` for All Repositories
+
+Create a shell script named `pull_all.sh`:
+
+```{bash}
+#| eval: false
+#| echo: true
+# Loop through all subdirectories
+for dir in */; do
+  if [ -d "$dir/.git" ]; then
+    echo "Pulling in $dir"
+    cd "$dir"
+    git pull
+    cd ..
+  fi
+done
+```
+
+## Step 2: Batch `git push` for All Repositories
+
+Similarly, create a script called push_all.sh:
+
+```{bash}
+#| eval: false
+#| echo: true
+# Loop through all subdirectories
+for dir in */; do
+  if [ -d "$dir/.git" ]; then
+    echo "Pushing in $dir"
+    cd "$dir"
+    git add .
+    git commit -m "Auto commit"
+    git push
+    cd ..
+  fi
+done
+```
+
+## Conclusion
+
+With just a few lines of scripting, you can easily manage multiple Git repositories at once. This method helps save time and reduces manual errors when updating multiple projects.
