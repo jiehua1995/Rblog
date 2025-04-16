@@ -1,0 +1,15 @@
+{
+  "hash": "8ccb24c7712e8b9632778f22e8f3588c",
+  "result": {
+    "engine": "knitr",
+    "markdown": "---\ntitle: \"FamDB database download\"\nauthor: \"Jie Hua\"\ndate: \"2025-04-15\"\ndate-modified: \"2025-04-15\"\ncategories: [Annotation]\nengine: knitr\nimage: \"https://cdn.bsky.app/img/avatar/plain/did:plc:k52pn3ganzkhpapnu7jufnsl/bafkreiekfrh77ku2ukwhv2ftt65f2y4ajnrr6nvn4vyb2l5ge3d7f5pf4u@jpeg\"\n---\n\n::: {.cell}\n\n```{.bash .cell-code}\n# 设置 URL 列表\nURLS=(\n\"https://www.dfam.org/releases/current/families/FamDB/dfam39_full.0.h5.gz\"\n\"https://www.dfam.org/releases/current/families/FamDB/dfam39_full.0.h5.gz.md5\"\n\"https://www.dfam.org/releases/current/families/FamDB/dfam39_full.1.h5.gz\"\n\"https://www.dfam.org/releases/current/families/FamDB/dfam39_full.1.h5.gz.md5\"\n\"https://www.dfam.org/releases/current/families/FamDB/dfam39_full.7.h5.gz\"\n\"https://www.dfam.org/releases/current/families/FamDB/dfam39_full.7.h5.gz.md5\"\n)\n\n# 使用 aria2c 多线程下载\nfor url in \"${URLS[@]}\"; do\n    echo \"Downloading $url ...\"\n    aria2c -x 16 -s 16 -k 1M \"$url\"\ndone\n# 校验 MD5\nfor file in *.gz; do\n    echo \"Checking MD5 for $file ...\"\n    md5file=\"${file}.md5\"\n    if [ -f \"$md5file\" ]; then\n        # 格式转换为标准 md5sum 可读格式\n        hash=$(cut -d ' ' -f 1 \"$md5file\")\n        echo \"$hash  $file\" > check.md5\n        md5sum -c check.md5\n        if [ $? -ne 0 ]; then\n            echo \"❌ MD5 check failed for $file\"\n            exit 1\n        else\n            echo \"✅ MD5 check passed for $file\"\n        fi\n        rm check.md5\n    else\n        echo \"⚠️ Warning: MD5 file not found for $file\"\n    fi\ndone\n# 解压缩\nfor file in *.gz; do\n    echo \"Unzipping $file ...\"\n    gunzip -k \"$file\"\ndone\necho \"✅ All files downloaded, verified, and unzipped successfully.\"\n\n```\n:::",
+    "supporting": [],
+    "filters": [
+      "rmarkdown/pagebreak.lua"
+    ],
+    "includes": {},
+    "engineDependencies": {},
+    "preserve": {},
+    "postProcess": true
+  }
+}

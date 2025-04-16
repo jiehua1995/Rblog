@@ -1,45 +1,17 @@
 [
   {
-    "objectID": "posts/2025-04-15 Folder Git Push/index.html",
-    "href": "posts/2025-04-15 Folder Git Push/index.html",
-    "title": "Git Push every repo in a folder",
+    "objectID": "posts/2025-04-16 Cartoonize protein structure/index.html",
+    "href": "posts/2025-04-16 Cartoonize protein structure/index.html",
+    "title": "Illustrate: Non-photorealistic Biomolecular Illustration",
     "section": "",
-    "text": "When working with multiple Git repositories inside a single parent folder, it can be tedious to git pull or git push each one individually. This guide shows you how to automate these tasks using simple shell scripts."
+    "text": "Illustrate is a small Fortran program for creating non-photorealistic illustrations of molecules, with cartoony colors and outlines, and soft ambient shadows. I originally developed it during postdoctoral training in the laboratory of Arthur J. Olson at the Scripps Research Institute, and have tinkered with it ever since. I have used it to create materials for my books and for PDB-101, the outreach portal of the RCSB Protein Data Bank, most notably, for the “Molecule of the Month.”\n\nOfficial website: https://ccsb.scripps.edu/illustrate/\nPublication: Goodsell, D. S., Autin, L., & Olson, A. J. (2019). Illustrate: Software for Biomolecular Illustration. Structure (London, England : 1993), 27(11), 1716–1720.e1. https://doi.org/10.1016/j.str.2019.08.011"
   },
   {
-    "objectID": "posts/2025-04-15 Folder Git Push/index.html#introduction",
-    "href": "posts/2025-04-15 Folder Git Push/index.html#introduction",
-    "title": "Git Push every repo in a folder",
+    "objectID": "posts/2025-04-15 FamDB download/index.html",
+    "href": "posts/2025-04-15 FamDB download/index.html",
+    "title": "FamDB database download",
     "section": "",
-    "text": "When working with multiple Git repositories inside a single parent folder, it can be tedious to git pull or git push each one individually. This guide shows you how to automate these tasks using simple shell scripts."
-  },
-  {
-    "objectID": "posts/2025-04-15 Folder Git Push/index.html#prerequisites",
-    "href": "posts/2025-04-15 Folder Git Push/index.html#prerequisites",
-    "title": "Git Push every repo in a folder",
-    "section": "Prerequisites",
-    "text": "Prerequisites\n\nA Unix-like shell (Linux/macOS or Git Bash on Windows)\nGit installed and configured\nAll subdirectories must be Git repositories (i.e., each one has a .git folder)"
-  },
-  {
-    "objectID": "posts/2025-04-15 Folder Git Push/index.html#step-1-batch-git-pull-for-all-repositories",
-    "href": "posts/2025-04-15 Folder Git Push/index.html#step-1-batch-git-pull-for-all-repositories",
-    "title": "Git Push every repo in a folder",
-    "section": "Step 1: Batch git pull for All Repositories",
-    "text": "Step 1: Batch git pull for All Repositories\nCreate a shell script named pull_all.sh:\n\n# Loop through all subdirectories\nfor dir in */; do\n  if [ -d \"$dir/.git\" ]; then\n    echo \"Pulling in $dir\"\n    cd \"$dir\"\n    git pull\n    cd ..\n  fi\ndone"
-  },
-  {
-    "objectID": "posts/2025-04-15 Folder Git Push/index.html#step-2-batch-git-push-for-all-repositories",
-    "href": "posts/2025-04-15 Folder Git Push/index.html#step-2-batch-git-push-for-all-repositories",
-    "title": "Git Push every repo in a folder",
-    "section": "Step 2: Batch git push for All Repositories",
-    "text": "Step 2: Batch git push for All Repositories\nSimilarly, create a script called push_all.sh:\n\n# Loop through all subdirectories\nfor dir in */; do\n  if [ -d \"$dir/.git\" ]; then\n    echo \"Pushing in $dir\"\n    cd \"$dir\"\n    git add .\n    git commit -m \"Auto commit\"\n    git push\n    cd ..\n  fi\ndone"
-  },
-  {
-    "objectID": "posts/2025-04-15 Folder Git Push/index.html#conclusion",
-    "href": "posts/2025-04-15 Folder Git Push/index.html#conclusion",
-    "title": "Git Push every repo in a folder",
-    "section": "Conclusion",
-    "text": "Conclusion\nWith just a few lines of scripting, you can easily manage multiple Git repositories at once. This method helps save time and reduces manual errors when updating multiple projects."
+    "text": "# 设置 URL 列表\nURLS=(\n\"https://www.dfam.org/releases/current/families/FamDB/dfam39_full.0.h5.gz\"\n\"https://www.dfam.org/releases/current/families/FamDB/dfam39_full.0.h5.gz.md5\"\n\"https://www.dfam.org/releases/current/families/FamDB/dfam39_full.1.h5.gz\"\n\"https://www.dfam.org/releases/current/families/FamDB/dfam39_full.1.h5.gz.md5\"\n\"https://www.dfam.org/releases/current/families/FamDB/dfam39_full.7.h5.gz\"\n\"https://www.dfam.org/releases/current/families/FamDB/dfam39_full.7.h5.gz.md5\"\n)\n\n# 使用 aria2c 多线程下载\nfor url in \"${URLS[@]}\"; do\n    echo \"Downloading $url ...\"\n    aria2c -x 16 -s 16 -k 1M \"$url\"\ndone\n# 校验 MD5\nfor file in *.gz; do\n    echo \"Checking MD5 for $file ...\"\n    md5file=\"${file}.md5\"\n    if [ -f \"$md5file\" ]; then\n        # 格式转换为标准 md5sum 可读格式\n        hash=$(cut -d ' ' -f 1 \"$md5file\")\n        echo \"$hash  $file\" &gt; check.md5\n        md5sum -c check.md5\n        if [ $? -ne 0 ]; then\n            echo \"❌ MD5 check failed for $file\"\n            exit 1\n        else\n            echo \"✅ MD5 check passed for $file\"\n        fi\n        rm check.md5\n    else\n        echo \"⚠️ Warning: MD5 file not found for $file\"\n    fi\ndone\n# 解压缩\nfor file in *.gz; do\n    echo \"Unzipping $file ...\"\n    gunzip -k \"$file\"\ndone\necho \"✅ All files downloaded, verified, and unzipped successfully.\""
   },
   {
     "objectID": "posts/2025-01-01 Process Cores/index.html",
@@ -88,7 +60,7 @@
     "href": "index.html",
     "title": "Home",
     "section": "",
-    "text": "Order By\n       Default\n         \n          Title\n        \n         \n          Date - Oldest\n        \n         \n          Date - Newest\n        \n         \n          Author\n        \n     \n  \n    \n      \n      \n    \n\n\n\n\n\n\n\n\n\n\nGit Push every repo in a folder\n\n\n\nBash\n\n\n\n\n\n\n\nJie Hua\n\n\nApr 15, 2025\n\n\n\n\n\n\n\n\n\n\n\n\nManhattan Plot for GWAS Results\n\n\n\nPlot\n\n\n\n\n\n\n\nJie Hua\n\n\nApr 14, 2025\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nDynamically adjust the process cores number\n\n\n\nBash\n\n\n\n\n\n\n\nJie Hua\n\n\nJan 1, 2025\n\n\n\n\n\n\n\n\nNo matching items"
+    "text": "Order By\n       Default\n         \n          Title\n        \n         \n          Date - Oldest\n        \n         \n          Date - Newest\n        \n         \n          Author\n        \n     \n  \n    \n      \n      \n    \n\n\n\n\n\n\n\n\n\n\nIllustrate: Non-photorealistic Biomolecular Illustration\n\n\n\nStructure\n\n\n\n\n\n\n\nJie Hua\n\n\nApr 16, 2025\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nFamDB database download\n\n\n\nAnnotation\n\n\n\n\n\n\n\nJie Hua\n\n\nApr 15, 2025\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nGit Push every repo in a folder\n\n\n\nBash\n\n\n\n\n\n\n\nJie Hua\n\n\nApr 15, 2025\n\n\n\n\n\n\n\n\n\n\n\n\nManhattan Plot for GWAS Results\n\n\n\nPlot\n\n\n\n\n\n\n\nJie Hua\n\n\nApr 14, 2025\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nDynamically adjust the process cores number\n\n\n\nBash\n\n\n\n\n\n\n\nJie Hua\n\n\nJan 1, 2025\n\n\n\n\n\n\n\n\nNo matching items"
   },
   {
     "objectID": "posts/2025-04-14 Manhattan Plot/index.html",
@@ -124,5 +96,47 @@
     "title": "Manhattan Plot for GWAS Results",
     "section": "相关脚本",
     "text": "相关脚本\n通过 Listing 1 加载了需要用到的的 R 包。\n\n\n\n\nListing 1: Load required packages\n\n\nlibrary(ggplot2)\nlibrary(dplyr)\n\n\n\n\n生成模拟数据\n\nset.seed(42)\ndata &lt;- data.frame(\n  SNP=paste0(\"rs\",1:10000),\n  CHR=rep(1:22, length.out=10000),\n  BP=sample(1:1e6, 10000),\n  P=runif(10000)\n)\n\n\n\n\nFirst 6 rows of the demo data\n\n\nSNP\nCHR\nBP\nP\n\n\n\n\nrs1\n1\n61413\n0.4715924\n\n\nrs2\n2\n54425\n0.5765097\n\n\nrs3\n3\n623844\n0.2229165\n\n\nrs4\n4\n74362\n0.3966966\n\n\nrs5\n5\n46208\n0.3641330\n\n\nrs6\n6\n964632\n0.6577111\n\n\n\n\n\n计算-log10(p-value)\n\ndata &lt;- data %&gt;%\n  mutate(logP = -log10(P))\n\n\n\n\nFirst 6 rows of the demo data\n\n\nSNP\nCHR\nBP\nP\nlogP\n\n\n\n\nrs1\n1\n61413\n0.4715924\n0.3264332\n\n\nrs2\n2\n54425\n0.5765097\n0.2391934\n\n\nrs3\n3\n623844\n0.2229165\n0.6518579\n\n\nrs4\n4\n74362\n0.3966966\n0.4015415\n\n\nrs5\n5\n46208\n0.3641330\n0.4387400\n\n\nrs6\n6\n964632\n0.6577111\n0.1819648\n\n\n\n\n\n画图展示相关的数据\n\nggplot(data, aes(x=BP, y=logP, color=as.factor(CHR)))+ \n  geom_point(alpha = 0.6, size = 1)+ \n  facet_grid(. ~ CHR, scales = \"free_x\", space = \"free_x\")+ \n  geom_hline(yintercept = -log10(5e-8), linetype = \"dashed\", color = \"red\")+ \n  labs(title = \"Manhattan Plot\",\n       x = \"Chromosome\",\n       y = \"-log10(p-value)\",\n       color = \"Chromosomes\" ) + \n  theme_minimal() + \n  theme(strip.text.x = element_blank(), \n        panel.spacing.x = unit(0.1, \"lines\"), \n        axis.text.x = element_blank(), \n        legend.position = \"none\")"
+  },
+  {
+    "objectID": "posts/2025-04-15 Folder Git Push/index.html",
+    "href": "posts/2025-04-15 Folder Git Push/index.html",
+    "title": "Git Push every repo in a folder",
+    "section": "",
+    "text": "When working with multiple Git repositories inside a single parent folder, it can be tedious to git pull or git push each one individually. This guide shows you how to automate these tasks using simple shell scripts."
+  },
+  {
+    "objectID": "posts/2025-04-15 Folder Git Push/index.html#introduction",
+    "href": "posts/2025-04-15 Folder Git Push/index.html#introduction",
+    "title": "Git Push every repo in a folder",
+    "section": "",
+    "text": "When working with multiple Git repositories inside a single parent folder, it can be tedious to git pull or git push each one individually. This guide shows you how to automate these tasks using simple shell scripts."
+  },
+  {
+    "objectID": "posts/2025-04-15 Folder Git Push/index.html#prerequisites",
+    "href": "posts/2025-04-15 Folder Git Push/index.html#prerequisites",
+    "title": "Git Push every repo in a folder",
+    "section": "Prerequisites",
+    "text": "Prerequisites\n\nA Unix-like shell (Linux/macOS or Git Bash on Windows)\nGit installed and configured\nAll subdirectories must be Git repositories (i.e., each one has a .git folder)"
+  },
+  {
+    "objectID": "posts/2025-04-15 Folder Git Push/index.html#step-1-batch-git-pull-for-all-repositories",
+    "href": "posts/2025-04-15 Folder Git Push/index.html#step-1-batch-git-pull-for-all-repositories",
+    "title": "Git Push every repo in a folder",
+    "section": "Step 1: Batch git pull for All Repositories",
+    "text": "Step 1: Batch git pull for All Repositories\nCreate a shell script named pull_all.sh:\n\n# Loop through all subdirectories\nfor dir in */; do\n  if [ -d \"$dir/.git\" ]; then\n    echo \"Pulling in $dir\"\n    cd \"$dir\"\n    git pull\n    cd ..\n  fi\ndone"
+  },
+  {
+    "objectID": "posts/2025-04-15 Folder Git Push/index.html#step-2-batch-git-push-for-all-repositories",
+    "href": "posts/2025-04-15 Folder Git Push/index.html#step-2-batch-git-push-for-all-repositories",
+    "title": "Git Push every repo in a folder",
+    "section": "Step 2: Batch git push for All Repositories",
+    "text": "Step 2: Batch git push for All Repositories\nSimilarly, create a script called push_all.sh:\n\n# Loop through all subdirectories\nfor dir in */; do\n  if [ -d \"$dir/.git\" ]; then\n    echo \"Pushing in $dir\"\n    cd \"$dir\"\n    git add .\n    git commit -m \"Auto commit\"\n    git push\n    cd ..\n  fi\ndone"
+  },
+  {
+    "objectID": "posts/2025-04-15 Folder Git Push/index.html#conclusion",
+    "href": "posts/2025-04-15 Folder Git Push/index.html#conclusion",
+    "title": "Git Push every repo in a folder",
+    "section": "Conclusion",
+    "text": "Conclusion\nWith just a few lines of scripting, you can easily manage multiple Git repositories at once. This method helps save time and reduces manual errors when updating multiple projects."
   }
 ]

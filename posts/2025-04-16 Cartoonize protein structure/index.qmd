@@ -1,0 +1,15 @@
+---
+title: "Illustrate: Non-photorealistic Biomolecular Illustration"
+author: "Jie Hua"
+date: "2025-04-16"
+date-modified: "2025-04-16"
+categories: [Structure]
+engine: knitr
+image: "https://ccsb.scripps.edu/illustrate/wp-content/uploads/sites/35/2019/04/1ttt-400x630.jpg"
+---
+
+> **Illustrate** is a small Fortran program for creating non-photorealistic illustrations of molecules, with cartoony colors and outlines, and soft ambient shadows. I originally developed it during postdoctoral training in the laboratory of Arthur J. Olson at the Scripps Research Institute, and have tinkered with it ever since. I have used it to create materials for my [books](https://ccsb.scripps.edu/goodsell/publication/) and for [PDB-101](http://pdb101.rcsb.org/), the outreach portal of the RCSB Protein Data Bank, most notably, for the [“Molecule of the Month.”](http://pdb101.rcsb.org/motm/motm-about)
+
+**Official website:** https://ccsb.scripps.edu/illustrate/
+
+**Publication:** Goodsell, D. S., Autin, L., & Olson, A. J. (2019). Illustrate: Software for Biomolecular Illustration. Structure (London, England : 1993), 27(11), 1716–1720.e1. https://doi.org/10.1016/j.str.2019.08.011
