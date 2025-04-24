@@ -1,0 +1,15 @@
+{
+  "hash": "df078276d43d2aa17549f169c06d1649",
+  "result": {
+    "engine": "knitr",
+    "markdown": "---\ntitle: \"gfatools for GFA (graphical fragment assembly) files\"\nauthor: \"Jie Hua\"\ndate: \"2025-04-23\"\ndate-modified: \"2025-04-23\"\ncategories: [Assembly]\nengine: knitr\nimage: \"gfa.png\"\n---\n\n\n\n\n## Basic Information\n\nGFA (Graphical Fragment Assembly) format is used for sequence assembly graphs. It was proposed by Prof. Dr. Heng Li in 2014. Here is his proposal: <https://lh3.github.io/2014/07/19/a-proposal-of-the-grapical-fragment-assembly-format>.\n\nHe updated this format in past 10 years to make it better. Here is his description about rGFA format: <http://www.liheng.org/downloads/rGFA-GAF.pdf>. Another one is <https://github.com/lh3/gfatools/blob/master/doc/rGFA.md>.\n\nShortly, GFA format is like SAM format, which is also developed by him. (I really like his work, that helped the academia a lot).\n\n> GFA is a simple TAB-dellimited text format consisting of 12 mandatory fields to represent reads aligned to a reference pan-genome graph: • Col 1–4: query name, length, start and end positions. • Col 5: the query strand relative to the mapping path in col 6. • Col 6: a stable graph path in the format matching the regular expression /(\\[\\>\\<\\]\\[\\^\\\\s\\>\\<\\]+:\\\\d+- \\\\d+)+\\|(\\[\\^\\\\s\\>\\<\\]+)/. The less or greater sign indicates the orientation of the segment. If a path consists of a single segment, coordinates can be omitted and its orientation is assumed to be forward “\\>”. • Col 7–9: total path length, start and end mapping positions on the forward strand of the path. • Col 10–12: number of matching bases, alignment block length and mapping quality\n>\n> Each line may have tags as in the SAM format. CIGARs are stored in tags\n\nSince the GFA format is so similar to SAM and PAF formats. I could use the R script that I wrote before to read and check those files. It may be better to use `rust`. I still need time to learn it.\n\n## Installation\n\n\n\n\n::: {.cell}\n\n```{.bash .cell-code}\ngit clone https://github.com/lh3/gfatools\ncd gfatools\nmake\nsudo cp gfatools /usr/local/bin/gfatools\n```\n:::\n\n\n\n\n## Usage\n\n\n\n\n::: {.cell}\n\n```{.bash .cell-code}\nUsage: gfatools <command> <arguments>\nCommands:\n  view        read a GFA file\n  stat        statistics about a GFA file\n  gfa2fa      convert GFA to FASTA\n  gfa2bed     convert rGFA to BED (requiring rGFA)\n  blacklist   blacklist regions\n  bubble      print bubble-like regions (EXPERIMENTAL)\n  asm         miniasm-like graph transformation\n  sql         export rGFA to SQLite (requiring rGFA)\n  ed          GWFA prefix alignment (for evaluation only)\n  version     print version number\n```\n:::\n\n\n\n\nThe most recent commit is <https://github.com/lh3/gfatools/commit/c31be8a62efc6bdea4576029f7fbe84f345a6eed>.\n",
+    "supporting": [],
+    "filters": [
+      "rmarkdown/pagebreak.lua"
+    ],
+    "includes": {},
+    "engineDependencies": {},
+    "preserve": {},
+    "postProcess": true
+  }
+}

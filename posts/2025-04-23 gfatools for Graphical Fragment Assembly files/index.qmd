@@ -1,0 +1,55 @@
+---
+title: "gfatools for GFA (graphical fragment assembly) files"
+author: "Jie Hua"
+date: "2025-04-23"
+date-modified: "2025-04-23"
+categories: [Assembly]
+engine: knitr
+image: "gfa.png"
+---
+
+## Basic Information
+
+GFA (Graphical Fragment Assembly) format is used for sequence assembly graphs. It was proposed by Prof. Dr. Heng Li in 2014. Here is his proposal: <https://lh3.github.io/2014/07/19/a-proposal-of-the-grapical-fragment-assembly-format>.
+
+He updated this format in past 10 years to make it better. Here is his description about rGFA format: <http://www.liheng.org/downloads/rGFA-GAF.pdf>. Another one is <https://github.com/lh3/gfatools/blob/master/doc/rGFA.md>.
+
+Shortly, GFA format is like SAM format, which is also developed by him. (I really like his work, that helped the academia a lot).
+
+> GFA is a simple TAB-dellimited text format consisting of 12 mandatory fields to represent reads aligned to a reference pan-genome graph: • Col 1–4: query name, length, start and end positions. • Col 5: the query strand relative to the mapping path in col 6. • Col 6: a stable graph path in the format matching the regular expression /(\[\>\<\]\[\^\\s\>\<\]+:\\d+- \\d+)+\|(\[\^\\s\>\<\]+)/. The less or greater sign indicates the orientation of the segment. If a path consists of a single segment, coordinates can be omitted and its orientation is assumed to be forward “\>”. • Col 7–9: total path length, start and end mapping positions on the forward strand of the path. • Col 10–12: number of matching bases, alignment block length and mapping quality
+>
+> Each line may have tags as in the SAM format. CIGARs are stored in tags
+
+Since the GFA format is so similar to SAM and PAF formats. I could use the R script that I wrote before to read and check those files. It may be better to use `rust`. I still need time to learn it.
+
+## Installation
+
+```{bash}
+#| eval: false
+#| echo: true
+git clone https://github.com/lh3/gfatools
+cd gfatools
+make
+sudo cp gfatools /usr/local/bin/gfatools
+```
+
+## Usage
+
+```{bash}
+#| eval: false
+#| echo: true
+Usage: gfatools <command> <arguments>
+Commands:
+  view        read a GFA file
+  stat        statistics about a GFA file
+  gfa2fa      convert GFA to FASTA
+  gfa2bed     convert rGFA to BED (requiring rGFA)
+  blacklist   blacklist regions
+  bubble      print bubble-like regions (EXPERIMENTAL)
+  asm         miniasm-like graph transformation
+  sql         export rGFA to SQLite (requiring rGFA)
+  ed          GWFA prefix alignment (for evaluation only)
+  version     print version number
+```
+
+The most recent commit is <https://github.com/lh3/gfatools/commit/c31be8a62efc6bdea4576029f7fbe84f345a6eed>.
