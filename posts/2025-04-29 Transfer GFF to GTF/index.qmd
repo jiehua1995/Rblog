@@ -1,0 +1,129 @@
+---
+title: "Transfer GFF to GTF file"
+author: "Jie Hua"
+date: "2025-04-29"
+date-modified: "2025-04-29"
+categories: [Annotation]
+engine: knitr
+image: "gff_teaser.webp"
+---
+
+## Basic Information
+
+> GFF3 (Generic Feature Format Version 3) file format represents the genomic features in a simple text-based tab-delimited file
+>
+> GFF3 file has nine fields (seqid, source, feature, start, end, score, strand, phase, and attributes)
+>
+> The lines which starts with ‘##’ provides the meta-information of the file and ‘#’ represents the human-readable comments
+
+We sometimes need to transfer GFF3 to GTF format.
+
+I used [gffread](https://github.com/gpertea/gffread) before. It generally works well, but it has some problem when I need to deal with a GFF3 file downloaded from NCBI.
+
+This file has some lines like:
+
+``` txt
+chrxxx	Gnomon	exon	46964	46999	.	-	.	ID=id-LOC123327042;Parent=gene-LOC123327042;Dbxref=GeneID:123327042;gbkey=exon;gene=LOC123327042;model_evidence=Supporting evidence includes similarity to: 1 Protein%2C and 74%25 coverage of the annotated genomic feature by RNAseq alignments;pseudo=true
+chrxxx	Gnomon	exon	47054	47468	.	-	.	ID=id-LOC123327042-2;Parent=gene-LOC123327042;Dbxref=GeneID:123327042;gbkey=exon;gene=LOC123327042;model_evidence=Supporting evidence includes similarity to: 1 Protein%2C and 74%25 coverage of the annotated genomic feature by RNAseq alignments;pseudo=true
+chrxxx	Gnomon	exon	47542	47661	.	-	.	ID=id-LOC123327042-3;Parent=gene-LOC123327042;Dbxref=GeneID:123327042;gbkey=exon;gene=LOC123327042;model_evidence=Supporting evidence includes similarity to: 1 Protein%2C and 74%25 coverage of the annotated genomic feature by RNAseq alignments;pseudo=true
+```
+
+When I used [gffread](https://github.com/gpertea/gffread), it can not read there lines containing "ID=id\*", it will lose the **gene_id** attribute in the output GTF file.
+
+I realized that I need to write a script by myself.
+
+## Script
+
+``` python
+import sys
+import uuid
+import re
+
+def parse_gff_attributes(attributes_str):
+    """Parse GFF attributes into a dictionary."""
+    attributes = {}
+    for attr in attributes_str.split(';'):
+        if attr:
+            key_value = attr.split('=', 1)
+            if len(key_value) == 2:
+                key, value = key_value
+                attributes[key] = value
+    return attributes
+
+def convert_gff_to_gtf(gff_file, gtf_file):
+    """Convert GFF3 to GTF format, retaining ID, gene_id, and transcript_id."""
+    with open(gff_file, 'r') as gff, open(gtf_file, 'w') as gtf:
+        for line in gff:
+            if line.startswith('#'):
+                gtf.write(line)
+                continue
+            
+            fields = line.strip().split('\t')
+            if len(fields) != 9:
+                continue
+                
+            seqid, source, feature, start, end, score, strand, phase, attributes_str = fields
+            attributes = parse_gff_attributes(attributes_str)
+            
+            # Skip features that are not relevant for GTF (e.g., region)
+            if feature not in ['gene', 'mRNA', 'exon', 'CDS', 'lnc_RNA', 'pseudogene']:
+                continue
+                
+            # Determine feature type for GTF
+            gtf_feature = feature
+            if feature == 'mRNA' or feature == 'lnc_RNA':
+                gtf_feature = 'transcript'
+            
+            # Extract required attributes
+            gene_id = attributes.get('gene', '')
+            transcript_id = attributes.get('transcript_id', '')
+            feature_id = attributes.get('ID', '')
+            
+            # Build GTF attributes string
+            gtf_attributes = []
+            if feature == 'gene':
+                gtf_attributes.append(f'gene_id "{gene_id}"')
+                if 'Name' in attributes:
+                    gtf_attributes.append(f'gene_name "{attributes["Name"]}"')
+            elif feature in ['mRNA', 'lnc_RNA', 'exon', 'CDS']:
+                gtf_attributes.append(f'gene_id "{gene_id}"')
+                gtf_attributes.append(f'transcript_id "{transcript_id}"')
+                if 'Name' in attributes and feature in ['mRNA', 'lnc_RNA']:
+                    gtf_attributes.append(f'gene_name "{attributes["Name"]}"')
+                if feature == 'exon':
+                    gtf_attributes.append(f'exon_id "{feature_id}"')
+            elif feature == 'pseudogene':
+                gtf_attributes.append(f'gene_id "{gene_id}"')
+                if 'Name' in attributes:
+                    gtf_attributes.append(f'gene_name "{attributes["Name"]}"')
+            
+            # Write GTF line
+            gtf_fields = [seqid, source, gtf_feature, start, end, score, strand, phase, '; '.join(gtf_attributes)]
+            gtf.write('\t'.join(gtf_fields) + '\n')
+
+if __name__ == '__main__':
+    if len(sys.argv) != 3:
+        print("Usage: python gff_to_gtf.py input.gff output.gtf")
+        sys.exit(1)
+    
+    gff_file = sys.argv[1]
+    gtf_file = sys.argv[2]
+    convert_gff_to_gtf(gff_file, gtf_file)
+    print(f"Conversion complete. GTF file written to {gtf_file}")
+```
+
+## Usage
+
+It is very easy to use this script, just save it as *gff2gtf.py* and then run like
+
+``` bash
+python gff2gtf.py input.gff output.gtf
+```
+
+The result looks like
+
+``` txt
+chrxxx      Gnomon  exon    46964   46999   .       -       .       gene_id "LOC123327042"; transcript_id ""; exon_id "id-LOC123327042"
+chrxxx      Gnomon  exon    47054   47468   .       -       .       gene_id "LOC123327042"; transcript_id ""; exon_id "id-LOC123327042-2"
+chrxxx       Gnomon  exon    47542   47661   .       -       .       gene_id "LOC123327042"; transcript_id ""; exon_id "id-LOC123327042-3"
+```
