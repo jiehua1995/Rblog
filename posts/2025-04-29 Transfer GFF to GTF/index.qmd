@@ -23,9 +23,9 @@ I used [gffread](https://github.com/gpertea/gffread) before. It generally works 
 This file has some lines like:
 
 ``` txt
-chrxxx	Gnomon	exon	46964	46999	.	-	.	ID=id-LOC123327042;Parent=gene-LOC123327042;Dbxref=GeneID:123327042;gbkey=exon;gene=LOC123327042;model_evidence=Supporting evidence includes similarity to: 1 Protein%2C and 74%25 coverage of the annotated genomic feature by RNAseq alignments;pseudo=true
-chrxxx	Gnomon	exon	47054	47468	.	-	.	ID=id-LOC123327042-2;Parent=gene-LOC123327042;Dbxref=GeneID:123327042;gbkey=exon;gene=LOC123327042;model_evidence=Supporting evidence includes similarity to: 1 Protein%2C and 74%25 coverage of the annotated genomic feature by RNAseq alignments;pseudo=true
-chrxxx	Gnomon	exon	47542	47661	.	-	.	ID=id-LOC123327042-3;Parent=gene-LOC123327042;Dbxref=GeneID:123327042;gbkey=exon;gene=LOC123327042;model_evidence=Supporting evidence includes similarity to: 1 Protein%2C and 74%25 coverage of the annotated genomic feature by RNAseq alignments;pseudo=true
+chrxxx  Gnomon  exon    46964   46999   .   -   .   ID=id-LOC123327042;Parent=gene-LOC123327042;Dbxref=GeneID:123327042;gbkey=exon;gene=LOC123327042;model_evidence=Supporting evidence includes similarity to: 1 Protein%2C and 74%25 coverage of the annotated genomic feature by RNAseq alignments;pseudo=true
+chrxxx  Gnomon  exon    47054   47468   .   -   .   ID=id-LOC123327042-2;Parent=gene-LOC123327042;Dbxref=GeneID:123327042;gbkey=exon;gene=LOC123327042;model_evidence=Supporting evidence includes similarity to: 1 Protein%2C and 74%25 coverage of the annotated genomic feature by RNAseq alignments;pseudo=true
+chrxxx  Gnomon  exon    47542   47661   .   -   .   ID=id-LOC123327042-3;Parent=gene-LOC123327042;Dbxref=GeneID:123327042;gbkey=exon;gene=LOC123327042;model_evidence=Supporting evidence includes similarity to: 1 Protein%2C and 74%25 coverage of the annotated genomic feature by RNAseq alignments;pseudo=true
 ```
 
 When I used [gffread](https://github.com/gpertea/gffread), it can not read there lines containing "ID=id\*", it will lose the **gene_id** attribute in the output GTF file.

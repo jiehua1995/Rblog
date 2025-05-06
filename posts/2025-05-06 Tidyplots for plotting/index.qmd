@@ -1,0 +1,118 @@
+---
+title: "tidyplots for R plotting"
+author: "Jie Hua"
+date: "2025-05-06"
+date-modified: "2025-05-06"
+categories: [Plot]
+img: "tidyplots.svg"
+---
+
+## Basic Information
+
+I noticed a new R package called "tidyplots" produced by Jan Broder Engler. This package could generate publication ready plots with simple commands, which largely simplified the R plotting process.
+
+The manual: https://jbengler.github.io/tidyplots/
+
+I had a try and it works very well. I hope there will be more useful functions.
+
+It is based on ggplot2 system, it is also very easy to add more features as we want.
+
+## Installation
+
+```{r}
+#| warning: false
+#| eval: false
+pak::pkg_install("tidyplots")
+```
+
+The development version could be installed with
+
+```{r}
+#| eval: false
+pak::pkg_install("jbengler/tidyplots")
+```
+
+## Plotting
+
+```{r}
+library(tidyplots)
+```
+
+### Barplot
+
+```{r}
+#| echo: false
+#| warning: false
+#| message: false
+knitr::kable(head(study), caption = "First 6 rows of the demo dataframe 'study' ", format = "pipe")
+```
+
+```{r}
+#| fig.cap: "Barplot"
+#| dpi: 300
+#| fig.width: 4
+#| fig.height: 4
+#| fig.align: center
+#| dev: svg
+study |> 
+  tidyplot(x = treatment, y = score, color = treatment) |> 
+  add_data_points() |> 
+  add_mean_bar(alpha = 0.4) |> 
+  add_sem_errorbar() |> 
+  adjust_colors(new_colors = colors_discrete_seaside)
+```
+
+### Barstack plot
+
+```{r}
+#| dpi: 300
+#| fig.width: 4
+#| fig.height: 4
+energy |> 
+  tidyplot(x = year, y = energy, color = energy_source) |> 
+  add_barstack_absolute()
+```
+
+It provided many useful types of plotting function, it is better to go to its official website to learn how to use this package.
+
+### Other example
+
+```{r}
+#| dpi: 300
+#| fig.width: 4
+#| fig.height: 4
+energy |> 
+  dplyr::filter(year %in% c(2005, 2010, 2015, 2020)) |> 
+  tidyplot(y = energy, color = energy_source) |> 
+  add_donut() |> 
+  adjust_size(width = 25, height = 25) |>
+  split_plot(by = year)
+```
+
+```{r}
+#| dpi: 300
+#| fig.width: 4
+#| fig.height: 4
+library(tidyverse)
+#library(tidyplots)
+
+df <- 
+  read_csv("https://tidyplots.org/data/correlation-matrix.csv")
+
+df |> 
+  tidyplot(x = x, y = y, color = correlation) |> 
+  add_heatmap() |> 
+  sort_x_axis_labels(order_x) |> 
+  sort_y_axis_labels(order_y) |> 
+  remove_x_axis() |> 
+  remove_y_axis() |> 
+  remove_legend_title() |> 
+  adjust_legend_position("right") |> 
+  adjust_colors(colors_continuous_inferno) |> 
+  adjust_theme_details(legend.key.height = unit(1, "null")) |> 
+  add_caption("Data source: Spellman PT, et al. 1998. Mol Biol Cell 9(12): 3273-97.")
+```
+
+If tidyplots could directly read .mcool or .hic files, it will be very helpful.
+
+I guess it is what he plans to do, we can use other R packages to read the contact matrix files into a dataframe to have a try, but it will take more efforts.
