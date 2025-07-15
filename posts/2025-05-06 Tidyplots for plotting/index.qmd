@@ -93,6 +93,8 @@ energy |>
 #| dpi: 300
 #| fig.width: 4
 #| fig.height: 4
+#| warning: false
+#| message: false
 library(tidyverse)
 #library(tidyplots)
 

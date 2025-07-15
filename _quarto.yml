@@ -4,6 +4,8 @@ project:
 website:
   title: "Jie Hua's Bioinformatics Notes"
   site-url: https://bioinfor.jiehua1995.xyz/
+  reader-mode: true
+  sidebar: false
   navbar:
     right:
       - about.qmd
@@ -14,7 +16,13 @@ website:
         href: index.xml
   twitter-card: true
   open-graph: true
-
+  bread-crumbs: true
+  page-footer:
+    border: false
+    left: "Copyright © 2025, Jie Hua"
+    right:
+      - icon: globe
+        href: https://jiehua1995.xyz
 execute:
   freeze: auto
 
