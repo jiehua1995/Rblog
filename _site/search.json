@@ -1,5 +1,257 @@
 [
   {
+    "objectID": "posts/2025-08-25 plotthis for R plotting/index.html",
+    "href": "posts/2025-08-25 plotthis for R plotting/index.html",
+    "title": "plotthis for R plotting",
+    "section": "",
+    "text": "I noticed a new R package called “plotthis” produced byundefined. This package could generate publication ready plots with simple commands, which largely simplified the R plotting process.\nThe manual: https://jbengler.github.io/tidyplots/\nIt is based on ggplot2 system, it is also very easy to add more features as we want."
+  },
+  {
+    "objectID": "posts/2025-08-25 plotthis for R plotting/index.html#basic-information",
+    "href": "posts/2025-08-25 plotthis for R plotting/index.html#basic-information",
+    "title": "plotthis for R plotting",
+    "section": "",
+    "text": "I noticed a new R package called “plotthis” produced byundefined. This package could generate publication ready plots with simple commands, which largely simplified the R plotting process.\nThe manual: https://jbengler.github.io/tidyplots/\nIt is based on ggplot2 system, it is also very easy to add more features as we want."
+  },
+  {
+    "objectID": "posts/2025-08-25 plotthis for R plotting/index.html#installation",
+    "href": "posts/2025-08-25 plotthis for R plotting/index.html#installation",
+    "title": "plotthis for R plotting",
+    "section": "Installation",
+    "text": "Installation\n\npak::pkg_install(\"plotthis\")\n\nThe development version could be installed with\n\npak::pkg_install(\"pwwang/plotthis\")"
+  },
+  {
+    "objectID": "posts/2025-08-25 plotthis for R plotting/index.html#plotting-demo",
+    "href": "posts/2025-08-25 plotthis for R plotting/index.html#plotting-demo",
+    "title": "plotthis for R plotting",
+    "section": "Plotting Demo",
+    "text": "Plotting Demo\n\nlibrary(plotthis)\n\n\nClustree Plot\n\n\n\nFirst 6 rows of the demo dataframe\n\n\np.0.4\np.0.5\np.0.6\np.0.7\np.0.8\np.0.9\np.1\nsplit\n\n\n\n\nB\nA\nF\nG\nG\nJ\nZ\n2\n\n\nD\nE\nA\nH\nA\nD\nI\n1\n\n\nC\nF\nG\nG\nC\nH\nNA\n2\n\n\nA\nC\nB\nB\nC\nE\nL\n1\n\n\nA\nE\nA\nE\nH\nH\nB\n1\n\n\nA\nE\nB\nB\nB\nE\nT\n2\n\n\n\n\n\n\nClustreePlot(data, prefix = \"p\")\n\nRegistered S3 method overwritten by 'gglogger':\n  method from   \n  +.gg   ggplot2\n\n\n\n\n\nClustreePlot\n\n\n\n\nI just realized that you might set the height and width of plots carefully, as this package dose not fit the size of your screen automatically, it is a small shortage.\nI like the ChordPlot and VennDiagrm it could generate.\n\n\n\n\n\n\nThis package maybe helpful for beginners or people without much knowledge of ggplot2."
+  },
+  {
+    "objectID": "posts/2025-05-06 Tidyplots for plotting/index.html",
+    "href": "posts/2025-05-06 Tidyplots for plotting/index.html",
+    "title": "tidyplots for R plotting",
+    "section": "",
+    "text": "I noticed a new R package called “tidyplots” produced by Jan Broder Engler. This package could generate publication ready plots with simple commands, which largely simplified the R plotting process.\nThe manual: https://jbengler.github.io/tidyplots/\nI had a try and it works very well. I hope there will be more useful functions.\nIt is based on ggplot2 system, it is also very easy to add more features as we want."
+  },
+  {
+    "objectID": "posts/2025-05-06 Tidyplots for plotting/index.html#basic-information",
+    "href": "posts/2025-05-06 Tidyplots for plotting/index.html#basic-information",
+    "title": "tidyplots for R plotting",
+    "section": "",
+    "text": "I noticed a new R package called “tidyplots” produced by Jan Broder Engler. This package could generate publication ready plots with simple commands, which largely simplified the R plotting process.\nThe manual: https://jbengler.github.io/tidyplots/\nI had a try and it works very well. I hope there will be more useful functions.\nIt is based on ggplot2 system, it is also very easy to add more features as we want."
+  },
+  {
+    "objectID": "posts/2025-05-06 Tidyplots for plotting/index.html#installation",
+    "href": "posts/2025-05-06 Tidyplots for plotting/index.html#installation",
+    "title": "tidyplots for R plotting",
+    "section": "Installation",
+    "text": "Installation\n\npak::pkg_install(\"tidyplots\")\n\nThe development version could be installed with\n\npak::pkg_install(\"jbengler/tidyplots\")"
+  },
+  {
+    "objectID": "posts/2025-05-06 Tidyplots for plotting/index.html#plotting",
+    "href": "posts/2025-05-06 Tidyplots for plotting/index.html#plotting",
+    "title": "tidyplots for R plotting",
+    "section": "Plotting",
+    "text": "Plotting\n\nlibrary(tidyplots)\n\n\nBarplot\n\n\n\nFirst 6 rows of the demo dataframe ‘study’\n\n\ntreatment\ngroup\ndose\nparticipant\nage\nsex\nscore\n\n\n\n\nA\nplacebo\nhigh\np01\n23\nfemale\n2\n\n\nA\nplacebo\nhigh\np02\n45\nmale\n4\n\n\nA\nplacebo\nhigh\np03\n32\nfemale\n5\n\n\nA\nplacebo\nhigh\np04\n37\nmale\n4\n\n\nA\nplacebo\nhigh\np05\n24\nfemale\n6\n\n\nB\nplacebo\nlow\np06\n23\nfemale\n9\n\n\n\n\n\n\nstudy |&gt; \n  tidyplot(x = treatment, y = score, color = treatment) |&gt; \n  add_data_points() |&gt; \n  add_mean_bar(alpha = 0.4) |&gt; \n  add_sem_errorbar() |&gt; \n  adjust_colors(new_colors = colors_discrete_seaside)\n\n\n\n\nBarplot\n\n\n\n\n\n\nBarstack plot\n\nenergy |&gt; \n  tidyplot(x = year, y = energy, color = energy_source) |&gt; \n  add_barstack_absolute()\n\n\n\n\n\n\n\n\nIt provided many useful types of plotting function, it is better to go to its official website to learn how to use this package.\n\n\nOther example\n\nenergy |&gt; \n  dplyr::filter(year %in% c(2005, 2010, 2015, 2020)) |&gt; \n  tidyplot(y = energy, color = energy_source) |&gt; \n  add_donut() |&gt; \n  adjust_size(width = 25, height = 25) |&gt;\n  split_plot(by = year)\n\n✔ split_plot: split into 4 plots across 1 page\n\n\n\n\n\n\n\n\n\n\nlibrary(tidyverse)\n\nWarning: package 'tibble' was built under R version 4.4.2\n\n\nWarning: package 'tidyr' was built under R version 4.4.2\n\n\nWarning: package 'readr' was built under R version 4.4.2\n\n\nWarning: package 'dplyr' was built under R version 4.4.2\n\n\nWarning: package 'stringr' was built under R version 4.4.2\n\n\nWarning: package 'forcats' was built under R version 4.4.2\n\n\n── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──\n✔ dplyr     1.1.4     ✔ readr     2.1.5\n✔ forcats   1.0.0     ✔ stringr   1.5.1\n✔ ggplot2   3.5.2     ✔ tibble    3.2.1\n✔ lubridate 1.9.4     ✔ tidyr     1.3.1\n✔ purrr     1.0.4     \n── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──\n✖ dplyr::filter() masks stats::filter()\n✖ dplyr::lag()    masks stats::lag()\nℹ Use the conflicted package (&lt;http://conflicted.r-lib.org/&gt;) to force all conflicts to become errors\n\n#library(tidyplots)\n\ndf &lt;- \n  read_csv(\"https://tidyplots.org/data/correlation-matrix.csv\")\n\nRows: 202500 Columns: 5\n── Column specification ────────────────────────────────────────────────────────\nDelimiter: \",\"\nchr (2): x, y\ndbl (3): correlation, order_x, order_y\n\nℹ Use `spec()` to retrieve the full column specification for this data.\nℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.\n\ndf |&gt; \n  tidyplot(x = x, y = y, color = correlation) |&gt; \n  add_heatmap() |&gt; \n  sort_x_axis_labels(order_x) |&gt; \n  sort_y_axis_labels(order_y) |&gt; \n  remove_x_axis() |&gt; \n  remove_y_axis() |&gt; \n  remove_legend_title() |&gt; \n  adjust_legend_position(\"right\") |&gt; \n  adjust_colors(colors_continuous_inferno) |&gt; \n  adjust_theme_details(legend.key.height = unit(1, \"null\")) |&gt; \n  add_caption(\"Data source: Spellman PT, et al. 1998. Mol Biol Cell 9(12): 3273-97.\")\n\n\n\n\n\n\n\n\nIf tidyplots could directly read .mcool or .hic files, it will be very helpful.\nI guess it is what he plans to do, we can use other R packages to read the contact matrix files into a dataframe to have a try, but it will take more efforts."
+  },
+  {
+    "objectID": "posts/2025-04-23 gfatools for Graphical Fragment Assembly files/index.html",
+    "href": "posts/2025-04-23 gfatools for Graphical Fragment Assembly files/index.html",
+    "title": "gfatools for GFA (graphical fragment assembly) files",
+    "section": "",
+    "text": "GFA (Graphical Fragment Assembly) format is used for sequence assembly graphs. It was proposed by Prof. Dr. Heng Li in 2014. Here is his proposal: https://lh3.github.io/2014/07/19/a-proposal-of-the-grapical-fragment-assembly-format.\nHe updated this format in past 10 years to make it better. Here is his description about rGFA format: http://www.liheng.org/downloads/rGFA-GAF.pdf. Another one is https://github.com/lh3/gfatools/blob/master/doc/rGFA.md.\nShortly, GFA format is like SAM format, which is also developed by him. (I really like his work, that helped the academia a lot).\n\nGFA is a simple TAB-dellimited text format consisting of 12 mandatory fields to represent reads aligned to a reference pan-genome graph: • Col 1–4: query name, length, start and end positions. • Col 5: the query strand relative to the mapping path in col 6. • Col 6: a stable graph path in the format matching the regular expression /([&gt;&lt;][^\\s&gt;&lt;]+:\\d+- \\d+)+|([^\\s&gt;&lt;]+)/. The less or greater sign indicates the orientation of the segment. If a path consists of a single segment, coordinates can be omitted and its orientation is assumed to be forward “&gt;”. • Col 7–9: total path length, start and end mapping positions on the forward strand of the path. • Col 10–12: number of matching bases, alignment block length and mapping quality\nEach line may have tags as in the SAM format. CIGARs are stored in tags\n\nSince the GFA format is so similar to SAM and PAF formats. I could use the R script that I wrote before to read and check those files. It may be better to use rust. I still need time to learn it."
+  },
+  {
+    "objectID": "posts/2025-04-23 gfatools for Graphical Fragment Assembly files/index.html#basic-information",
+    "href": "posts/2025-04-23 gfatools for Graphical Fragment Assembly files/index.html#basic-information",
+    "title": "gfatools for GFA (graphical fragment assembly) files",
+    "section": "",
+    "text": "GFA (Graphical Fragment Assembly) format is used for sequence assembly graphs. It was proposed by Prof. Dr. Heng Li in 2014. Here is his proposal: https://lh3.github.io/2014/07/19/a-proposal-of-the-grapical-fragment-assembly-format.\nHe updated this format in past 10 years to make it better. Here is his description about rGFA format: http://www.liheng.org/downloads/rGFA-GAF.pdf. Another one is https://github.com/lh3/gfatools/blob/master/doc/rGFA.md.\nShortly, GFA format is like SAM format, which is also developed by him. (I really like his work, that helped the academia a lot).\n\nGFA is a simple TAB-dellimited text format consisting of 12 mandatory fields to represent reads aligned to a reference pan-genome graph: • Col 1–4: query name, length, start and end positions. • Col 5: the query strand relative to the mapping path in col 6. • Col 6: a stable graph path in the format matching the regular expression /([&gt;&lt;][^\\s&gt;&lt;]+:\\d+- \\d+)+|([^\\s&gt;&lt;]+)/. The less or greater sign indicates the orientation of the segment. If a path consists of a single segment, coordinates can be omitted and its orientation is assumed to be forward “&gt;”. • Col 7–9: total path length, start and end mapping positions on the forward strand of the path. • Col 10–12: number of matching bases, alignment block length and mapping quality\nEach line may have tags as in the SAM format. CIGARs are stored in tags\n\nSince the GFA format is so similar to SAM and PAF formats. I could use the R script that I wrote before to read and check those files. It may be better to use rust. I still need time to learn it."
+  },
+  {
+    "objectID": "posts/2025-04-23 gfatools for Graphical Fragment Assembly files/index.html#installation",
+    "href": "posts/2025-04-23 gfatools for Graphical Fragment Assembly files/index.html#installation",
+    "title": "gfatools for GFA (graphical fragment assembly) files",
+    "section": "Installation",
+    "text": "Installation\n\ngit clone https://github.com/lh3/gfatools\ncd gfatools\nmake\nsudo cp gfatools /usr/local/bin/gfatools"
+  },
+  {
+    "objectID": "posts/2025-04-23 gfatools for Graphical Fragment Assembly files/index.html#usage",
+    "href": "posts/2025-04-23 gfatools for Graphical Fragment Assembly files/index.html#usage",
+    "title": "gfatools for GFA (graphical fragment assembly) files",
+    "section": "Usage",
+    "text": "Usage\n\nUsage: gfatools &lt;command&gt; &lt;arguments&gt;\nCommands:\n  view        read a GFA file\n  stat        statistics about a GFA file\n  gfa2fa      convert GFA to FASTA\n  gfa2bed     convert rGFA to BED (requiring rGFA)\n  blacklist   blacklist regions\n  bubble      print bubble-like regions (EXPERIMENTAL)\n  asm         miniasm-like graph transformation\n  sql         export rGFA to SQLite (requiring rGFA)\n  ed          GWFA prefix alignment (for evaluation only)\n  version     print version number\n\nThe most recent commit is https://github.com/lh3/gfatools/commit/c31be8a62efc6bdea4576029f7fbe84f345a6eed."
+  },
+  {
+    "objectID": "posts/2025-04-15 Folder Git Push/index.html",
+    "href": "posts/2025-04-15 Folder Git Push/index.html",
+    "title": "Git Push every repo in a folder",
+    "section": "",
+    "text": "When working with multiple Git repositories inside a single parent folder, it can be tedious to git pull or git push each one individually. This guide shows you how to automate these tasks using simple shell scripts."
+  },
+  {
+    "objectID": "posts/2025-04-15 Folder Git Push/index.html#introduction",
+    "href": "posts/2025-04-15 Folder Git Push/index.html#introduction",
+    "title": "Git Push every repo in a folder",
+    "section": "",
+    "text": "When working with multiple Git repositories inside a single parent folder, it can be tedious to git pull or git push each one individually. This guide shows you how to automate these tasks using simple shell scripts."
+  },
+  {
+    "objectID": "posts/2025-04-15 Folder Git Push/index.html#prerequisites",
+    "href": "posts/2025-04-15 Folder Git Push/index.html#prerequisites",
+    "title": "Git Push every repo in a folder",
+    "section": "Prerequisites",
+    "text": "Prerequisites\n\nA Unix-like shell (Linux/macOS or Git Bash on Windows)\nGit installed and configured\nAll subdirectories must be Git repositories (i.e., each one has a .git folder)"
+  },
+  {
+    "objectID": "posts/2025-04-15 Folder Git Push/index.html#step-1-batch-git-pull-for-all-repositories",
+    "href": "posts/2025-04-15 Folder Git Push/index.html#step-1-batch-git-pull-for-all-repositories",
+    "title": "Git Push every repo in a folder",
+    "section": "Step 1: Batch git pull for All Repositories",
+    "text": "Step 1: Batch git pull for All Repositories\nCreate a shell script named pull_all.sh:\n\n# Loop through all subdirectories\nfor dir in */; do\n  if [ -d \"$dir/.git\" ]; then\n    echo \"Pulling in $dir\"\n    cd \"$dir\"\n    git pull\n    cd ..\n  fi\ndone"
+  },
+  {
+    "objectID": "posts/2025-04-15 Folder Git Push/index.html#step-2-batch-git-push-for-all-repositories",
+    "href": "posts/2025-04-15 Folder Git Push/index.html#step-2-batch-git-push-for-all-repositories",
+    "title": "Git Push every repo in a folder",
+    "section": "Step 2: Batch git push for All Repositories",
+    "text": "Step 2: Batch git push for All Repositories\nSimilarly, create a script called push_all.sh:\n\n# Loop through all subdirectories\nfor dir in */; do\n  if [ -d \"$dir/.git\" ]; then\n    echo \"Pushing in $dir\"\n    cd \"$dir\"\n    git add .\n    git commit -m \"Auto commit\"\n    git push\n    cd ..\n  fi\ndone"
+  },
+  {
+    "objectID": "posts/2025-04-15 Folder Git Push/index.html#conclusion",
+    "href": "posts/2025-04-15 Folder Git Push/index.html#conclusion",
+    "title": "Git Push every repo in a folder",
+    "section": "Conclusion",
+    "text": "Conclusion\nWith just a few lines of scripting, you can easily manage multiple Git repositories at once. This method helps save time and reduces manual errors when updating multiple projects."
+  },
+  {
+    "objectID": "posts/2025-04-14 Manhattan Plot/index.html",
+    "href": "posts/2025-04-14 Manhattan Plot/index.html",
+    "title": "Manhattan Plot for GWAS Results",
+    "section": "",
+    "text": "思问 & StatisticVision. (2025, March 14). R语言绘图25|Nature曼哈顿图复现 [微信公众号]. R语言绘图25|Nature曼哈顿图复现. https://mp.weixin.qq.com/s/3YlnB3Nm85v3FxE8F67oDw"
+  },
+  {
+    "objectID": "posts/2025-04-14 Manhattan Plot/index.html#参考教程",
+    "href": "posts/2025-04-14 Manhattan Plot/index.html#参考教程",
+    "title": "Manhattan Plot for GWAS Results",
+    "section": "",
+    "text": "思问 & StatisticVision. (2025, March 14). R语言绘图25|Nature曼哈顿图复现 [微信公众号]. R语言绘图25|Nature曼哈顿图复现. https://mp.weixin.qq.com/s/3YlnB3Nm85v3FxE8F67oDw"
+  },
+  {
+    "objectID": "posts/2025-04-14 Manhattan Plot/index.html#基本信息",
+    "href": "posts/2025-04-14 Manhattan Plot/index.html#基本信息",
+    "title": "Manhattan Plot for GWAS Results",
+    "section": "基本信息",
+    "text": "基本信息\n曼哈顿图（Manhattan Plot)是基因组范围内关联研究（GWAS）中常用的可视化工具，用于展示单核苷酸多态性（SNP）与表型之间的关联。它通过在x轴上绘制基因组位置，在y轴上绘制-log10(p-value)来显示每个SNP的显著性水平。"
+  },
+  {
+    "objectID": "posts/2025-04-14 Manhattan Plot/index.html#曼哈顿图的特点",
+    "href": "posts/2025-04-14 Manhattan Plot/index.html#曼哈顿图的特点",
+    "title": "Manhattan Plot for GWAS Results",
+    "section": "曼哈顿图的特点",
+    "text": "曼哈顿图的特点\n\nX轴： 基因组的位置，按照染色体编号和物理位置排列，每条染色体用不同的颜色区分\nY轴：用-log10(p-value)表示SNPs的显著性水平，越高表示显著性水平越高\n阈值线：图中与X轴平行的一条线，表示不同的显著性水平，分别对应p-value的某些值，比如p&lt;5x10-8\n点: 每一个点表示一个SNPs，其高度表示显著性程度"
+  },
+  {
+    "objectID": "posts/2025-04-14 Manhattan Plot/index.html#相关脚本",
+    "href": "posts/2025-04-14 Manhattan Plot/index.html#相关脚本",
+    "title": "Manhattan Plot for GWAS Results",
+    "section": "相关脚本",
+    "text": "相关脚本\n通过 Listing 1 加载了需要用到的的 R 包。\n\n\n\n\nListing 1: Load required packages\n\n\nlibrary(ggplot2)\nlibrary(dplyr)\n\n\n\n\n生成模拟数据\n\nset.seed(42)\ndata &lt;- data.frame(\n  SNP=paste0(\"rs\",1:10000),\n  CHR=rep(1:22, length.out=10000),\n  BP=sample(1:1e6, 10000),\n  P=runif(10000)\n)\n\n\n\n\nFirst 6 rows of the demo data\n\n\nSNP\nCHR\nBP\nP\n\n\n\n\nrs1\n1\n61413\n0.4715924\n\n\nrs2\n2\n54425\n0.5765097\n\n\nrs3\n3\n623844\n0.2229165\n\n\nrs4\n4\n74362\n0.3966966\n\n\nrs5\n5\n46208\n0.3641330\n\n\nrs6\n6\n964632\n0.6577111\n\n\n\n\n\n计算-log10(p-value)\n\ndata &lt;- data %&gt;%\n  mutate(logP = -log10(P))\n\n\n\n\nFirst 6 rows of the demo data\n\n\nSNP\nCHR\nBP\nP\nlogP\n\n\n\n\nrs1\n1\n61413\n0.4715924\n0.3264332\n\n\nrs2\n2\n54425\n0.5765097\n0.2391934\n\n\nrs3\n3\n623844\n0.2229165\n0.6518579\n\n\nrs4\n4\n74362\n0.3966966\n0.4015415\n\n\nrs5\n5\n46208\n0.3641330\n0.4387400\n\n\nrs6\n6\n964632\n0.6577111\n0.1819648\n\n\n\n\n\n画图展示相关的数据\n\nggplot(data, aes(x=BP, y=logP, color=as.factor(CHR)))+ \n  geom_point(alpha = 0.6, size = 1)+ \n  facet_grid(. ~ CHR, scales = \"free_x\", space = \"free_x\")+ \n  geom_hline(yintercept = -log10(5e-8), linetype = \"dashed\", color = \"red\")+ \n  labs(title = \"Manhattan Plot\",\n       x = \"Chromosome\",\n       y = \"-log10(p-value)\",\n       color = \"Chromosomes\" ) + \n  theme_minimal() + \n  theme(strip.text.x = element_blank(), \n        panel.spacing.x = unit(0.1, \"lines\"), \n        axis.text.x = element_blank(), \n        legend.position = \"none\")"
+  },
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "Home",
+    "section": "",
+    "text": "Order By\n       Default\n         \n          Title\n        \n         \n          Date - Oldest\n        \n         \n          Date - Newest\n        \n         \n          Author\n        \n     \n  \n    \n      \n      \n    \n\n\n\n\n\n\n\n\nplotthis for R plotting\n\n\n\nPlot\n\n\n\n\n\n\n\nJie Hua\n\n\nAug 25, 2025\n\n\n\n\n\n\n\n\n\n\n\n\nggtree for phylogenetic trees\n\n\n\nPlot\n\n\n\n\n\n\n\nJie Hua\n\n\nJun 24, 2025\n\n\n\n\n\n\n\n\n\n\n\n\ntidyplots for R plotting\n\n\n\nPlot\n\n\n\n\n\n\n\nJie Hua\n\n\nMay 6, 2025\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nTransfer GFF to GTF file\n\n\n\nAnnotation\n\n\n\n\n\n\n\nJie Hua\n\n\nApr 29, 2025\n\n\n\n\n\n\n\n\n\n\n\n\n\n\ngfatools for GFA (graphical fragment assembly) files\n\n\n\nAssembly\n\n\n\n\n\n\n\nJie Hua\n\n\nApr 23, 2025\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nIllustrate: Non-photorealistic Biomolecular Illustration\n\n\n\nStructure\n\n\n\n\n\n\n\nJie Hua\n\n\nApr 16, 2025\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nFamDB database download\n\n\n\nAnnotation\n\n\n\n\n\n\n\nJie Hua\n\n\nApr 15, 2025\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nGit Push every repo in a folder\n\n\n\nBash\n\n\n\n\n\n\n\nJie Hua\n\n\nApr 15, 2025\n\n\n\n\n\n\n\n\n\n\n\n\nManhattan Plot for GWAS Results\n\n\n\nPlot\n\n\n\n\n\n\n\nJie Hua\n\n\nApr 14, 2025\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nDynamically adjust the process cores number\n\n\n\nBash\n\n\n\n\n\n\n\nJie Hua\n\n\nJan 1, 2025\n\n\n\n\n\n\n\n\nNo matching items"
+  },
+  {
+    "objectID": "about.html",
+    "href": "about.html",
+    "title": "About",
+    "section": "",
+    "text": "I am now a doctoral student in Biomedical center, LMU."
+  },
+  {
+    "objectID": "posts/2025-01-01 Process Cores/index.html",
+    "href": "posts/2025-01-01 Process Cores/index.html",
+    "title": "Dynamically adjust the process cores number",
+    "section": "",
+    "text": "In high-performance computing or scripting environments, it’s often useful to dynamically adjust the number of threads used based on the time of day.\nFor example, during working hours, we might want to use fewer threads to avoid overwhelming shared systems, while at night, we can take full advantage of available resources.\nThis tutorial demonstrates how to use a simple Bash script to determine the current time and set the number of threads accordingly."
+  },
+  {
+    "objectID": "posts/2025-01-01 Process Cores/index.html#introduction",
+    "href": "posts/2025-01-01 Process Cores/index.html#introduction",
+    "title": "Dynamically adjust the process cores number",
+    "section": "",
+    "text": "In high-performance computing or scripting environments, it’s often useful to dynamically adjust the number of threads used based on the time of day.\nFor example, during working hours, we might want to use fewer threads to avoid overwhelming shared systems, while at night, we can take full advantage of available resources.\nThis tutorial demonstrates how to use a simple Bash script to determine the current time and set the number of threads accordingly."
+  },
+  {
+    "objectID": "posts/2025-01-01 Process Cores/index.html#bash-script",
+    "href": "posts/2025-01-01 Process Cores/index.html#bash-script",
+    "title": "Dynamically adjust the process cores number",
+    "section": "Bash Script",
+    "text": "Bash Script\nThe following script uses the date command to get the current hour and then sets the number of threads based on predefined rules:\n\n# Get the current hour in 24-hour format (00-23)\nhour=$(date +\"%H\")\n\n# Set thread number based on the time of day\nif [ \"$hour\" -ge 0 ] && [ \"$hour\" -lt 6 ]; then\n    threads=16  # Early morning: high resource usage allowed\nelif [ \"$hour\" -ge 6 ] && [ \"$hour\" -lt 12 ]; then\n    threads=8   # Morning: moderate usage\nelif [ \"$hour\" -ge 12 ] && [ \"$hour\" -lt 18 ]; then\n    threads=4   # Afternoon: light usage\nelse\n    threads=12  # Evening: high usage again\nfi\n\necho \"Current hour: $hour\"\necho \"Using $threads threads\""
+  },
+  {
+    "objectID": "posts/2025-01-01 Process Cores/index.html#notes",
+    "href": "posts/2025-01-01 Process Cores/index.html#notes",
+    "title": "Dynamically adjust the process cores number",
+    "section": "Notes",
+    "text": "Notes\nYou can customize the thresholds and thread values based on your system and policy.\nThis logic can be easily embedded in SLURM job scripts or any shell-based pipeline."
+  },
+  {
+    "objectID": "posts/2025-01-01 Process Cores/index.html#conclusion",
+    "href": "posts/2025-01-01 Process Cores/index.html#conclusion",
+    "title": "Dynamically adjust the process cores number",
+    "section": "Conclusion",
+    "text": "Conclusion\nThis simple method allows you to be resource-conscious and responsive to different usage patterns throughout the day. It’s a lightweight solution that works in any Unix-like environment."
+  },
+  {
+    "objectID": "posts/2025-04-15 FamDB download/index.html",
+    "href": "posts/2025-04-15 FamDB download/index.html",
+    "title": "FamDB database download",
+    "section": "",
+    "text": "# 设置 URL 列表\nURLS=(\n\"https://www.dfam.org/releases/current/families/FamDB/dfam39_full.0.h5.gz\"\n\"https://www.dfam.org/releases/current/families/FamDB/dfam39_full.0.h5.gz.md5\"\n\"https://www.dfam.org/releases/current/families/FamDB/dfam39_full.1.h5.gz\"\n\"https://www.dfam.org/releases/current/families/FamDB/dfam39_full.1.h5.gz.md5\"\n\"https://www.dfam.org/releases/current/families/FamDB/dfam39_full.7.h5.gz\"\n\"https://www.dfam.org/releases/current/families/FamDB/dfam39_full.7.h5.gz.md5\"\n)\n\n# 使用 aria2c 多线程下载\nfor url in \"${URLS[@]}\"; do\n    echo \"Downloading $url ...\"\n    aria2c -x 16 -s 16 -k 1M \"$url\"\ndone\n# 校验 MD5\nfor file in *.gz; do\n    echo \"Checking MD5 for $file ...\"\n    md5file=\"${file}.md5\"\n    if [ -f \"$md5file\" ]; then\n        # 格式转换为标准 md5sum 可读格式\n        hash=$(cut -d ' ' -f 1 \"$md5file\")\n        echo \"$hash  $file\" &gt; check.md5\n        md5sum -c check.md5\n        if [ $? -ne 0 ]; then\n            echo \"❌ MD5 check failed for $file\"\n            exit 1\n        else\n            echo \"✅ MD5 check passed for $file\"\n        fi\n        rm check.md5\n    else\n        echo \"⚠️ Warning: MD5 file not found for $file\"\n    fi\ndone\n# 解压缩\nfor file in *.gz; do\n    echo \"Unzipping $file ...\"\n    gunzip -k \"$file\"\ndone\necho \"✅ All files downloaded, verified, and unzipped successfully.\""
+  },
+  {
+    "objectID": "posts/2025-04-16 Cartoonize protein structure/index.html",
+    "href": "posts/2025-04-16 Cartoonize protein structure/index.html",
+    "title": "Illustrate: Non-photorealistic Biomolecular Illustration",
+    "section": "",
+    "text": "Illustrate is a small Fortran program for creating non-photorealistic illustrations of molecules, with cartoony colors and outlines, and soft ambient shadows. I originally developed it during postdoctoral training in the laboratory of Arthur J. Olson at the Scripps Research Institute, and have tinkered with it ever since. I have used it to create materials for my books and for PDB-101, the outreach portal of the RCSB Protein Data Bank, most notably, for the “Molecule of the Month.”\n\nOfficial website: https://ccsb.scripps.edu/illustrate/\nPublication: Goodsell, D. S., Autin, L., & Olson, A. J. (2019). Illustrate: Software for Biomolecular Illustration. Structure (London, England : 1993), 27(11), 1716–1720.e1. https://doi.org/10.1016/j.str.2019.08.011"
+  },
+  {
+    "objectID": "posts/2025-04-29 Transfer GFF to GTF/index.html",
+    "href": "posts/2025-04-29 Transfer GFF to GTF/index.html",
+    "title": "Transfer GFF to GTF file",
+    "section": "",
+    "text": "GFF3 (Generic Feature Format Version 3) file format represents the genomic features in a simple text-based tab-delimited file\nGFF3 file has nine fields (seqid, source, feature, start, end, score, strand, phase, and attributes)\nThe lines which starts with ‘##’ provides the meta-information of the file and ‘#’ represents the human-readable comments\n\nWe sometimes need to transfer GFF3 to GTF format.\nI used gffread before. It generally works well, but it has some problem when I need to deal with a GFF3 file downloaded from NCBI.\nThis file has some lines like:\nchrxxx  Gnomon  exon    46964   46999   .   -   .   ID=id-LOC123327042;Parent=gene-LOC123327042;Dbxref=GeneID:123327042;gbkey=exon;gene=LOC123327042;model_evidence=Supporting evidence includes similarity to: 1 Protein%2C and 74%25 coverage of the annotated genomic feature by RNAseq alignments;pseudo=true\nchrxxx  Gnomon  exon    47054   47468   .   -   .   ID=id-LOC123327042-2;Parent=gene-LOC123327042;Dbxref=GeneID:123327042;gbkey=exon;gene=LOC123327042;model_evidence=Supporting evidence includes similarity to: 1 Protein%2C and 74%25 coverage of the annotated genomic feature by RNAseq alignments;pseudo=true\nchrxxx  Gnomon  exon    47542   47661   .   -   .   ID=id-LOC123327042-3;Parent=gene-LOC123327042;Dbxref=GeneID:123327042;gbkey=exon;gene=LOC123327042;model_evidence=Supporting evidence includes similarity to: 1 Protein%2C and 74%25 coverage of the annotated genomic feature by RNAseq alignments;pseudo=true\nWhen I used gffread, it can not read there lines containing “ID=id*”, it will lose the gene_id attribute in the output GTF file.\nI realized that I need to write a script by myself."
+  },
+  {
+    "objectID": "posts/2025-04-29 Transfer GFF to GTF/index.html#basic-information",
+    "href": "posts/2025-04-29 Transfer GFF to GTF/index.html#basic-information",
+    "title": "Transfer GFF to GTF file",
+    "section": "",
+    "text": "GFF3 (Generic Feature Format Version 3) file format represents the genomic features in a simple text-based tab-delimited file\nGFF3 file has nine fields (seqid, source, feature, start, end, score, strand, phase, and attributes)\nThe lines which starts with ‘##’ provides the meta-information of the file and ‘#’ represents the human-readable comments\n\nWe sometimes need to transfer GFF3 to GTF format.\nI used gffread before. It generally works well, but it has some problem when I need to deal with a GFF3 file downloaded from NCBI.\nThis file has some lines like:\nchrxxx  Gnomon  exon    46964   46999   .   -   .   ID=id-LOC123327042;Parent=gene-LOC123327042;Dbxref=GeneID:123327042;gbkey=exon;gene=LOC123327042;model_evidence=Supporting evidence includes similarity to: 1 Protein%2C and 74%25 coverage of the annotated genomic feature by RNAseq alignments;pseudo=true\nchrxxx  Gnomon  exon    47054   47468   .   -   .   ID=id-LOC123327042-2;Parent=gene-LOC123327042;Dbxref=GeneID:123327042;gbkey=exon;gene=LOC123327042;model_evidence=Supporting evidence includes similarity to: 1 Protein%2C and 74%25 coverage of the annotated genomic feature by RNAseq alignments;pseudo=true\nchrxxx  Gnomon  exon    47542   47661   .   -   .   ID=id-LOC123327042-3;Parent=gene-LOC123327042;Dbxref=GeneID:123327042;gbkey=exon;gene=LOC123327042;model_evidence=Supporting evidence includes similarity to: 1 Protein%2C and 74%25 coverage of the annotated genomic feature by RNAseq alignments;pseudo=true\nWhen I used gffread, it can not read there lines containing “ID=id*”, it will lose the gene_id attribute in the output GTF file.\nI realized that I need to write a script by myself."
+  },
+  {
+    "objectID": "posts/2025-04-29 Transfer GFF to GTF/index.html#script",
+    "href": "posts/2025-04-29 Transfer GFF to GTF/index.html#script",
+    "title": "Transfer GFF to GTF file",
+    "section": "Script",
+    "text": "Script\nimport sys\nimport uuid\nimport re\n\ndef parse_gff_attributes(attributes_str):\n    \"\"\"Parse GFF attributes into a dictionary.\"\"\"\n    attributes = {}\n    for attr in attributes_str.split(';'):\n        if attr:\n            key_value = attr.split('=', 1)\n            if len(key_value) == 2:\n                key, value = key_value\n                attributes[key] = value\n    return attributes\n\ndef convert_gff_to_gtf(gff_file, gtf_file):\n    \"\"\"Convert GFF3 to GTF format, retaining ID, gene_id, and transcript_id.\"\"\"\n    with open(gff_file, 'r') as gff, open(gtf_file, 'w') as gtf:\n        for line in gff:\n            if line.startswith('#'):\n                gtf.write(line)\n                continue\n            \n            fields = line.strip().split('\\t')\n            if len(fields) != 9:\n                continue\n                \n            seqid, source, feature, start, end, score, strand, phase, attributes_str = fields\n            attributes = parse_gff_attributes(attributes_str)\n            \n            # Skip features that are not relevant for GTF (e.g., region)\n            if feature not in ['gene', 'mRNA', 'exon', 'CDS', 'lnc_RNA', 'pseudogene']:\n                continue\n                \n            # Determine feature type for GTF\n            gtf_feature = feature\n            if feature == 'mRNA' or feature == 'lnc_RNA':\n                gtf_feature = 'transcript'\n            \n            # Extract required attributes\n            gene_id = attributes.get('gene', '')\n            transcript_id = attributes.get('transcript_id', '')\n            feature_id = attributes.get('ID', '')\n            \n            # Build GTF attributes string\n            gtf_attributes = []\n            if feature == 'gene':\n                gtf_attributes.append(f'gene_id \"{gene_id}\"')\n                if 'Name' in attributes:\n                    gtf_attributes.append(f'gene_name \"{attributes[\"Name\"]}\"')\n            elif feature in ['mRNA', 'lnc_RNA', 'exon', 'CDS']:\n                gtf_attributes.append(f'gene_id \"{gene_id}\"')\n                gtf_attributes.append(f'transcript_id \"{transcript_id}\"')\n                if 'Name' in attributes and feature in ['mRNA', 'lnc_RNA']:\n                    gtf_attributes.append(f'gene_name \"{attributes[\"Name\"]}\"')\n                if feature == 'exon':\n                    gtf_attributes.append(f'exon_id \"{feature_id}\"')\n            elif feature == 'pseudogene':\n                gtf_attributes.append(f'gene_id \"{gene_id}\"')\n                if 'Name' in attributes:\n                    gtf_attributes.append(f'gene_name \"{attributes[\"Name\"]}\"')\n            \n            # Write GTF line\n            gtf_fields = [seqid, source, gtf_feature, start, end, score, strand, phase, '; '.join(gtf_attributes)]\n            gtf.write('\\t'.join(gtf_fields) + '\\n')\n\nif __name__ == '__main__':\n    if len(sys.argv) != 3:\n        print(\"Usage: python gff_to_gtf.py input.gff output.gtf\")\n        sys.exit(1)\n    \n    gff_file = sys.argv[1]\n    gtf_file = sys.argv[2]\n    convert_gff_to_gtf(gff_file, gtf_file)\n    print(f\"Conversion complete. GTF file written to {gtf_file}\")"
+  },
+  {
+    "objectID": "posts/2025-04-29 Transfer GFF to GTF/index.html#usage",
+    "href": "posts/2025-04-29 Transfer GFF to GTF/index.html#usage",
+    "title": "Transfer GFF to GTF file",
+    "section": "Usage",
+    "text": "Usage\nIt is very easy to use this script, just save it as gff2gtf.py and then run like\npython gff2gtf.py input.gff output.gtf\nThe result looks like\nchrxxx      Gnomon  exon    46964   46999   .       -       .       gene_id \"LOC123327042\"; transcript_id \"\"; exon_id \"id-LOC123327042\"\nchrxxx      Gnomon  exon    47054   47468   .       -       .       gene_id \"LOC123327042\"; transcript_id \"\"; exon_id \"id-LOC123327042-2\"\nchrxxx       Gnomon  exon    47542   47661   .       -       .       gene_id \"LOC123327042\"; transcript_id \"\"; exon_id \"id-LOC123327042-3\""
+  },
+  {
     "objectID": "posts/2025-06-24 ggtree/index.html",
     "href": "posts/2025-06-24 ggtree/index.html",
     "title": "ggtree for phylogenetic trees",
@@ -54,229 +306,5 @@
     "title": "ggtree for phylogenetic trees",
     "section": "Add heatmap layer for continuous values",
     "text": "Add heatmap layer for continuous values\n\n# You can also add heatmap layer for continuous values.\np4 &lt;- p3 + \n      new_scale_fill() +\n      geom_fruit(\n          data=dat3,\n          geom=geom_tile,\n          mapping=aes(y=ID, x=Type2, alpha=Alpha, fill=Type2),\n          pwidth=0.15,\n          axis.params=list(\n                          axis=\"x\", # add axis text of the layer.\n                          text.angle=-45, # the text angle of x-axis.\n                          hjust=0  # adjust the horizontal position of text of axis.\n                      )\n      ) +\n      scale_fill_manual(\n          values=c(\"#b22222\", \"#005500\", \"#0000be\", \"#9f1f9f\"),\n          guide=guide_legend(keywidth=0.5, keyheight=0.5, order=4)\n      ) +\n      scale_alpha_continuous(\n          range=c(0, 0.4), # the range of alpha\n          guide=guide_legend(keywidth=0.5, keyheight=0.5, order=5)\n      ) \np4\n\n\n\n\nFan layout tree with heatmap for continuous values\n\n\n\n# Then add a bar layer outside of the tree.\np5 &lt;- p4 + \n      new_scale_fill() +\n      geom_fruit(\n          data=dat1,\n          geom=geom_col,\n          mapping=aes(y=ID, x=Abundance, fill=Location),  #The 'Abundance' of 'dat1' will be mapped to x\n          pwidth=0.4,\n          axis.params=list(\n                          axis=\"x\", # add axis text of the layer.\n                          text.angle=-45, # the text size of axis.\n                          hjust=0  # adjust the horizontal position of text of axis.\n                      ),\n          grid.params=list() # add the grid line of the external bar plot.\n      ) + \n      scale_fill_manual(\n          values=c(\"#F8766D\", \"#C49A00\", \"#53B400\", \"#00C094\", \"#00B6EB\", \"#A58AFF\", \"#FB61D7\"),\n          guide=guide_legend(keywidth=0.5, keyheight=0.5, order=6)\n      ) +\n      theme(#legend.position=c(0.96, 0.5), # the position of legend.\n          legend.background=element_rect(fill=NA), # the background of legend.\n          legend.title=element_text(size=7), # the title size of legend.\n          legend.text=element_text(size=6), # the text size of legend.\n          legend.spacing.y = unit(0.02, \"cm\")  # the distance of legends (y orientation).\n      ) \np5\n\n\n\n\nFan layout tree with heatmap for continuous values"
-  },
-  {
-    "objectID": "posts/2025-04-29 Transfer GFF to GTF/index.html",
-    "href": "posts/2025-04-29 Transfer GFF to GTF/index.html",
-    "title": "Transfer GFF to GTF file",
-    "section": "",
-    "text": "GFF3 (Generic Feature Format Version 3) file format represents the genomic features in a simple text-based tab-delimited file\nGFF3 file has nine fields (seqid, source, feature, start, end, score, strand, phase, and attributes)\nThe lines which starts with ‘##’ provides the meta-information of the file and ‘#’ represents the human-readable comments\n\nWe sometimes need to transfer GFF3 to GTF format.\nI used gffread before. It generally works well, but it has some problem when I need to deal with a GFF3 file downloaded from NCBI.\nThis file has some lines like:\nchrxxx  Gnomon  exon    46964   46999   .   -   .   ID=id-LOC123327042;Parent=gene-LOC123327042;Dbxref=GeneID:123327042;gbkey=exon;gene=LOC123327042;model_evidence=Supporting evidence includes similarity to: 1 Protein%2C and 74%25 coverage of the annotated genomic feature by RNAseq alignments;pseudo=true\nchrxxx  Gnomon  exon    47054   47468   .   -   .   ID=id-LOC123327042-2;Parent=gene-LOC123327042;Dbxref=GeneID:123327042;gbkey=exon;gene=LOC123327042;model_evidence=Supporting evidence includes similarity to: 1 Protein%2C and 74%25 coverage of the annotated genomic feature by RNAseq alignments;pseudo=true\nchrxxx  Gnomon  exon    47542   47661   .   -   .   ID=id-LOC123327042-3;Parent=gene-LOC123327042;Dbxref=GeneID:123327042;gbkey=exon;gene=LOC123327042;model_evidence=Supporting evidence includes similarity to: 1 Protein%2C and 74%25 coverage of the annotated genomic feature by RNAseq alignments;pseudo=true\nWhen I used gffread, it can not read there lines containing “ID=id*”, it will lose the gene_id attribute in the output GTF file.\nI realized that I need to write a script by myself."
-  },
-  {
-    "objectID": "posts/2025-04-29 Transfer GFF to GTF/index.html#basic-information",
-    "href": "posts/2025-04-29 Transfer GFF to GTF/index.html#basic-information",
-    "title": "Transfer GFF to GTF file",
-    "section": "",
-    "text": "GFF3 (Generic Feature Format Version 3) file format represents the genomic features in a simple text-based tab-delimited file\nGFF3 file has nine fields (seqid, source, feature, start, end, score, strand, phase, and attributes)\nThe lines which starts with ‘##’ provides the meta-information of the file and ‘#’ represents the human-readable comments\n\nWe sometimes need to transfer GFF3 to GTF format.\nI used gffread before. It generally works well, but it has some problem when I need to deal with a GFF3 file downloaded from NCBI.\nThis file has some lines like:\nchrxxx  Gnomon  exon    46964   46999   .   -   .   ID=id-LOC123327042;Parent=gene-LOC123327042;Dbxref=GeneID:123327042;gbkey=exon;gene=LOC123327042;model_evidence=Supporting evidence includes similarity to: 1 Protein%2C and 74%25 coverage of the annotated genomic feature by RNAseq alignments;pseudo=true\nchrxxx  Gnomon  exon    47054   47468   .   -   .   ID=id-LOC123327042-2;Parent=gene-LOC123327042;Dbxref=GeneID:123327042;gbkey=exon;gene=LOC123327042;model_evidence=Supporting evidence includes similarity to: 1 Protein%2C and 74%25 coverage of the annotated genomic feature by RNAseq alignments;pseudo=true\nchrxxx  Gnomon  exon    47542   47661   .   -   .   ID=id-LOC123327042-3;Parent=gene-LOC123327042;Dbxref=GeneID:123327042;gbkey=exon;gene=LOC123327042;model_evidence=Supporting evidence includes similarity to: 1 Protein%2C and 74%25 coverage of the annotated genomic feature by RNAseq alignments;pseudo=true\nWhen I used gffread, it can not read there lines containing “ID=id*”, it will lose the gene_id attribute in the output GTF file.\nI realized that I need to write a script by myself."
-  },
-  {
-    "objectID": "posts/2025-04-29 Transfer GFF to GTF/index.html#script",
-    "href": "posts/2025-04-29 Transfer GFF to GTF/index.html#script",
-    "title": "Transfer GFF to GTF file",
-    "section": "Script",
-    "text": "Script\nimport sys\nimport uuid\nimport re\n\ndef parse_gff_attributes(attributes_str):\n    \"\"\"Parse GFF attributes into a dictionary.\"\"\"\n    attributes = {}\n    for attr in attributes_str.split(';'):\n        if attr:\n            key_value = attr.split('=', 1)\n            if len(key_value) == 2:\n                key, value = key_value\n                attributes[key] = value\n    return attributes\n\ndef convert_gff_to_gtf(gff_file, gtf_file):\n    \"\"\"Convert GFF3 to GTF format, retaining ID, gene_id, and transcript_id.\"\"\"\n    with open(gff_file, 'r') as gff, open(gtf_file, 'w') as gtf:\n        for line in gff:\n            if line.startswith('#'):\n                gtf.write(line)\n                continue\n            \n            fields = line.strip().split('\\t')\n            if len(fields) != 9:\n                continue\n                \n            seqid, source, feature, start, end, score, strand, phase, attributes_str = fields\n            attributes = parse_gff_attributes(attributes_str)\n            \n            # Skip features that are not relevant for GTF (e.g., region)\n            if feature not in ['gene', 'mRNA', 'exon', 'CDS', 'lnc_RNA', 'pseudogene']:\n                continue\n                \n            # Determine feature type for GTF\n            gtf_feature = feature\n            if feature == 'mRNA' or feature == 'lnc_RNA':\n                gtf_feature = 'transcript'\n            \n            # Extract required attributes\n            gene_id = attributes.get('gene', '')\n            transcript_id = attributes.get('transcript_id', '')\n            feature_id = attributes.get('ID', '')\n            \n            # Build GTF attributes string\n            gtf_attributes = []\n            if feature == 'gene':\n                gtf_attributes.append(f'gene_id \"{gene_id}\"')\n                if 'Name' in attributes:\n                    gtf_attributes.append(f'gene_name \"{attributes[\"Name\"]}\"')\n            elif feature in ['mRNA', 'lnc_RNA', 'exon', 'CDS']:\n                gtf_attributes.append(f'gene_id \"{gene_id}\"')\n                gtf_attributes.append(f'transcript_id \"{transcript_id}\"')\n                if 'Name' in attributes and feature in ['mRNA', 'lnc_RNA']:\n                    gtf_attributes.append(f'gene_name \"{attributes[\"Name\"]}\"')\n                if feature == 'exon':\n                    gtf_attributes.append(f'exon_id \"{feature_id}\"')\n            elif feature == 'pseudogene':\n                gtf_attributes.append(f'gene_id \"{gene_id}\"')\n                if 'Name' in attributes:\n                    gtf_attributes.append(f'gene_name \"{attributes[\"Name\"]}\"')\n            \n            # Write GTF line\n            gtf_fields = [seqid, source, gtf_feature, start, end, score, strand, phase, '; '.join(gtf_attributes)]\n            gtf.write('\\t'.join(gtf_fields) + '\\n')\n\nif __name__ == '__main__':\n    if len(sys.argv) != 3:\n        print(\"Usage: python gff_to_gtf.py input.gff output.gtf\")\n        sys.exit(1)\n    \n    gff_file = sys.argv[1]\n    gtf_file = sys.argv[2]\n    convert_gff_to_gtf(gff_file, gtf_file)\n    print(f\"Conversion complete. GTF file written to {gtf_file}\")"
-  },
-  {
-    "objectID": "posts/2025-04-29 Transfer GFF to GTF/index.html#usage",
-    "href": "posts/2025-04-29 Transfer GFF to GTF/index.html#usage",
-    "title": "Transfer GFF to GTF file",
-    "section": "Usage",
-    "text": "Usage\nIt is very easy to use this script, just save it as gff2gtf.py and then run like\npython gff2gtf.py input.gff output.gtf\nThe result looks like\nchrxxx      Gnomon  exon    46964   46999   .       -       .       gene_id \"LOC123327042\"; transcript_id \"\"; exon_id \"id-LOC123327042\"\nchrxxx      Gnomon  exon    47054   47468   .       -       .       gene_id \"LOC123327042\"; transcript_id \"\"; exon_id \"id-LOC123327042-2\"\nchrxxx       Gnomon  exon    47542   47661   .       -       .       gene_id \"LOC123327042\"; transcript_id \"\"; exon_id \"id-LOC123327042-3\""
-  },
-  {
-    "objectID": "posts/2025-04-16 Cartoonize protein structure/index.html",
-    "href": "posts/2025-04-16 Cartoonize protein structure/index.html",
-    "title": "Illustrate: Non-photorealistic Biomolecular Illustration",
-    "section": "",
-    "text": "Illustrate is a small Fortran program for creating non-photorealistic illustrations of molecules, with cartoony colors and outlines, and soft ambient shadows. I originally developed it during postdoctoral training in the laboratory of Arthur J. Olson at the Scripps Research Institute, and have tinkered with it ever since. I have used it to create materials for my books and for PDB-101, the outreach portal of the RCSB Protein Data Bank, most notably, for the “Molecule of the Month.”\n\nOfficial website: https://ccsb.scripps.edu/illustrate/\nPublication: Goodsell, D. S., Autin, L., & Olson, A. J. (2019). Illustrate: Software for Biomolecular Illustration. Structure (London, England : 1993), 27(11), 1716–1720.e1. https://doi.org/10.1016/j.str.2019.08.011"
-  },
-  {
-    "objectID": "posts/2025-04-15 FamDB download/index.html",
-    "href": "posts/2025-04-15 FamDB download/index.html",
-    "title": "FamDB database download",
-    "section": "",
-    "text": "# 设置 URL 列表\nURLS=(\n\"https://www.dfam.org/releases/current/families/FamDB/dfam39_full.0.h5.gz\"\n\"https://www.dfam.org/releases/current/families/FamDB/dfam39_full.0.h5.gz.md5\"\n\"https://www.dfam.org/releases/current/families/FamDB/dfam39_full.1.h5.gz\"\n\"https://www.dfam.org/releases/current/families/FamDB/dfam39_full.1.h5.gz.md5\"\n\"https://www.dfam.org/releases/current/families/FamDB/dfam39_full.7.h5.gz\"\n\"https://www.dfam.org/releases/current/families/FamDB/dfam39_full.7.h5.gz.md5\"\n)\n\n# 使用 aria2c 多线程下载\nfor url in \"${URLS[@]}\"; do\n    echo \"Downloading $url ...\"\n    aria2c -x 16 -s 16 -k 1M \"$url\"\ndone\n# 校验 MD5\nfor file in *.gz; do\n    echo \"Checking MD5 for $file ...\"\n    md5file=\"${file}.md5\"\n    if [ -f \"$md5file\" ]; then\n        # 格式转换为标准 md5sum 可读格式\n        hash=$(cut -d ' ' -f 1 \"$md5file\")\n        echo \"$hash  $file\" &gt; check.md5\n        md5sum -c check.md5\n        if [ $? -ne 0 ]; then\n            echo \"❌ MD5 check failed for $file\"\n            exit 1\n        else\n            echo \"✅ MD5 check passed for $file\"\n        fi\n        rm check.md5\n    else\n        echo \"⚠️ Warning: MD5 file not found for $file\"\n    fi\ndone\n# 解压缩\nfor file in *.gz; do\n    echo \"Unzipping $file ...\"\n    gunzip -k \"$file\"\ndone\necho \"✅ All files downloaded, verified, and unzipped successfully.\""
-  },
-  {
-    "objectID": "posts/2025-01-01 Process Cores/index.html",
-    "href": "posts/2025-01-01 Process Cores/index.html",
-    "title": "Dynamically adjust the process cores number",
-    "section": "",
-    "text": "In high-performance computing or scripting environments, it’s often useful to dynamically adjust the number of threads used based on the time of day.\nFor example, during working hours, we might want to use fewer threads to avoid overwhelming shared systems, while at night, we can take full advantage of available resources.\nThis tutorial demonstrates how to use a simple Bash script to determine the current time and set the number of threads accordingly."
-  },
-  {
-    "objectID": "posts/2025-01-01 Process Cores/index.html#introduction",
-    "href": "posts/2025-01-01 Process Cores/index.html#introduction",
-    "title": "Dynamically adjust the process cores number",
-    "section": "",
-    "text": "In high-performance computing or scripting environments, it’s often useful to dynamically adjust the number of threads used based on the time of day.\nFor example, during working hours, we might want to use fewer threads to avoid overwhelming shared systems, while at night, we can take full advantage of available resources.\nThis tutorial demonstrates how to use a simple Bash script to determine the current time and set the number of threads accordingly."
-  },
-  {
-    "objectID": "posts/2025-01-01 Process Cores/index.html#bash-script",
-    "href": "posts/2025-01-01 Process Cores/index.html#bash-script",
-    "title": "Dynamically adjust the process cores number",
-    "section": "Bash Script",
-    "text": "Bash Script\nThe following script uses the date command to get the current hour and then sets the number of threads based on predefined rules:\n\n# Get the current hour in 24-hour format (00-23)\nhour=$(date +\"%H\")\n\n# Set thread number based on the time of day\nif [ \"$hour\" -ge 0 ] && [ \"$hour\" -lt 6 ]; then\n    threads=16  # Early morning: high resource usage allowed\nelif [ \"$hour\" -ge 6 ] && [ \"$hour\" -lt 12 ]; then\n    threads=8   # Morning: moderate usage\nelif [ \"$hour\" -ge 12 ] && [ \"$hour\" -lt 18 ]; then\n    threads=4   # Afternoon: light usage\nelse\n    threads=12  # Evening: high usage again\nfi\n\necho \"Current hour: $hour\"\necho \"Using $threads threads\""
-  },
-  {
-    "objectID": "posts/2025-01-01 Process Cores/index.html#notes",
-    "href": "posts/2025-01-01 Process Cores/index.html#notes",
-    "title": "Dynamically adjust the process cores number",
-    "section": "Notes",
-    "text": "Notes\nYou can customize the thresholds and thread values based on your system and policy.\nThis logic can be easily embedded in SLURM job scripts or any shell-based pipeline."
-  },
-  {
-    "objectID": "posts/2025-01-01 Process Cores/index.html#conclusion",
-    "href": "posts/2025-01-01 Process Cores/index.html#conclusion",
-    "title": "Dynamically adjust the process cores number",
-    "section": "Conclusion",
-    "text": "Conclusion\nThis simple method allows you to be resource-conscious and responsive to different usage patterns throughout the day. It’s a lightweight solution that works in any Unix-like environment."
-  },
-  {
-    "objectID": "about.html",
-    "href": "about.html",
-    "title": "About",
-    "section": "",
-    "text": "I am now a doctoral student in Biomedical center, LMU."
-  },
-  {
-    "objectID": "index.html",
-    "href": "index.html",
-    "title": "Home",
-    "section": "",
-    "text": "Order By\n       Default\n         \n          Title\n        \n         \n          Date - Oldest\n        \n         \n          Date - Newest\n        \n         \n          Author\n        \n     \n  \n    \n      \n      \n    \n\n\n\n\n\n\n\n\nggtree for phylogenetic trees\n\n\n\nPlot\n\n\n\n\n\n\n\nJie Hua\n\n\nJun 24, 2025\n\n\n\n\n\n\n\n\n\n\n\n\ntidyplots for R plotting\n\n\n\nPlot\n\n\n\n\n\n\n\nJie Hua\n\n\nMay 6, 2025\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nTransfer GFF to GTF file\n\n\n\nAnnotation\n\n\n\n\n\n\n\nJie Hua\n\n\nApr 29, 2025\n\n\n\n\n\n\n\n\n\n\n\n\n\n\ngfatools for GFA (graphical fragment assembly) files\n\n\n\nAssembly\n\n\n\n\n\n\n\nJie Hua\n\n\nApr 23, 2025\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nIllustrate: Non-photorealistic Biomolecular Illustration\n\n\n\nStructure\n\n\n\n\n\n\n\nJie Hua\n\n\nApr 16, 2025\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nFamDB database download\n\n\n\nAnnotation\n\n\n\n\n\n\n\nJie Hua\n\n\nApr 15, 2025\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nGit Push every repo in a folder\n\n\n\nBash\n\n\n\n\n\n\n\nJie Hua\n\n\nApr 15, 2025\n\n\n\n\n\n\n\n\n\n\n\n\nManhattan Plot for GWAS Results\n\n\n\nPlot\n\n\n\n\n\n\n\nJie Hua\n\n\nApr 14, 2025\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nDynamically adjust the process cores number\n\n\n\nBash\n\n\n\n\n\n\n\nJie Hua\n\n\nJan 1, 2025\n\n\n\n\n\n\n\n\nNo matching items"
-  },
-  {
-    "objectID": "posts/2025-04-14 Manhattan Plot/index.html",
-    "href": "posts/2025-04-14 Manhattan Plot/index.html",
-    "title": "Manhattan Plot for GWAS Results",
-    "section": "",
-    "text": "思问 & StatisticVision. (2025, March 14). R语言绘图25|Nature曼哈顿图复现 [微信公众号]. R语言绘图25|Nature曼哈顿图复现. https://mp.weixin.qq.com/s/3YlnB3Nm85v3FxE8F67oDw"
-  },
-  {
-    "objectID": "posts/2025-04-14 Manhattan Plot/index.html#参考教程",
-    "href": "posts/2025-04-14 Manhattan Plot/index.html#参考教程",
-    "title": "Manhattan Plot for GWAS Results",
-    "section": "",
-    "text": "思问 & StatisticVision. (2025, March 14). R语言绘图25|Nature曼哈顿图复现 [微信公众号]. R语言绘图25|Nature曼哈顿图复现. https://mp.weixin.qq.com/s/3YlnB3Nm85v3FxE8F67oDw"
-  },
-  {
-    "objectID": "posts/2025-04-14 Manhattan Plot/index.html#基本信息",
-    "href": "posts/2025-04-14 Manhattan Plot/index.html#基本信息",
-    "title": "Manhattan Plot for GWAS Results",
-    "section": "基本信息",
-    "text": "基本信息\n曼哈顿图（Manhattan Plot)是基因组范围内关联研究（GWAS）中常用的可视化工具，用于展示单核苷酸多态性（SNP）与表型之间的关联。它通过在x轴上绘制基因组位置，在y轴上绘制-log10(p-value)来显示每个SNP的显著性水平。"
-  },
-  {
-    "objectID": "posts/2025-04-14 Manhattan Plot/index.html#曼哈顿图的特点",
-    "href": "posts/2025-04-14 Manhattan Plot/index.html#曼哈顿图的特点",
-    "title": "Manhattan Plot for GWAS Results",
-    "section": "曼哈顿图的特点",
-    "text": "曼哈顿图的特点\n\nX轴： 基因组的位置，按照染色体编号和物理位置排列，每条染色体用不同的颜色区分\nY轴：用-log10(p-value)表示SNPs的显著性水平，越高表示显著性水平越高\n阈值线：图中与X轴平行的一条线，表示不同的显著性水平，分别对应p-value的某些值，比如p&lt;5x10-8\n点: 每一个点表示一个SNPs，其高度表示显著性程度"
-  },
-  {
-    "objectID": "posts/2025-04-14 Manhattan Plot/index.html#相关脚本",
-    "href": "posts/2025-04-14 Manhattan Plot/index.html#相关脚本",
-    "title": "Manhattan Plot for GWAS Results",
-    "section": "相关脚本",
-    "text": "相关脚本\n通过 Listing 1 加载了需要用到的的 R 包。\n\n\n\n\nListing 1: Load required packages\n\n\nlibrary(ggplot2)\nlibrary(dplyr)\n\n\n\n\n生成模拟数据\n\nset.seed(42)\ndata &lt;- data.frame(\n  SNP=paste0(\"rs\",1:10000),\n  CHR=rep(1:22, length.out=10000),\n  BP=sample(1:1e6, 10000),\n  P=runif(10000)\n)\n\n\n\n\nFirst 6 rows of the demo data\n\n\nSNP\nCHR\nBP\nP\n\n\n\n\nrs1\n1\n61413\n0.4715924\n\n\nrs2\n2\n54425\n0.5765097\n\n\nrs3\n3\n623844\n0.2229165\n\n\nrs4\n4\n74362\n0.3966966\n\n\nrs5\n5\n46208\n0.3641330\n\n\nrs6\n6\n964632\n0.6577111\n\n\n\n\n\n计算-log10(p-value)\n\ndata &lt;- data %&gt;%\n  mutate(logP = -log10(P))\n\n\n\n\nFirst 6 rows of the demo data\n\n\nSNP\nCHR\nBP\nP\nlogP\n\n\n\n\nrs1\n1\n61413\n0.4715924\n0.3264332\n\n\nrs2\n2\n54425\n0.5765097\n0.2391934\n\n\nrs3\n3\n623844\n0.2229165\n0.6518579\n\n\nrs4\n4\n74362\n0.3966966\n0.4015415\n\n\nrs5\n5\n46208\n0.3641330\n0.4387400\n\n\nrs6\n6\n964632\n0.6577111\n0.1819648\n\n\n\n\n\n画图展示相关的数据\n\nggplot(data, aes(x=BP, y=logP, color=as.factor(CHR)))+ \n  geom_point(alpha = 0.6, size = 1)+ \n  facet_grid(. ~ CHR, scales = \"free_x\", space = \"free_x\")+ \n  geom_hline(yintercept = -log10(5e-8), linetype = \"dashed\", color = \"red\")+ \n  labs(title = \"Manhattan Plot\",\n       x = \"Chromosome\",\n       y = \"-log10(p-value)\",\n       color = \"Chromosomes\" ) + \n  theme_minimal() + \n  theme(strip.text.x = element_blank(), \n        panel.spacing.x = unit(0.1, \"lines\"), \n        axis.text.x = element_blank(), \n        legend.position = \"none\")"
-  },
-  {
-    "objectID": "posts/2025-04-15 Folder Git Push/index.html",
-    "href": "posts/2025-04-15 Folder Git Push/index.html",
-    "title": "Git Push every repo in a folder",
-    "section": "",
-    "text": "When working with multiple Git repositories inside a single parent folder, it can be tedious to git pull or git push each one individually. This guide shows you how to automate these tasks using simple shell scripts."
-  },
-  {
-    "objectID": "posts/2025-04-15 Folder Git Push/index.html#introduction",
-    "href": "posts/2025-04-15 Folder Git Push/index.html#introduction",
-    "title": "Git Push every repo in a folder",
-    "section": "",
-    "text": "When working with multiple Git repositories inside a single parent folder, it can be tedious to git pull or git push each one individually. This guide shows you how to automate these tasks using simple shell scripts."
-  },
-  {
-    "objectID": "posts/2025-04-15 Folder Git Push/index.html#prerequisites",
-    "href": "posts/2025-04-15 Folder Git Push/index.html#prerequisites",
-    "title": "Git Push every repo in a folder",
-    "section": "Prerequisites",
-    "text": "Prerequisites\n\nA Unix-like shell (Linux/macOS or Git Bash on Windows)\nGit installed and configured\nAll subdirectories must be Git repositories (i.e., each one has a .git folder)"
-  },
-  {
-    "objectID": "posts/2025-04-15 Folder Git Push/index.html#step-1-batch-git-pull-for-all-repositories",
-    "href": "posts/2025-04-15 Folder Git Push/index.html#step-1-batch-git-pull-for-all-repositories",
-    "title": "Git Push every repo in a folder",
-    "section": "Step 1: Batch git pull for All Repositories",
-    "text": "Step 1: Batch git pull for All Repositories\nCreate a shell script named pull_all.sh:\n\n# Loop through all subdirectories\nfor dir in */; do\n  if [ -d \"$dir/.git\" ]; then\n    echo \"Pulling in $dir\"\n    cd \"$dir\"\n    git pull\n    cd ..\n  fi\ndone"
-  },
-  {
-    "objectID": "posts/2025-04-15 Folder Git Push/index.html#step-2-batch-git-push-for-all-repositories",
-    "href": "posts/2025-04-15 Folder Git Push/index.html#step-2-batch-git-push-for-all-repositories",
-    "title": "Git Push every repo in a folder",
-    "section": "Step 2: Batch git push for All Repositories",
-    "text": "Step 2: Batch git push for All Repositories\nSimilarly, create a script called push_all.sh:\n\n# Loop through all subdirectories\nfor dir in */; do\n  if [ -d \"$dir/.git\" ]; then\n    echo \"Pushing in $dir\"\n    cd \"$dir\"\n    git add .\n    git commit -m \"Auto commit\"\n    git push\n    cd ..\n  fi\ndone"
-  },
-  {
-    "objectID": "posts/2025-04-15 Folder Git Push/index.html#conclusion",
-    "href": "posts/2025-04-15 Folder Git Push/index.html#conclusion",
-    "title": "Git Push every repo in a folder",
-    "section": "Conclusion",
-    "text": "Conclusion\nWith just a few lines of scripting, you can easily manage multiple Git repositories at once. This method helps save time and reduces manual errors when updating multiple projects."
-  },
-  {
-    "objectID": "posts/2025-04-23 gfatools for Graphical Fragment Assembly files/index.html",
-    "href": "posts/2025-04-23 gfatools for Graphical Fragment Assembly files/index.html",
-    "title": "gfatools for GFA (graphical fragment assembly) files",
-    "section": "",
-    "text": "GFA (Graphical Fragment Assembly) format is used for sequence assembly graphs. It was proposed by Prof. Dr. Heng Li in 2014. Here is his proposal: https://lh3.github.io/2014/07/19/a-proposal-of-the-grapical-fragment-assembly-format.\nHe updated this format in past 10 years to make it better. Here is his description about rGFA format: http://www.liheng.org/downloads/rGFA-GAF.pdf. Another one is https://github.com/lh3/gfatools/blob/master/doc/rGFA.md.\nShortly, GFA format is like SAM format, which is also developed by him. (I really like his work, that helped the academia a lot).\n\nGFA is a simple TAB-dellimited text format consisting of 12 mandatory fields to represent reads aligned to a reference pan-genome graph: • Col 1–4: query name, length, start and end positions. • Col 5: the query strand relative to the mapping path in col 6. • Col 6: a stable graph path in the format matching the regular expression /([&gt;&lt;][^\\s&gt;&lt;]+:\\d+- \\d+)+|([^\\s&gt;&lt;]+)/. The less or greater sign indicates the orientation of the segment. If a path consists of a single segment, coordinates can be omitted and its orientation is assumed to be forward “&gt;”. • Col 7–9: total path length, start and end mapping positions on the forward strand of the path. • Col 10–12: number of matching bases, alignment block length and mapping quality\nEach line may have tags as in the SAM format. CIGARs are stored in tags\n\nSince the GFA format is so similar to SAM and PAF formats. I could use the R script that I wrote before to read and check those files. It may be better to use rust. I still need time to learn it."
-  },
-  {
-    "objectID": "posts/2025-04-23 gfatools for Graphical Fragment Assembly files/index.html#basic-information",
-    "href": "posts/2025-04-23 gfatools for Graphical Fragment Assembly files/index.html#basic-information",
-    "title": "gfatools for GFA (graphical fragment assembly) files",
-    "section": "",
-    "text": "GFA (Graphical Fragment Assembly) format is used for sequence assembly graphs. It was proposed by Prof. Dr. Heng Li in 2014. Here is his proposal: https://lh3.github.io/2014/07/19/a-proposal-of-the-grapical-fragment-assembly-format.\nHe updated this format in past 10 years to make it better. Here is his description about rGFA format: http://www.liheng.org/downloads/rGFA-GAF.pdf. Another one is https://github.com/lh3/gfatools/blob/master/doc/rGFA.md.\nShortly, GFA format is like SAM format, which is also developed by him. (I really like his work, that helped the academia a lot).\n\nGFA is a simple TAB-dellimited text format consisting of 12 mandatory fields to represent reads aligned to a reference pan-genome graph: • Col 1–4: query name, length, start and end positions. • Col 5: the query strand relative to the mapping path in col 6. • Col 6: a stable graph path in the format matching the regular expression /([&gt;&lt;][^\\s&gt;&lt;]+:\\d+- \\d+)+|([^\\s&gt;&lt;]+)/. The less or greater sign indicates the orientation of the segment. If a path consists of a single segment, coordinates can be omitted and its orientation is assumed to be forward “&gt;”. • Col 7–9: total path length, start and end mapping positions on the forward strand of the path. • Col 10–12: number of matching bases, alignment block length and mapping quality\nEach line may have tags as in the SAM format. CIGARs are stored in tags\n\nSince the GFA format is so similar to SAM and PAF formats. I could use the R script that I wrote before to read and check those files. It may be better to use rust. I still need time to learn it."
-  },
-  {
-    "objectID": "posts/2025-04-23 gfatools for Graphical Fragment Assembly files/index.html#installation",
-    "href": "posts/2025-04-23 gfatools for Graphical Fragment Assembly files/index.html#installation",
-    "title": "gfatools for GFA (graphical fragment assembly) files",
-    "section": "Installation",
-    "text": "Installation\n\ngit clone https://github.com/lh3/gfatools\ncd gfatools\nmake\nsudo cp gfatools /usr/local/bin/gfatools"
-  },
-  {
-    "objectID": "posts/2025-04-23 gfatools for Graphical Fragment Assembly files/index.html#usage",
-    "href": "posts/2025-04-23 gfatools for Graphical Fragment Assembly files/index.html#usage",
-    "title": "gfatools for GFA (graphical fragment assembly) files",
-    "section": "Usage",
-    "text": "Usage\n\nUsage: gfatools &lt;command&gt; &lt;arguments&gt;\nCommands:\n  view        read a GFA file\n  stat        statistics about a GFA file\n  gfa2fa      convert GFA to FASTA\n  gfa2bed     convert rGFA to BED (requiring rGFA)\n  blacklist   blacklist regions\n  bubble      print bubble-like regions (EXPERIMENTAL)\n  asm         miniasm-like graph transformation\n  sql         export rGFA to SQLite (requiring rGFA)\n  ed          GWFA prefix alignment (for evaluation only)\n  version     print version number\n\nThe most recent commit is https://github.com/lh3/gfatools/commit/c31be8a62efc6bdea4576029f7fbe84f345a6eed."
-  },
-  {
-    "objectID": "posts/2025-05-06 Tidyplots for plotting/index.html",
-    "href": "posts/2025-05-06 Tidyplots for plotting/index.html",
-    "title": "tidyplots for R plotting",
-    "section": "",
-    "text": "I noticed a new R package called “tidyplots” produced by Jan Broder Engler. This package could generate publication ready plots with simple commands, which largely simplified the R plotting process.\nThe manual: https://jbengler.github.io/tidyplots/\nI had a try and it works very well. I hope there will be more useful functions.\nIt is based on ggplot2 system, it is also very easy to add more features as we want."
-  },
-  {
-    "objectID": "posts/2025-05-06 Tidyplots for plotting/index.html#basic-information",
-    "href": "posts/2025-05-06 Tidyplots for plotting/index.html#basic-information",
-    "title": "tidyplots for R plotting",
-    "section": "",
-    "text": "I noticed a new R package called “tidyplots” produced by Jan Broder Engler. This package could generate publication ready plots with simple commands, which largely simplified the R plotting process.\nThe manual: https://jbengler.github.io/tidyplots/\nI had a try and it works very well. I hope there will be more useful functions.\nIt is based on ggplot2 system, it is also very easy to add more features as we want."
-  },
-  {
-    "objectID": "posts/2025-05-06 Tidyplots for plotting/index.html#installation",
-    "href": "posts/2025-05-06 Tidyplots for plotting/index.html#installation",
-    "title": "tidyplots for R plotting",
-    "section": "Installation",
-    "text": "Installation\n\npak::pkg_install(\"tidyplots\")\n\nThe development version could be installed with\n\npak::pkg_install(\"jbengler/tidyplots\")"
-  },
-  {
-    "objectID": "posts/2025-05-06 Tidyplots for plotting/index.html#plotting",
-    "href": "posts/2025-05-06 Tidyplots for plotting/index.html#plotting",
-    "title": "tidyplots for R plotting",
-    "section": "Plotting",
-    "text": "Plotting\n\nlibrary(tidyplots)\n\n\nBarplot\n\n\n\nFirst 6 rows of the demo dataframe ‘study’\n\n\ntreatment\ngroup\ndose\nparticipant\nage\nsex\nscore\n\n\n\n\nA\nplacebo\nhigh\np01\n23\nfemale\n2\n\n\nA\nplacebo\nhigh\np02\n45\nmale\n4\n\n\nA\nplacebo\nhigh\np03\n32\nfemale\n5\n\n\nA\nplacebo\nhigh\np04\n37\nmale\n4\n\n\nA\nplacebo\nhigh\np05\n24\nfemale\n6\n\n\nB\nplacebo\nlow\np06\n23\nfemale\n9\n\n\n\n\n\n\nstudy |&gt; \n  tidyplot(x = treatment, y = score, color = treatment) |&gt; \n  add_data_points() |&gt; \n  add_mean_bar(alpha = 0.4) |&gt; \n  add_sem_errorbar() |&gt; \n  adjust_colors(new_colors = colors_discrete_seaside)\n\n\n\n\nBarplot\n\n\n\n\n\n\nBarstack plot\n\nenergy |&gt; \n  tidyplot(x = year, y = energy, color = energy_source) |&gt; \n  add_barstack_absolute()\n\n\n\n\n\n\n\n\nIt provided many useful types of plotting function, it is better to go to its official website to learn how to use this package.\n\n\nOther example\n\nenergy |&gt; \n  dplyr::filter(year %in% c(2005, 2010, 2015, 2020)) |&gt; \n  tidyplot(y = energy, color = energy_source) |&gt; \n  add_donut() |&gt; \n  adjust_size(width = 25, height = 25) |&gt;\n  split_plot(by = year)\n\n✔ split_plot: split into 4 plots across 1 page\n\n\n\n\n\n\n\n\n\n\nlibrary(tidyverse)\n\nWarning: package 'tibble' was built under R version 4.4.2\n\n\nWarning: package 'tidyr' was built under R version 4.4.2\n\n\nWarning: package 'readr' was built under R version 4.4.2\n\n\nWarning: package 'dplyr' was built under R version 4.4.2\n\n\nWarning: package 'stringr' was built under R version 4.4.2\n\n\nWarning: package 'forcats' was built under R version 4.4.2\n\n\n── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──\n✔ dplyr     1.1.4     ✔ readr     2.1.5\n✔ forcats   1.0.0     ✔ stringr   1.5.1\n✔ ggplot2   3.5.2     ✔ tibble    3.2.1\n✔ lubridate 1.9.4     ✔ tidyr     1.3.1\n✔ purrr     1.0.4     \n── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──\n✖ dplyr::filter() masks stats::filter()\n✖ dplyr::lag()    masks stats::lag()\nℹ Use the conflicted package (&lt;http://conflicted.r-lib.org/&gt;) to force all conflicts to become errors\n\n#library(tidyplots)\n\ndf &lt;- \n  read_csv(\"https://tidyplots.org/data/correlation-matrix.csv\")\n\nRows: 202500 Columns: 5\n── Column specification ────────────────────────────────────────────────────────\nDelimiter: \",\"\nchr (2): x, y\ndbl (3): correlation, order_x, order_y\n\nℹ Use `spec()` to retrieve the full column specification for this data.\nℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.\n\ndf |&gt; \n  tidyplot(x = x, y = y, color = correlation) |&gt; \n  add_heatmap() |&gt; \n  sort_x_axis_labels(order_x) |&gt; \n  sort_y_axis_labels(order_y) |&gt; \n  remove_x_axis() |&gt; \n  remove_y_axis() |&gt; \n  remove_legend_title() |&gt; \n  adjust_legend_position(\"right\") |&gt; \n  adjust_colors(colors_continuous_inferno) |&gt; \n  adjust_theme_details(legend.key.height = unit(1, \"null\")) |&gt; \n  add_caption(\"Data source: Spellman PT, et al. 1998. Mol Biol Cell 9(12): 3273-97.\")\n\n\n\n\n\n\n\n\nIf tidyplots could directly read .mcool or .hic files, it will be very helpful.\nI guess it is what he plans to do, we can use other R packages to read the contact matrix files into a dataframe to have a try, but it will take more efforts."
   }
 ]

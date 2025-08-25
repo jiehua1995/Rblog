@@ -1,0 +1,77 @@
+---
+title: "plotthis for R plotting"
+author: "Jie Hua"
+date: "2025-08-25"
+date-modified: "2025-08-25"
+categories: [Plot]
+img: "plotthis.png"
+---
+
+## Basic Information
+
+I noticed a new R package called "plotthis" produced byundefined. This package could generate publication ready plots with simple commands, which largely simplified the R plotting process.
+
+The manual: [https://jbengler.github.io/tidyplots/](https://pwwang.github.io/plotthis/)
+
+It is based on ggplot2 system, it is also very easy to add more features as we want.
+
+## Installation
+
+```{r}
+#| label: installation
+#| warning: false
+#| eval: false
+pak::pkg_install("plotthis")
+```
+
+The development version could be installed with
+
+```{r}
+#| eval: false
+pak::pkg_install("pwwang/plotthis")
+```
+
+## Plotting Demo
+
+```{r}
+library(plotthis)
+```
+
+### Clustree Plot
+
+```{r}
+#| echo: false
+#| warning: false
+#| message: false
+set.seed(8525)
+N = 100
+data <- data.frame(
+    p.0.4 = sample(LETTERS[1:5], N, replace = TRUE),
+    p.0.5 = sample(LETTERS[1:6], N, replace = TRUE),
+    p.0.6 = sample(LETTERS[1:7], N, replace = TRUE),
+    p.0.7 = sample(LETTERS[1:8], N, replace = TRUE),
+    p.0.8 = sample(LETTERS[1:9], N, replace = TRUE),
+    p.0.9 = sample(LETTERS[1:10], N, replace = TRUE),
+    p.1 = sample(LETTERS[1:30], N, replace = TRUE),
+    split = sample(1:2, N, replace = TRUE)
+)
+knitr::kable(head(data), caption = "First 6 rows of the demo dataframe", format = "pipe")
+```
+
+```{r}
+#| fig.cap: "ClustreePlot"
+#| dpi: 600
+#| fig.width: 6
+#| fig.height: 6
+#| fig.align: center
+#| dev: svg
+ClustreePlot(data, prefix = "p")
+```
+
+I just realized that you might set the height and width of plots carefully, as this package dose not fit the size of your screen automatically, it is a small shortage.
+
+I like the ChordPlot and VennDiagrm it could generate.
+
+![![](https://pwwang.github.io/plotthis/reference/venndiagram1-2.png){width="500"}](https://pwwang.github.io/plotthis/reference/chordplot-6.png){fig-align="center" width="500"}
+
+This package maybe helpful for beginners or people without much knowledge of ggplot2.

@@ -1,0 +1,17 @@
+{
+  "hash": "605c97917806f6eb411ec98538a52d2b",
+  "result": {
+    "engine": "knitr",
+    "markdown": "---\ntitle: \"plotthis for R plotting\"\nauthor: \"Jie Hua\"\ndate: \"2025-08-25\"\ndate-modified: \"2025-08-25\"\ncategories: [Plot]\nimg: \"plotthis.png\"\n---\n\n\n\n\n## Basic Information\n\nI noticed a new R package called \"plotthis\" produced byundefined. This package could generate publication ready plots with simple commands, which largely simplified the R plotting process.\n\nThe manual: [https://jbengler.github.io/tidyplots/](https://pwwang.github.io/plotthis/)\n\nIt is based on ggplot2 system, it is also very easy to add more features as we want.\n\n## Installation\n\n\n\n\n::: {.cell}\n\n```{.r .cell-code}\npak::pkg_install(\"plotthis\")\n```\n:::\n\n\n\n\nThe development version could be installed with\n\n\n\n\n::: {.cell}\n\n```{.r .cell-code}\npak::pkg_install(\"pwwang/plotthis\")\n```\n:::\n\n\n\n\n## Plotting Demo\n\n\n\n\n::: {.cell}\n\n```{.r .cell-code}\nlibrary(plotthis)\n```\n:::\n\n\n\n\n### Clustree Plot\n\n\n\n\n::: {.cell}\n::: {.cell-output-display}\n\n\nTable: First 6 rows of the demo dataframe\n\n|p.0.4 |p.0.5 |p.0.6 |p.0.7 |p.0.8 |p.0.9 |p.1 | split|\n|:-----|:-----|:-----|:-----|:-----|:-----|:---|-----:|\n|B     |A     |F     |G     |G     |J     |Z   |     2|\n|D     |E     |A     |H     |A     |D     |I   |     1|\n|C     |F     |G     |G     |C     |H     |NA  |     2|\n|A     |C     |B     |B     |C     |E     |L   |     1|\n|A     |E     |A     |E     |H     |H     |B   |     1|\n|A     |E     |B     |B     |B     |E     |T   |     2|\n\n\n:::\n:::\n\n::: {.cell layout-align=\"center\"}\n\n```{.r .cell-code}\nClustreePlot(data, prefix = \"p\")\n```\n\n::: {.cell-output .cell-output-stderr}\n\n```\nRegistered S3 method overwritten by 'gglogger':\n  method from   \n  +.gg   ggplot2\n```\n\n\n:::\n\n::: {.cell-output-display}\n![ClustreePlot](index_files/figure-html/unnamed-chunk-4-1.svg){fig-align='center' width=3600}\n:::\n:::\n\n\n\n\nI just realized that you might set the height and width of plots carefully, as this package dose not fit the size of your screen automatically, it is a small shortage.\n\nI like the ChordPlot and VennDiagrm it could generate.\n\n![![](https://pwwang.github.io/plotthis/reference/venndiagram1-2.png){width=\"500\"}](https://pwwang.github.io/plotthis/reference/chordplot-6.png){fig-align=\"center\" width=\"500\"}\n\nThis package maybe helpful for beginners or people without much knowledge of ggplot2.\n",
+    "supporting": [
+      "index_files"
+    ],
+    "filters": [
+      "rmarkdown/pagebreak.lua"
+    ],
+    "includes": {},
+    "engineDependencies": {},
+    "preserve": {},
+    "postProcess": true
+  }
+}
