@@ -1,0 +1,84 @@
+---
+title: "Colorblind fridenly plotting in R"
+author: "Jie Hua"
+date: "2025-08-28"
+date-modified: "2025-08-28"
+categories: [Plot]
+img: "index.png"
+---
+
+## 0. Basic Information
+
+To use colorblind-friendly palettes in **R**, you mainly need the following packages. Be sure that we checked the plots with these packages before saving the plots. Thank you!
+
+## 1. colorbindr
+
+> Simulate colorblindness in production-ready R figures. Written by Claire D. McWhite and Claus O. Wilke.
+
+Official repo: <https://github.com/clauswilke/colorblindr>
+
+### 1.1 Installation
+
+```{r}
+#| warning: false
+#| eval: false
+remotes::install_github("wilkelab/cowplot")
+install.packages("colorspace", repos = "http://R-Forge.R-project.org")
+remotes::install_github("clauswilke/colorblindr")
+```
+
+It could also be installed with: (but you need to install [**pak**](https://github.com/r-lib/pak)first.
+
+```{r}
+#| eval: false
+#| warning: false
+pak::pkg_install("clauswilke/colorblindr")
+```
+
+### 1.2 Demo
+
+It is easy to follow the official document, first make a ggplot object like:
+
+```{r}
+library(ggplot2)
+fig <- ggplot(iris, aes(Sepal.Length, fill = Species)) + geom_density(alpha = 0.7)
+fig
+```
+
+Then we could use this package to check in different simulations:
+
+```{r}
+library(colorblindr)
+cvd_grid(fig)
+```
+
+It is also possible to inspect it in the interactive app, I just show the script, it will not open a tab for readers.
+
+```{r}
+#| eval: false
+view_cvd(fig) # starts the interactive app
+```
+
+# 2. colorblindcheck
+
+> Check Color Palettes for Problems with Color Vision Deficiency
+
+Official repo: <https://github.com/Nowosad/colorblindcheck>
+
+### 2.1 Installation
+
+```{r}
+#| warning: false
+#| eval: false
+install.packages("colorblindcheck")
+```
+
+### 2.2 Demo
+
+```{r}
+library(colorblindcheck)
+rainbow_pal = rainbow(n = 7)
+rainbow_pal
+#> [1] "#FF0000" "#FFDB00" "#49FF00" "#00FF92" "#0092FF" "#4900FF" "#FF00DB"
+palette_check(rainbow_pal, plot = TRUE)
+```
