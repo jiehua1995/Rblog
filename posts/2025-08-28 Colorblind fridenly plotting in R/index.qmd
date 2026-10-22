@@ -4,7 +4,7 @@ author: "Jie Hua"
 date: "2025-08-28"
 date-modified: "2025-08-28"
 categories: [Plot]
-img: "index.png"
+image: "index.png"
 ---
 
 ## 0. Basic Information

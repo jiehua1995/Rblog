@@ -1,13 +1,60 @@
 ---
 title: "Home"
+description: "A working notebook of reproducible bioinformatics — genomes, structures, and data visualization."
+image: favicon.png
 listing:
   contents: posts
   sort: "date desc"
   type: grid
-  categories: numbered
+  categories: false
   sort-ui: true
   filter-ui: true
+  max-items: 7
   feed: true
 page-layout: full
 title-block-banner: false
 ---
+
+::::::::: masthead
+:::::: masthead-copy
+[Bioinformatics Notes · Vol. 01]{.kicker}
+
+[Jie Hua]{.masthead-title}
+
+[Notes on bioinformatics, genomes, and the craft of data visualization.]{.masthead-lede}
+
+::: masthead-actions
+<a class="search-pill" href="#" data-search-open><i class="fa-solid fa-magnifying-glass"></i> Search the notes <kbd class="search-kbd">Ctrl K</kbd></a>
+
+[Browse the archive <i class="fa-solid fa-arrow-right"></i>](articles.html){.ghost-link}
+:::
+
+::: {.masthead-dock .liquid-dock aria-label="Quick links"}
+[<i class="fa-solid fa-user"></i>](about.html){.dock-icon data-label="About" aria-label="About"} [<i class="fa-solid fa-globe"></i>](https://www.jiehua1995.xyz/){.dock-icon data-label="Personal site" aria-label="Personal site"} [<i class="fa-brands fa-github"></i>](https://github.com/jiehua1995){.dock-icon data-label="GitHub" aria-label="GitHub"} [<i class="fa-solid fa-rss"></i>](index.xml){.dock-icon data-label="RSS" aria-label="RSS"}
+:::
+
+::: masthead-stats
+[Since 2025]{.stat} · [Biomedical Center, LMU]{.stat} · [Munich]{.stat}
+:::
+::::::
+
+:::: {.masthead-visual aria-hidden="true"}
+::: portrait-orb
+![](favicon.png){alt=""}
+:::
+
+[Genomes]{.float-chip .chip-a} [Structures]{.float-chip .chip-b} [Viz]{.float-chip .chip-c}
+::::
+:::::::::
+
+:::: section-head
+<div>
+
+[Latest notes]{.kicker}
+
+[From the notebook]{.section-title}
+
+</div>
+
+[View all notes <i class="fa-solid fa-arrow-right"></i>](articles.html){.text-link}
+::::

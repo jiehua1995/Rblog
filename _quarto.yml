@@ -3,26 +3,27 @@ project:
 
 website:
   title: "Jie Hua's Bioinformatics Notes"
+  description: "A working notebook of reproducible bioinformatics — genomes, structures, and data visualization."
   site-url: https://bioinfor.jiehua1995.xyz/
-  reader-mode: true
+  image: favicon.png
+  image-alt: "Jie Hua — Bioinformatics Notes"
+  reader-mode: false
   sidebar: false
+  search: true
   navbar:
     right:
-      - about.qmd
-      - 404.qmd
+      - text: "Archive"
+        href: articles.qmd
+      - text: "About"
+        href: about.qmd
       - icon: github
         href: https://github.com/jiehua1995
       - icon: rss
         href: index.xml
-  twitter-card: true
+  twitter-card:
+    card-style: summary_large_image
   open-graph: true
   bread-crumbs: true
-  page-footer:
-    border: false
-    left: "Copyright © 2025, Jie Hua"
-    right:
-      - icon: globe
-        href: https://jiehua1995.xyz
 execute:
   freeze: auto
 
@@ -32,6 +33,10 @@ format:
       light: flatly
       dark: darkly
     css: styles.css
+    lightbox: true
+    include-in-header:
+      - custom-head.html
+    include-after-body:
+      - custom-body.html
 
 editor: visual
-

@@ -1,0 +1,17 @@
+---
+title: "Archive"
+description: "Every note, in reverse chronological order."
+image: favicon.png
+page-layout: full
+listing:
+  contents: posts
+  sort: "date desc"
+  type: table
+  categories: false
+  sort-ui: true
+  filter-ui: true
+  fields:
+    - title
+    - date
+    - categories
+---

@@ -4,7 +4,7 @@ author: "Jie Hua"
 date: "2025-05-06"
 date-modified: "2025-05-06"
 categories: [Plot]
-img: "tidyplots.svg"
+image: "tidyplots.svg"
 ---
 
 ## Basic Information

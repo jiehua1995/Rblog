@@ -7,3 +7,12 @@ freeze: true
 # Enable banner style title blocks
 title-block-banner: true
 
+# Reading aids
+toc: true
+toc-title: "On this page"
+toc-depth: 3
+code-overflow: wrap
+date-format: "MMMM D, YYYY"
+
+# Default author
+author: "Jie Hua"

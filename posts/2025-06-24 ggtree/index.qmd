@@ -4,7 +4,7 @@ author: "Jie Hua"
 date: "2025-06-24"
 date-modified: "2025-06-24"
 categories: [Plot]
-img: "tree.png"
+image: "tree.png"
 ---
 
 ## Basic Information
