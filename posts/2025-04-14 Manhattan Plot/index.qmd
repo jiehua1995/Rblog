@@ -6,6 +6,11 @@ date-modified: "2025-04-14"
 categories: [Plot]
 ---
 
+```{r}
+#| include: false
+source(file.path(dirname(knitr::current_input()), "..", "..", "theme-blog.R"))
+```
+
 ## 参考教程
 
 1.  思问 & StatisticVision. (2025, March 14). *R语言绘图25\|Nature曼哈顿图复现* \[微信公众号\]. R语言绘图25\|Nature曼哈顿图复现. <https://mp.weixin.qq.com/s/3YlnB3Nm85v3FxE8F67oDw>
@@ -80,7 +85,7 @@ ggplot(data, aes(x=BP, y=logP, color=as.factor(CHR)))+
        x = "Chromosome",
        y = "-log10(p-value)",
        color = "Chromosomes" ) + 
-  theme_minimal() + 
+  theme_blog() + 
   theme(strip.text.x = element_blank(), 
         panel.spacing.x = unit(0.1, "lines"), 
         axis.text.x = element_blank(), 

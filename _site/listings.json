@@ -2,6 +2,7 @@
   {
     "listing": "/articles.html",
     "items": [
+      "/posts/2026-10-22 Single-cell sequencing/index.html",
       "/posts/2025-08-28 Colorblind fridenly plotting in R/index.html",
       "/posts/2025-08-25 plotthis for R plotting/index.html",
       "/posts/2025-06-24 ggtree/index.html",
@@ -18,6 +19,7 @@
   {
     "listing": "/index.html",
     "items": [
+      "/posts/2026-10-22 Single-cell sequencing/index.html",
       "/posts/2025-08-28 Colorblind fridenly plotting in R/index.html",
       "/posts/2025-08-25 plotthis for R plotting/index.html",
       "/posts/2025-06-24 ggtree/index.html",

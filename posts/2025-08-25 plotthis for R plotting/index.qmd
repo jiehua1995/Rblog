@@ -6,6 +6,11 @@ date-modified: "2025-08-25"
 categories: [Plot]
 ---
 
+```{r}
+#| include: false
+source(file.path(dirname(knitr::current_input()), "..", "..", "theme-blog.R"))
+```
+
 ## Basic Information
 
 I noticed a new R package called "plotthis" produced byundefined. This package could generate publication ready plots with simple commands, which largely simplified the R plotting process.
@@ -59,12 +64,11 @@ knitr::kable(head(data), caption = "First 6 rows of the demo dataframe", format 
 
 ```{r}
 #| fig.cap: "ClustreePlot"
-#| dpi: 600
+#| dpi: 300
 #| fig.width: 6
 #| fig.height: 6
 #| fig.align: center
-#| dev: svg
-ClustreePlot(data, prefix = "p")
+ClustreePlot(data, prefix = "p") + theme_blog_overlay
 ```
 
 I just realized that you might set the height and width of plots carefully, as this package dose not fit the size of your screen automatically, it is a small shortage.

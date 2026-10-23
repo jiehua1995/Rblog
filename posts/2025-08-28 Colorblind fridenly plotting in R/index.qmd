@@ -7,6 +7,11 @@ categories: [Plot]
 image: "index.png"
 ---
 
+```{r}
+#| include: false
+source(file.path(dirname(knitr::current_input()), "..", "..", "theme-blog.R"))
+```
+
 ## 0. Basic Information
 
 To use colorblind-friendly palettes in **R**, you mainly need the following packages. Be sure that we checked the plots with these packages before saving the plots. Thank you!

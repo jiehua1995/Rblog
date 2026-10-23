@@ -7,6 +7,11 @@ categories: [Plot]
 image: "tree.png"
 ---
 
+```{r}
+#| include: false
+source(file.path(dirname(knitr::current_input()), "..", "..", "theme-blog.R"))
+```
+
 ## Basic Information
 
 Phylogenetic trees are used to show the evolutionary relationships between different species or genes. The `ggtree` package in R is a powerful tool for visualizing these trees, allowing for customization and integration with other data types.
@@ -72,7 +77,6 @@ knitr::kable(head(dat3), caption = "Demo tree data 3", format = "pipe")
 #| fig.width: 6
 #| fig.height: 6
 #| fig.align: center
-#| dev: svg
 
 # The format of the datasets is the long shape for ggplot2. If you have short shape dataset,
 # you can use `melt` of `reshape2` or `pivot_longer` of `tidyr` to convert it.
@@ -81,7 +85,7 @@ knitr::kable(head(dat3), caption = "Demo tree data 3", format = "pipe")
 p <- ggtree(tree, layout="fan", open.angle=10, size=0.5)
 #> Scale for y is already present.
 #> Adding another scale for y, which will replace the existing scale.
-p
+p + theme_blog_overlay
 
 ```
 
@@ -95,7 +99,6 @@ p
 #| fig.width: 6
 #| fig.height: 6
 #| fig.align: center
-#| dev: svg
 ## Next, we can use %<+% of ggtree to add annotation dataset to tree.
 #p1 <- p %<+% dat1
 #p1
@@ -162,7 +165,7 @@ p2 <- p +
                     order=1
                 )
       )
-p2
+p2 + theme_blog_overlay
 
 
 ```
@@ -177,7 +180,6 @@ p2
 #| fig.width: 6
 #| fig.height: 6
 #| fig.align: center
-#| dev: svg
 
 # Next, we will add a heatmap layer on the outer ring of p2 using `geom_tile` of `ggplot2`.
 # Since we want to map some variable of dataset to the `fill` aesthetics of `geom_tile`, but 
@@ -195,7 +197,7 @@ p3 <- p2 +
           values=c("#339933", "#dfac03"),
           guide=guide_legend(keywidth=0.5, keyheight=0.5, order=3)
       ) 
-p3
+p3 + theme_blog_overlay
 ```
 
 ## Add heatmap layer for continuous values
@@ -208,7 +210,6 @@ p3
 #| fig.width: 6
 #| fig.height: 6
 #| fig.align: center
-#| dev: svg
 
 # You can also add heatmap layer for continuous values.
 p4 <- p3 + 
@@ -232,7 +233,7 @@ p4 <- p3 +
           range=c(0, 0.4), # the range of alpha
           guide=guide_legend(keywidth=0.5, keyheight=0.5, order=5)
       ) 
-p4
+p4 + theme_blog_overlay
 
 # Then add a bar layer outside of the tree.
 p5 <- p4 + 
@@ -259,8 +260,7 @@ p5 <- p4 +
           legend.text=element_text(size=6), # the text size of legend.
           legend.spacing.y = unit(0.02, "cm")  # the distance of legends (y orientation).
       ) 
-p5
-
+p5 + theme_blog_overlay
 ```
 
 ## Add multiple layers on the same position
@@ -273,7 +273,6 @@ p5
 #| fig.width: 6
 #| fig.height: 6
 #| fig.align: center
-#| dev: svg
 
 # To reproduce.
 set.seed(1024)
@@ -289,7 +288,7 @@ colnames(dtf)[[3]] <- "group3"
 p <- ggtree(tr, layout="fan", open.angle=0)
 #> Scale for y is already present.
 #> Adding another scale for y, which will replace the existing scale.
-p
+p + theme_blog_overlay
 # the first ring.
 p1 <- p + 
       geom_fruit(
@@ -298,7 +297,7 @@ p1 <- p +
           mapping = aes(y=id, x=value, fill=group),
       ) + 
       new_scale_fill()
-p1
+p1 + theme_blog_overlay
 # the second ring
 # geom_fruit_list is a list, which first element must be layer of geom_fruit.
 p2 <- p1 + 
@@ -320,7 +319,7 @@ p2 <- p1 +
           )
       ) + 
       new_scale_fill()
-p2
+p2 + theme_blog_overlay
 
 # The third ring
 p3 <- p2 + 
@@ -333,5 +332,5 @@ p3 <- p2 +
       scale_fill_manual(values=c("#00AED7", "#009E73"))
 #> Warning in geom_col(data = structure(list(label = c("t1", "t10", "t100", :
 #> Ignoring unknown parameters: `stat`
-p3
+p3 + theme_blog_overlay
 ```
