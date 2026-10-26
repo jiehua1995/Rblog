@@ -400,6 +400,8 @@
 
       var frame = card.querySelector(".card-img-top");
       var img = frame ? frame.querySelector("img") : null;
+      var hasImage = !!(img && img.getAttribute("src")) &&
+        !(img.complete && img.naturalWidth === 0);
       var done = false;
 
       var useAnime = function () {
@@ -417,23 +419,26 @@
           });
       };
 
+      // 优先使用正文的第一张图；没有正文图时保留 front matter 的 image，最后才用动漫图
       var upgrade = function () {
         if (done) return;
         done = true;
         var pageUrl = new URL(href, window.location.href).href;
         firstArticleImage(pageUrl).then(function (src) {
-          if (src) applyCardImage(card, src);
-          else useAnime();
-        }).catch(useAnime);
+          if (src) {
+            var next = applyCardImage(card, src);
+            next.addEventListener("error", function () {
+              if (!hasImage) useAnime();
+            }, { once: true });
+          } else if (!hasImage) {
+            useAnime();
+          }
+        }).catch(function () {
+          if (!hasImage) useAnime();
+        });
       };
 
-      if (!img || !img.getAttribute("src")) {
-        upgrade();
-      } else if (img.complete && img.naturalWidth === 0) {
-        upgrade();
-      } else {
-        img.addEventListener("error", upgrade);
-      }
+      upgrade();
     });
   }
 

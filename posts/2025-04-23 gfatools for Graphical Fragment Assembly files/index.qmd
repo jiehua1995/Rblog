@@ -5,7 +5,7 @@ date: "2025-04-23"
 date-modified: "2025-04-23"
 categories: [Assembly]
 engine: knitr
-image: "gfa.png"
+image: "gfa-card.png"
 ---
 
 ## Basic Information

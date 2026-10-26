@@ -1276,7 +1276,7 @@ body.quarto-dark .quarto-grid-item.card {
 .quarto-grid-item .card-img-top {
   margin: 0 !important;
   overflow: hidden;
-  background: var(--paper-2);
+  background: transparent;
 }
 
 .quarto-grid-item .card-img-top img {
@@ -2884,8 +2884,9 @@ body:has(.quarto-title-banner) #quarto-document-content h3 {
   }
 
   .navbar .navbar-nav .nav-item.compact .nav-link {
-    width: 36px;
-    height: 36px;
+    width: 42px;
+    min-width: 42px;
+    height: 42px;
     padding: 0;
     display: inline-grid;
     place-items: center;
@@ -2896,7 +2897,7 @@ body:has(.quarto-title-banner) #quarto-document-content h3 {
   .navbar .navbar-nav .nav-item.compact .nav-link i {
     width: auto;
     flex: 0 0 auto;
-    font-size: 0.8rem;
+    font-size: 0.95rem;
   }
 
   .navbar .navbar-nav .nav-item.compact .menu-text {
