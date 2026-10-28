@@ -1,5 +1,6 @@
 ---
 title: "Illustrate: Non-photorealistic Biomolecular Illustration"
+subtitle: "Illustrate：非真实感生物分子插图"
 author: "Jie Hua"
 date: "2025-04-16"
 date-modified: "2025-04-16"
@@ -8,8 +9,14 @@ engine: knitr
 image: "https://ccsb.scripps.edu/illustrate/wp-content/uploads/sites/35/2019/04/1ttt-400x630.jpg"
 ---
 
+> **Illustrate** 是一个小型的 Fortran 程序，用于生成分子的非真实感插图（non-photorealistic illustration），具有卡通化的配色与轮廓线，以及柔和的环境阴影。它最初是我在斯克利普斯研究所（Scripps Research Institute）Arthur J. Olson 实验室从事博士后研究期间开发的，此后我一直对它加以改进。我用它为我的[著作](https://ccsb.scripps.edu/goodsell/publication/)以及 RCSB 蛋白质数据库（RCSB Protein Data Bank）的科普门户 [PDB-101](http://pdb101.rcsb.org/) 制作素材，其中最著名的是[“每月一分子”（Molecule of the Month）](http://pdb101.rcsb.org/motm/motm-about)栏目。
+
 > **Illustrate** is a small Fortran program for creating non-photorealistic illustrations of molecules, with cartoony colors and outlines, and soft ambient shadows. I originally developed it during postdoctoral training in the laboratory of Arthur J. Olson at the Scripps Research Institute, and have tinkered with it ever since. I have used it to create materials for my [books](https://ccsb.scripps.edu/goodsell/publication/) and for [PDB-101](http://pdb101.rcsb.org/), the outreach portal of the RCSB Protein Data Bank, most notably, for the [“Molecule of the Month.”](http://pdb101.rcsb.org/motm/motm-about)
 
+**官方网站：** https://ccsb.scripps.edu/illustrate/
+
 **Official website:** https://ccsb.scripps.edu/illustrate/
+
+**发表文献：** Goodsell, D. S., Autin, L., & Olson, A. J. (2019).《Illustrate: Software for Biomolecular Illustration》。Structure (London, England : 1993), 27(11), 1716–1720.e1. https://doi.org/10.1016/j.str.2019.08.011
 
 **Publication:** Goodsell, D. S., Autin, L., & Olson, A. J. (2019). Illustrate: Software for Biomolecular Illustration. Structure (London, England : 1993), 27(11), 1716–1720.e1. https://doi.org/10.1016/j.str.2019.08.011

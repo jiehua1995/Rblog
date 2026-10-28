@@ -1478,7 +1478,7 @@ body:has(.quarto-listing-container-table) main.content {
 }
 
 .quarto-listing-container-table thead th:first-child {
-  width: 58%;
+  width: 8.4rem;
 }
 
 .quarto-listing-container-table thead a {
@@ -1514,13 +1514,32 @@ body:has(.quarto-listing-container-table) main.content {
 }
 
 .quarto-listing-container-table tbody td {
-  padding: 1.15rem 0.8rem;
+  padding: 0.42rem 0.6rem;
   border-bottom: 1px solid var(--rule);
   vertical-align: middle;
   color: var(--muted);
   font-family: var(--font-mono);
   font-size: 0.68rem;
   letter-spacing: 0.02em;
+}
+
+/* first column = date, shown as a soft liquid pill */
+.quarto-listing-container-table tbody td:first-child {
+  width: 8.4rem;
+  padding: 0.38rem 0.7rem;
+  border-bottom-color: transparent;
+  border-radius: 999px;
+  color: var(--ink);
+  font-family: var(--font-display);
+  font-size: 0.94rem;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  text-align: center;
+  white-space: nowrap;
+  background:
+    radial-gradient(120% 180% at 12% 8%, rgba(86, 180, 233, 0.30), transparent 62%),
+    radial-gradient(120% 180% at 88% 92%, rgba(204, 121, 167, 0.22), transparent 64%),
+    var(--surface);
 }
 
 .quarto-listing-container-table tbody tr {
@@ -1535,18 +1554,30 @@ body:has(.quarto-listing-container-table) main.content {
   border-bottom: 0;
 }
 
-.quarto-listing-container-table tbody td a {
+.quarto-listing-container-table tbody td:nth-child(2) a {
   font-family: var(--font-display);
-  font-size: 1.24rem;
+  font-size: 1.04rem;
   font-weight: 500;
-  line-height: 1.3;
-  letter-spacing: -0.015em;
+  line-height: 1.25;
+  letter-spacing: -0.012em;
   color: var(--ink);
   text-decoration: none;
 }
 
-.quarto-listing-container-table tbody td a:hover {
+.quarto-listing-container-table tbody td:nth-child(2) a:hover {
   color: var(--accent);
+}
+
+@media (max-width: 767px) {
+  .quarto-listing-container-table tbody td:first-child {
+    width: auto;
+    padding: 0.28rem 0.6rem;
+    font-size: 0.8rem;
+  }
+
+  .quarto-listing-container-table tbody td:nth-child(2) a {
+    font-size: 0.98rem;
+  }
 }
 
 /* category sidebar (Archive listings only — never the article TOC) */
@@ -3348,4 +3379,112 @@ body.quarto-dark .about-name {
     opacity: 1;
     transform: none;
   }
+}
+
+/* ==========================================================================
+   Archive: compact list with a fluid date pill
+   ========================================================================== */
+
+.quarto-listing-container-table table,
+.quarto-listing-container-table tbody {
+  display: block;
+  width: 100%;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+.quarto-listing-container-table thead {
+  display: none;
+}
+
+.quarto-listing-container-table tbody tr {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  padding: 0.42rem 0.1rem;
+  border-bottom: 1px solid var(--rule);
+  background: transparent;
+  transition: background-color 0.25s ease;
+}
+
+.quarto-listing-container-table tbody tr:last-child {
+  border-bottom: 0;
+}
+
+.quarto-listing-container-table tbody tr:hover {
+  background: var(--accent-soft);
+}
+
+.quarto-listing-container-table tbody td {
+  display: block;
+  padding: 0;
+  border: 0;
+  background: none;
+  font-size: 0.68rem;
+}
+
+/* date: uniform pill, wide enough to keep the title column aligned */
+.quarto-listing-container-table tbody td:first-child {
+  flex: 0 0 7.6rem;
+  width: 7.6rem;
+  padding: 0.3rem 0.5rem;
+  border-radius: 999px;
+  color: var(--ink);
+  font-family: var(--font-display);
+  font-size: 0.92rem;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  text-align: center;
+  white-space: nowrap;
+  background:
+    radial-gradient(120% 180% at 12% 8%, rgba(86, 180, 233, 0.32), transparent 62%),
+    radial-gradient(120% 180% at 88% 92%, rgba(204, 121, 167, 0.24), transparent 64%),
+    var(--surface);
+}
+
+.quarto-listing-container-table tbody td:nth-child(2) {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.quarto-listing-container-table tbody td:nth-child(2) a {
+  font-family: var(--font-display);
+  font-size: 1.02rem;
+  font-weight: 500;
+  line-height: 1.25;
+  letter-spacing: -0.012em;
+  color: var(--ink);
+  text-decoration: none;
+}
+
+.quarto-listing-container-table tbody td:nth-child(2) a:hover {
+  color: var(--accent);
+}
+
+.quarto-listing-container-table tbody td:nth-child(3) {
+  flex: 0 0 auto;
+}
+
+@media (max-width: 767px) {
+  .quarto-listing-container-table tbody tr {
+    gap: 0.6rem;
+  }
+
+  .quarto-listing-container-table tbody td:first-child {
+    flex: 0 0 auto;
+    width: auto;
+    padding: 0.24rem 0.6rem;
+    font-size: 0.78rem;
+  }
+
+  .quarto-listing-container-table tbody td:nth-child(2) a {
+    font-size: 0.95rem;
+  }
+}
+
+/* long URLs should wrap instead of running under the table of contents */
+#quarto-document-content a {
+  overflow-wrap: anywhere;
 }

@@ -1,6 +1,6 @@
 ---
-title: "单细胞 RNA 表达数据在 Transformer 中的编码方法"
-subtitle: "Encoding Single-Cell RNA Expression Data for Transformer Models"
+title: "Encoding Single-Cell RNA Expression Data for Transformer Models"
+subtitle: "单细胞 RNA 表达数据在 Transformer 中的编码方法"
 description: "逐段中英对照的技术综述：以 Geneformer、scGPT、scFoundation、scPRINT 与 UCE 为例，还原从 raw counts 到 token 与 embedding 的完整计算过程，比较信息保留、计算成本与适用场景，并给出可验证的实验设计。"
 author: "Jie Hua"
 date: "2026-10-30"
@@ -18,7 +18,7 @@ This article was researched and written by an **AI system (DeepSeek-Flash)** and
 :::
 
 ::: {.callout-note collapse="true"}
-## 生成本文所用的提示词（示意） / Prompt used to generate this article (illustrative)
+## 生成本文所用的提示词（压缩后） / Prompt used to generate this article (condensed)
 
 > 写一篇中英逐段对照的技术综述，主题是单细胞 RNA 表达数据如何被编码成 Transformer 的输入。重点拆解四种方案：Geneformer 的 rank-based encoding、scGPT 的 binned encoding、scFoundation 与 scPRINT 的连续值编码、以及把表达量当作基因向量权重的方案。用一组 10 个基因的玩具数据，把每种方法的张量维度、伪代码和可能丢失信息的位置讲清楚。不要用模型整体 benchmark 的胜负来推断编码方式优劣，要提出可以单独检验编码变量的实验。代码默认折叠，开头加一个折叠的提示词说明。
 

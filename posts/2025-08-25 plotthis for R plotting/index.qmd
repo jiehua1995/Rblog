@@ -1,5 +1,6 @@
 ---
 title: "plotthis for R plotting"
+subtitle: "用 plotthis 进行 R 绘图"
 author: "Jie Hua"
 date: "2025-08-25"
 date-modified: "2025-08-25"
@@ -11,15 +12,21 @@ categories: [Plot]
 source(file.path(dirname(knitr::current_input()), "..", "..", "theme-blog.R"))
 ```
 
-## Basic Information
+## 基本信息 / Basic Information
+
+我注意到一个名为 “plotthis” 的新 R 包。该包可以用简单的命令生成达到发表水准的图表，大大简化了 R 的绘图流程。
 
 I noticed a new R package called "plotthis" produced byundefined. This package could generate publication ready plots with simple commands, which largely simplified the R plotting process.
 
+手册：[https://jbengler.github.io/tidyplots/](https://pwwang.github.io/plotthis/)
+
 The manual: [https://jbengler.github.io/tidyplots/](https://pwwang.github.io/plotthis/)
+
+它基于 ggplot2 体系，同时也很容易按需添加更多功能。
 
 It is based on ggplot2 system, it is also very easy to add more features as we want.
 
-## Installation
+## 安装 / Installation
 
 ```{r}
 #| label: installation
@@ -28,6 +35,8 @@ It is based on ggplot2 system, it is also very easy to add more features as we w
 pak::pkg_install("plotthis")
 ```
 
+开发版本可以通过以下方式安装
+
 The development version could be installed with
 
 ```{r}
@@ -35,13 +44,13 @@ The development version could be installed with
 pak::pkg_install("pwwang/plotthis")
 ```
 
-## Plotting Demo
+## 绘图演示 / Plotting Demo
 
 ```{r}
 library(plotthis)
 ```
 
-### Clustree Plot
+### 聚类树图 / Clustree Plot
 
 ```{r}
 #| echo: false
@@ -71,10 +80,16 @@ knitr::kable(head(data), caption = "First 6 rows of the demo dataframe", format 
 ClustreePlot(data, prefix = "p") + theme_blog_overlay
 ```
 
+我后来意识到，你可能需要仔细设置图的高度和宽度，因为这个包不会自动适配屏幕尺寸，这是一个小缺点。
+
 I just realized that you might set the height and width of plots carefully, as this package dose not fit the size of your screen automatically, it is a small shortage.
+
+我很喜欢它能够生成的弦图（ChordPlot）和韦恩图（VennDiagram）。
 
 I like the ChordPlot and VennDiagrm it could generate.
 
 ![![](https://pwwang.github.io/plotthis/reference/venndiagram1-2.png){width="500"}](https://pwwang.github.io/plotthis/reference/chordplot-6.png){fig-align="center" width="500"}
+
+这个包也许对初学者，或对 ggplot2 了解不多的人有所帮助。
 
 This package maybe helpful for beginners or people without much knowledge of ggplot2.

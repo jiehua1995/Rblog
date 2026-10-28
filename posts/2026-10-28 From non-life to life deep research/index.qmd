@@ -1,6 +1,6 @@
 ---
-title: "从无生命到生命：物质、信息、自组织与涌现"
-subtitle: "From Non-Life to Life: Philosophy, Self-Organization, Information, and the Emergence of Living Systems"
+title: "From Non-Life to Life: Philosophy, Self-Organization, Information, and the Emergence of Living Systems"
+subtitle: "从无生命到生命：物质、信息、自组织与涌现"
 description: "一篇关于生命起源的深度综述：从亚里士多德与康德，到耗散结构、自催化闭合、RNA 复制、原始细胞与人工生命，梳理 2020–2026 年的实验与理论进展，并给出可检验的生命性评价框架。"
 author: "Jie Hua"
 date: "2026-10-28"
@@ -10,20 +10,32 @@ engine: knitr
 ---
 
 ::: callout-important
-## 写作说明
+## 写作说明 / A Note on the Writing
 
 本文由 **AI（DeepSeek-Flash）** 检索、整理并撰写，**尚未经过人工逐条校对**。文中的文献信息经过初步核对（部分附 DOI），但作者、年份、卷期仍可能存在错误；引用前请以 DOI 或出版方页面为准。
 
+This article was retrieved, organised, and written by **AI (DeepSeek-Flash)** and **has not yet been verified item by item by a human**. The bibliographic information has been checked only preliminarily (some entries include a DOI), but authors, years, volumes, and issue numbers may still contain errors; before citing, please rely on the DOI or the publisher's page.
+
 文中所有图都是**概念示意图**，由本文 R 代码在渲染时生成，不是实验数据。凡属作者推论、类比或尚未被实验支持的主张，正文中都会用"推测""假说""目前的模型认为"等措辞显式标注；请把这类句子与有实验依据的陈述区分开。
 
+All figures in this article are **conceptual schematics** generated at render time by the article's own R code; they are not experimental data. Wherever a claim is an inference or analogy by the author, or is not yet supported by experiment, the text explicitly flags it with wording such as "speculation", "hypothesis", or "current models suggest"; please distinguish such sentences from statements that have experimental support.
+
 本文不主张生命起源问题已经被解决。它的目标恰好相反：说清楚哪些转变已经被实验或模型支持，哪些仍是空白。
+
+This article does not claim that the problem of the origin of life has been solved. Its aim is precisely the opposite: to make clear which transitions are already supported by experiment or by models, and which remain blank.
 :::
 
 一块花岗岩、一支蜡烛的火焰、一杯在黄色与蓝色之间周期性振荡的 Belousov–Zhabotinsky 反应液，以及一个正在分裂的大肠杆菌——把这四样东西并排放在桌上，几乎所有人都能立刻指出"最后一个是活的"。但若被追问**依据是什么**，答案会立刻变得含糊：细菌会代谢，火焰也会消耗燃料；细菌会复制，反应液也能在时间上自我复制图案；细菌有边界，岩石也有边界；细菌会响应环境，火焰也会随气流改变形状。
 
+A block of granite, the flame of a candle, a cup of Belousov–Zhabotinsky reaction liquid oscillating periodically between yellow and blue, and a dividing *Escherichia coli* cell—place these four things side by side on a table and almost anyone will immediately point to "the last one is alive." Yet when pressed on **what the basis for that judgement is**, the answer at once becomes vague: bacteria metabolise, but a flame also consumes fuel; bacteria replicate, but the reaction liquid can also replicate a pattern in time; bacteria have a boundary, but so does a rock; bacteria respond to their environment, but a flame also changes shape with the airflow.
+
 生命起源研究的困难，并不只是"我们还不知道那条化学反应路径"。更深的一层是：**我们用来判断"这是生命"的标准本身，是一个哲学上未经澄清的混合体**——一部分是热力学直觉（它维持自身远离平衡），一部分是信息直觉（它把信息传给下一代），一部分是目的论直觉（它为某种东西服务），一部分只是地球生物学的偶然特征（它有细胞膜、用 DNA、含碳）。
 
+The difficulty of origin-of-life research is not merely that "we do not yet know the chemical reaction pathway." A deeper layer is this: **the very standard by which we judge "this is life" is itself a philosophically unclarified mixture**—partly a thermodynamic intuition (it sustains itself far from equilibrium), partly an informational intuition (it transmits information to the next generation), partly a teleological intuition (it serves some purpose), and partly nothing more than contingent features of terrestrial biology (it has a cell membrane, uses DNA, contains carbon).
+
 因此这篇文章不按学科分章（哲学、化学、热力学、计算机），而是沿着一条概念主线推进：**一块物质要经过哪些组织方式的转变，才配被称为"活的"？** 这条主线可以画成一张粗糙的路线图：
+
+This article is therefore not organised by discipline (philosophy, chemistry, thermodynamics, computer science) but advances along a single conceptual thread: **through which transformations of organisation must a piece of matter pass before it deserves to be called "alive"?** This thread can be drawn as a rough roadmap:
 
 ```{r}
 #| label: setup
@@ -40,7 +52,7 @@ suppressPackageStartupMessages({
 
 ```{r}
 #| label: fig-roadmap
-#| fig-cap: "从物质到生命的概念路线图。每一级台阶都对应一种组织方式的改变，而不是某种新物质的出现。这个顺序是分析性的，不代表历史上必然按此顺序发生；真实过程可能重叠、并行、甚至跳跃。"
+#| fig-cap: "从物质到生命的概念路线图。每一级台阶都对应一种组织方式的改变，而不是某种新物质的出现。这个顺序是分析性的，不代表历史上必然按此顺序发生；真实过程可能重叠、并行、甚至跳跃。 | A conceptual roadmap from matter to life. Each step corresponds to a change in the mode of organisation, not to the appearance of a new kind of substance. This ordering is analytical; it does not imply that the historical process necessarily followed it, and the real process may have overlapped, run in parallel, or even jumped."
 #| fig-width: 5.8
 #| fig-height: 8.0
 stages <- data.frame(
@@ -81,19 +93,28 @@ ggplot(stages) +
 
 需要预先说明三种"证据等级"，因为后文会反复用到：
 
+Three "grades of evidence" must be stated in advance, because they will recur repeatedly in what follows:
+
 -   **实验事实**：在受控条件下重复观察到，例如某条反应路径在模拟早期地球条件下能生成核苷酸。
+-   **Experimental fact**: repeatedly observed under controlled conditions—for example, that a given reaction pathway can produce nucleotides under conditions simulating the early Earth.
 -   **模型结论**：在明确的数学假设下成立，例如随机催化网络中巨型连通分量出现的阈值；模型换了假设，结论可能改变。
+-   **Model result**: holds under explicit mathematical assumptions—for example, the threshold at which a giant connected component appears in a random catalytic network; change the assumptions and the conclusion may change.
 -   **哲学解释**：用来组织事实的概念框架，例如"生命是一种过程而非实体"。它不能单独被实验推翻，但可以影响我们设计什么实验。
+-   **Philosophical interpretation**: a conceptual framework used to organise facts—for example, "life is a process rather than a substance." It cannot be refuted by experiment alone, but it can influence which experiments we design.
 
 把这三者混为一谈，是生命起源讨论里最常见的错误——也是最容易产生"科学家已经破解生命起源"这类标题的原因。
 
-## 第一章　生命为什么是一个哲学难题？
+Conflating these three is the most common error in discussions of the origin of life—and the most reliable way to produce headlines of the form "scientists have cracked the origin of life."
 
-### 1.1 四种"像生命"的东西
+## 第一章　生命为什么是一个哲学难题？ / Chapter 1. Why Is Life a Philosophical Problem?
+
+### 1.1 四种"像生命"的东西 / 1.1 Four Things That Look Like Life
 
 先做一次思想实验。把岩石、火焰、化学振荡反应和细菌放在同一张桌子上，逐一检查它们共享哪些属性：
 
-| 属性 | 岩石 | 火焰 | BZ 反应 | 细菌 |
+Begin with a thought experiment. Place a rock, a flame, a chemical oscillating reaction, and a bacterium on the same table, and examine one by one which properties they share:
+
+| 属性 / Property | 岩石 / Rock | 火焰 / Flame | BZ 反应 / BZ reaction | 细菌 / Bacteria |
 |----|----|----|----|----|
 | 有边界 | 固体表面 | 近似有（反应区） | 有（颜色波前） | 有（脂双层） |
 | 与环境交换物质 | 极慢 | 强烈 | 中等 | 强烈、受控 |
@@ -105,57 +126,95 @@ ggplot(stages) +
 
 火焰几乎满足了"远离平衡 + 自我维持"，却不满足"可遗传变异"。BZ 反应同时满足"自组织 + 时间周期性"，但没有信息传递。细菌则同时具备全部，而且这些属性彼此耦合：膜维持了浓度梯度，浓度梯度驱动代谢，代谢产物参与膜脂合成。
 
+A flame satisfies "far from equilibrium + self-maintenance" almost completely, yet it does not satisfy "heritable variation." The BZ reaction satisfies both "self-organisation + temporal periodicity," yet it has no transmission of information. A bacterium possesses all of them at once, and these properties are coupled to one another: the membrane maintains a concentration gradient, the gradient drives metabolism, and the products of metabolism participate in the synthesis of membrane lipids.
+
 这份表格的关键不是找到一条分界线，而是发现：**"活着"不是一个二值属性，而是一组彼此依赖的能力**。这直接导致了现代生命定义的三种典型策略。
 
-### 1.2 亚里士多德：形式、潜能与现实
+The point of this table is not to find a dividing line but to notice that **"being alive" is not a binary property but a set of mutually dependent capacities**. This leads directly to the three typical strategies in modern definitions of life.
+
+### 1.2 亚里士多德：形式、潜能与现实 / 1.2 Aristotle: Form, Potentiality, and Actuality
 
 亚里士多德在《论灵魂》（*De Anima*）中给出的定义，至今仍是最有生命力的哲学框架之一：生命体是**具有灵魂（psychē）的自然物体**，而灵魂是"潜在地拥有生命的自然身体的形式（eidos）"。这里的"形式"不是外形，而是使质料成为"这一种东西"的组织原则。
 
+In *De Anima*, Aristotle offers a definition that remains one of the most fertile philosophical frameworks available: a living thing is **a natural body that possesses a soul (psychē)**, and the soul is "the form (eidos) of a natural body that potentially has life." "Form" here does not mean outward shape but the organising principle that makes matter into "this kind of thing."
+
 更关键的是他区分了**潜能（dynamis）与现实（energeia）**。种子潜在地是一棵树；眼睛潜在地能看。生命不是某种附加在物质上的神秘成分，而是物质在特定组织下**持续实现自身功能**的方式。
+
+More decisively, he distinguishes **potentiality (dynamis) from actuality (energeia)**. A seed is potentially a tree; an eye is potentially able to see. Life is not some mysterious ingredient added to matter; it is the way matter, under a particular organisation, **continuously realises its own functions**.
 
 这一框架的现代回声非常明显：后面会看到，自创生理论（autopoiesis）说的"系统持续生产自身组成部分"，Kauffman 说的"整体为部分而存在、部分为整体而存在"的康德式整体（Kantian whole），本质上都是把"形式"重新解释为**组织的因果闭合**。亚里士多德的问题意识——生命是实体还是过程——从未真正消失。
 
-### 1.3 机械论与活力论：一场没有真正结束的争论
+The modern echoes of this framework are unmistakable: as we shall see, the autopoietic claim that "the system continuously produces its own components," and Kauffman's Kantian whole, in which "the whole exists for the parts and the parts for the whole," are at bottom reinterpretations of "form" as **the causal closure of organisation**. Aristotle's underlying question—whether life is a substance or a process—has never really gone away.
+
+### 1.3 机械论与活力论：一场没有真正结束的争论 / 1.3 Mechanism and Vitalism: An Argument That Never Really Ended
 
 17 世纪以后，机械论把生物体比作钟表：心脏是泵，肺是风箱，肌肉是杠杆。笛卡尔甚至认为动物是自动机。与之相对的活力论（vitalism）主张，生命含有某种非物理的"生命力"（élan vital 的前身），无法用物理化学解释。
 
+From the seventeenth century onward, mechanism likened organisms to clocks: the heart is a pump, the lungs are bellows, the muscles are levers. Descartes even held that animals are automata. Vitalism, by contrast, maintained that life contains some non-physical "vital force" (the forerunner of the *élan vital*) that cannot be explained by physics and chemistry.
+
 20 世纪分子生物学基本判了活力论死刑：没有发现任何违反物理定律的"生命力"。但这场争论留下了一个没有被真正解决的问题：**把生命完全还原为分子间相互作用，会不会丢掉某些真实的因果结构？**
+
+Twentieth-century molecular biology effectively pronounced a death sentence on vitalism: no "vital force" violating the laws of physics was ever found. Yet the debate left behind a problem that has not really been resolved: **does reducing life entirely to interactions among molecules discard some genuine causal structure?**
 
 当代的"新机械论"（new mechanism）与系统生物学给出的折中方案是：不引入神秘力量，但承认**组织层次本身具有因果效力**。一个酶的性质由分子结构决定，但"这个反应发生在哪个区室、受哪个调控网络控制"这类问题，无法只在原子层面回答。
 
-### 1.4 康德：部分与整体的相互依赖
+The compromise offered by contemporary "new mechanism" and systems biology is this: introduce no mysterious forces, but acknowledge that **levels of organisation themselves possess causal efficacy**. The properties of an enzyme are determined by its molecular structure, but questions such as "in which compartment does this reaction occur, and which regulatory network controls it" cannot be answered at the level of atoms alone.
+
+### 1.4 康德：部分与整体的相互依赖 / 1.4 Kant: The Mutual Dependence of Parts and Whole
 
 康德在《判断力批判》（1790）第 65 节给出了一个常被引用的表述：在有组织的自然产物中，**每一部分都既是手段又是目的**；部分只有在与整体的关系中才可能存在，而整体又通过部分而存在。
 
+In §65 of the *Critique of Judgement* (1790), Kant gives a frequently cited formulation: in an organised product of nature, **every part is at once means and end**; a part can exist only in relation to the whole, and the whole exists through the parts.
+
 他称这样的对象为"自然目的"（Naturzweck），并强调这是一个**反思性判断**的调节性原则，而不是构成性知识。换句话说：我们看待生物时不得不使用目的论语言，但这不证明自然界真有目的。
+
+He calls such an object a "natural end" (Naturzweck) and stresses that this is a regulative principle of **reflective judgement**, not constitutive knowledge. In other words: in looking at organisms we cannot avoid teleological language, but that does not prove that nature actually has purposes.
 
 康德的表述之所以重要，是因为它预见了现代"因果闭合"的思想：生命系统的特殊性不在于它由什么组成，而在于它的**因果关系是循环的**——产物反过来是原因。Kauffman 与 Roli 在 2025 年明确把自催化集合称为"康德式整体"，正是这一思路的当代版本。
 
-### 1.5 柏格森与过程哲学：生命作为持续的创造
+Kant's formulation matters because it anticipates the modern idea of "causal closure": what is distinctive about living systems is not what they are made of but that their **causality is circular**—the product is in turn the cause. Kauffman and Roli's explicit description of autocatalytic sets as "Kantian wholes" in 2025 is precisely a contemporary version of this line of thought.
+
+### 1.5 柏格森与过程哲学：生命作为持续的创造 / 1.5 Bergson and Process Philosophy: Life as Continuous Creation
 
 柏格森在《创造性进化》（1907）中反对把生命理解为机械装配，也反对把它理解为朝向某个固定目的的努力。他提出的"生命冲力"（élan vital）常被误读为神秘主义，但其真正的哲学要点是：**演化是持续的创造性过程，不能被还原为对预先存在可能性的选择**。
 
+In *Creative Evolution* (1907), Bergson rejects the understanding of life as mechanical assembly, and equally rejects the understanding of it as a striving toward some fixed goal. His "vital impetus" (*élan vital*) is often misread as mysticism, but its real philosophical point is this: **evolution is a continuous creative process that cannot be reduced to a selection among pre-existing possibilities**.
+
 这一直觉在当代有两个科学版本：
 
-1.  **开放式演化（open-ended evolution）**：系统不断产生新的可能性空间，而不是在固定空间里搜索。
-2.  **个体化（individuation）**：个体不是预先给定的单位，而是在过程中逐步形成的——这正是 Simondon 在 1958 年提出的核心问题，我们会在第七章回到它。
+This intuition has two scientific versions today:
 
-### 1.6 薛定谔的问题：生命靠什么对抗熵增？
+1.  **开放式演化（open-ended evolution）**：系统不断产生新的可能性空间，而不是在固定空间里搜索。
+1.  **Open-ended evolution**: the system continually generates new spaces of possibility rather than searching within a fixed space.
+2.  **个体化（individuation）**：个体不是预先给定的单位，而是在过程中逐步形成的——这正是 Simondon 在 1958 年提出的核心问题，我们会在第七章回到它。
+2.  **Individuation**: the individual is not a unit given in advance but something gradually constituted in the course of a process—precisely the central problem raised by Simondon in 1958, to which we shall return in Chapter 7.
+
+### 1.6 薛定谔的问题：生命靠什么对抗熵增？ / 1.6 Schrödinger's Question: What Does Life Use to Resist the Growth of Entropy?
 
 1944 年，薛定谔在《生命是什么？》中提出一个至今仍在被引用的问题：生命体为什么能维持高度有序，而不被热力学第二定律抹平？
 
+In 1944, Schrödinger posed in *What Is Life?* a question that is still being cited: why can living things maintain a high degree of order without being flattened by the second law of thermodynamics?
+
 他的回答是"以负熵为食"（feeding on negative entropy）：生命从环境中摄取有序性、向环境排放熵。这个表述在物理上并不严格（后来他自己也承认），但方向是对的——**生命不是违反第二定律，而是通过加速环境的熵产生来维持自身的低熵**。
+
+His answer was "feeding on negative entropy": life takes order from the environment and discharges entropy into it. The formulation is not physically rigorous (as he himself later conceded), but the direction is right—**life does not violate the second law; it maintains its own low entropy by accelerating the production of entropy in its environment**.
 
 这一思路在第三章、第四章会被展开为耗散结构与非平衡热力学。这里先记住薛定谔真正贡献的两点：
 
--   遗传信息必须存储在某种"非周期性晶体"（aperiodic crystal）中——这一预言直接指向 DNA；
--   生命的有序性需要一个物理学的解释，而不是一个活力论的解释。
+This line of thought will be developed in Chapters 3 and 4 as dissipative structures and non-equilibrium thermodynamics. For now, two points that constitute Schrödinger's real contribution should be kept in mind:
 
-### 1.7 现代生命定义的三条路线
+-   遗传信息必须存储在某种"非周期性晶体"（aperiodic crystal）中——这一预言直接指向 DNA；
+-   Hereditary information must be stored in some kind of "aperiodic crystal"—a prediction that points directly to DNA;
+-   生命的有序性需要一个物理学的解释，而不是一个活力论的解释。
+-   The orderliness of life requires a physical explanation, not a vitalist one.
+
+### 1.7 现代生命定义的三条路线 / 1.7 Three Routes in Modern Definitions of Life
 
 当代文献中的生命定义大致可以归为三类，每一类都有明显的代价：
 
-| 路线 | 代表定义 | 核心判据 | 主要困难 |
+Definitions of life in the contemporary literature fall roughly into three classes, each with conspicuous costs:
+
+| 路线 / Route | 代表定义 / Representative definition | 核心判据 / Core criterion | 主要困难 / Main difficulty |
 |------------------|------------------|------------------|------------------|
 | 代谢主义 | 生命是自我维持的化学反应网络 | 代谢、自我生产 | 病毒、休眠孢子被判为"非生命" |
 | 复制主义 | 生命是能够复制并演化的信息载体 | 复制、变异、选择 | 无法处理不育的个体与群体选择 |
@@ -163,52 +222,85 @@ ggplot(stages) +
 
 NASA 的"工作性定义"——生命是能够进行达尔文式演化的自我维持化学系统（a self-sustaining chemical system capable of Darwinian evolution）——本质上是复制主义与代谢主义的拼接。它非常有用，因为它同时要求"自我维持"和"可演化"；但它也有两个众所周知的盲点：
 
--   它把"化学"写进了定义，从而在定义上排除了纯数字生命与可能的非化学生命；
--   它没有说明"自我维持"需要达到什么程度。
+The NASA "working definition"—life is a self-sustaining chemical system capable of Darwinian evolution—is at bottom a splice of replicationism and metabolism. It is extremely useful, because it demands both "self-sustaining" and "evolvable"; but it also has two well-known blind spots:
 
-### 1.8 边界对象：病毒、朊粒、人工细胞、数字生命
+-   它把"化学"写进了定义，从而在定义上排除了纯数字生命与可能的非化学生命；
+-   It writes "chemical" into the definition, thereby ruling out purely digital life and possible non-chemical life by definition;
+-   它没有说明"自我维持"需要达到什么程度。
+-   It does not say to what degree "self-sustaining" must be achieved.
+
+### 1.8 边界对象：病毒、朊粒、人工细胞、数字生命 / 1.8 Boundary Objects: Viruses, Prions, Artificial Cells, Digital Life
 
 四个典型边界案例，足以说明为什么"清单式定义"总是不够：
 
+Four typical boundary cases suffice to show why checklist definitions always fall short:
+
 -   **病毒**：有基因组、能演化、有明确的复制—选择循环，但离开宿主没有自身代谢。按 NASA 定义，它处于灰色地带。
+-   **Viruses**: they have a genome, can evolve, and exhibit a clear replication–selection cycle, but outside a host they have no metabolism of their own. Under the NASA definition they occupy a grey zone.
 -   **朊粒**：只有蛋白质构象的传播，没有核酸，却能"遗传"并被选择（不同株系有不同表型）。它挑战了"遗传信息必须由核酸承载"的假设。
+-   **Prions**: only a protein conformation propagates; there is no nucleic acid, yet the entity can be "inherited" and selected (different strains have different phenotypes). This challenges the assumption that hereditary information must be carried by nucleic acids.
 -   **人工细胞**：可以封装酶、能合成膜脂、能生长甚至分裂，但大多不能自主复制基因组。它们证明"部分生命属性可以被分离出来单独实现"。
+-   **Artificial cells**: they can encapsulate enzymes, synthesise membrane lipids, grow, and even divide, but most cannot autonomously replicate a genome. They demonstrate that "individual properties of life can be separated out and realised in isolation."
 -   **数字生命**：Tierra、Avida 中的自复制程序会变异、会被选择、会演化出寄生者；它们满足"演化"，却不满足"化学"。
+-   **Digital life**: the self-replicating programs in Tierra and Avida mutate, are selected, and evolve parasites; they satisfy "evolution" but not "chemistry."
 
 这些案例共同提示：**生命不是一个自然种类（natural kind），更像一个以原型为中心的家族相似概念**——细菌是原型，病毒、朊粒、原始细胞、数字生物按各自与原型共享的属性多少，分布在不同的"生命性"梯度上。
 
-### 1.9 本章结论：从"是什么"转向"如何发生"
+Together these cases suggest that **life is not a natural kind but rather a family-resemblance concept centred on a prototype**—the bacterium is the prototype, and viruses, prions, protocells, and digital organisms are distributed along different gradients of "aliveness" according to how many properties they share with that prototype.
+
+### 1.9 本章结论：从"是什么"转向"如何发生" / 1.9 Chapter Conclusion: From "What It Is" to "How It Happens"
 
 本章的结论可以压缩成一句话：**把生命理解为一个持续发生的过程，比把它理解为一个固定对象，更符合现有的证据与哲学传统。**
 
+The conclusion of this chapter can be compressed into a single sentence: **understanding life as a process that continually happens accords better with the available evidence and with the philosophical tradition than understanding it as a fixed object.**
+
 这一转向有三个直接后果：
 
+This shift has three direct consequences:
+
 1.  定义问题变成**程度问题**：不问"是不是生命"，而问"在多大程度上实现了哪些生命功能"。
+1.  The definitional question becomes a **question of degree**: we no longer ask "is it life?" but "to what extent, and which, life functions are realised?"
 2.  起源问题变成**转变问题**：不问"第一个生命出现在哪一年"，而问"哪几种组织方式的转变是必要的、哪些是可替代的"。
+2.  The origin question becomes a **question of transitions**: we no longer ask "in which year did the first life appear?" but "which transformations of organisation are necessary and which are replaceable?"
 3.  实验设计变成**扰动问题**：既然生命是过程，那么检验一个系统是否"活着"的最好方式，是扰动它、看它能否**主动恢复**——而不是静态地检查它有没有某个部件。
+3.  Experimental design becomes a **question of perturbation**: since life is a process, the best way to test whether a system is "alive" is to perturb it and see whether it can **actively recover**—rather than statically checking whether it possesses a particular component.
 
 > **已知**：没有任何一个定义能同时覆盖全部边界案例而不产生反例；NASA 定义是最常用的工作性折中。 **未决**：生命性是否可以被连续量化？如果可以被量化，序参量应该是什么？ **可验证方向**：设计一组"扰动—恢复"实验，比较原始细胞、普通囊泡与活细胞在受到渗透、温度、稀释扰动后的恢复能力分布。
 
-## 第二章　生命诞生之前的地球
+> **Known**: no single definition covers all boundary cases without generating counterexamples; the NASA definition is the most commonly used working compromise. **Open**: can aliveness be quantified continuously? If it can, what should the order parameter be? **Testable direction**: design a set of "perturbation–recovery" experiments comparing the distribution of recovery capacity in protocells, ordinary vesicles, and living cells after osmotic, thermal, and dilution perturbations.
 
-### 2.1 时间尺度：46 亿年里的四个阶段
+## 第二章　生命诞生之前的地球 / Chapter 2. The Earth Before Life
+
+### 2.1 时间尺度：46 亿年里的四个阶段 / 2.1 Timescale: Four Stages in 4.6 Billion Years
 
 地球形成于约 45.4 亿年前（Ga）。与生命起源相关的时段通常被划分为：
 
+The Earth formed about 4.54 billion years ago (Ga). The interval relevant to the origin of life is usually divided as follows:
+
 -   **冥古宙（Hadean，约 4.6–4.0 Ga）**：岩浆海洋、强烈撞击、原始大气与海洋形成。
+-   **Hadean (about 4.6–4.0 Ga)**: magma oceans, intense impacts, and the formation of a primordial atmosphere and ocean.
 -   **太古宙早期（Eoarchean，约 4.0–3.6 Ga）**：大陆核形成、最早的沉积岩、可能的生命痕迹。
+-   **Eoarchean (about 4.0–3.6 Ga)**: formation of continental nuclei, the earliest sedimentary rocks, and possible traces of life.
 -   **太古宙中晚期（约 3.6–2.5 Ga）**：叠层石、微生物席、大氧化事件前的缺氧海洋。
+-   **Middle to late Archean (about 3.6–2.5 Ga)**: stromatolites, microbial mats, and an anoxic ocean before the Great Oxidation Event.
 -   **元古宙以后**：真核化、多细胞化——这已经不属于生命起源，而属于生命的复杂化。
+-   **From the Proterozoic onward**: eukaryogenesis and multicellularity—no longer part of the origin of life but part of its complexification.
 
 关键点在于：**生命起源的化学窗口，比"生命出现"的证据窗口要早得多，也更不确定**。最早的疑似生命证据在 3.5–3.7 Ga，但化学上的"适宜窗口"可能要到 4.2–4.3 Ga 才打开。
 
+The key point is this: **the chemical window for the origin of life is much earlier, and much less certain, than the evidential window for "the appearance of life."** The earliest suspected evidence of life dates to 3.5–3.7 Ga, but the chemically "suitable window" may not have opened until 4.2–4.3 Ga.
+
 2026 年的一项建模工作给出了一个具体数字：通过模拟冥古宙的热环境与撞击频率，研究者认为约 **4.33 Ga** 是 RNA 世界启动的"甜点窗口"（sweet spot），比 LUCA 的估计时间早约 1.3 亿年（Mojzsis et al. 2026）。这类结果依赖大量假设（撞击通量、海水 pH、温度、可用磷酸盐浓度），**不能被当作年代测定**，但它提供了一个可被后续地质证据检验的框架。
 
-### 2.2 环境的多样性：不是"一锅汤"
+A modelling study published in 2026 offers a concrete number: by simulating the Hadean thermal environment and impact frequency, the researchers argue that about **4.33 Ga** was the "sweet spot" for launching an RNA world, roughly 130 million years earlier than the estimated age of LUCA (Mojzsis et al. 2026). Such results depend on a large number of assumptions (impact flux, seawater pH, temperature, available phosphate concentration) and **cannot be treated as a dating measurement**, but they provide a framework that subsequent geological evidence can test.
+
+### 2.2 环境的多样性：不是"一锅汤" / 2.2 The Diversity of Environments: Not "One Pot of Soup"
 
 "原始汤"（primordial soup）是一个过于简化的意象。近二十年的研究更倾向于**多个相连的微环境**：
 
-| 环境 | 优势 | 主要困难 |
+The "primordial soup" is an over-simplified image. Research over the past two decades has favoured **multiple interconnected microenvironments**:
+
+| 环境 / Environment | 优势 / Advantage | 主要困难 / Main difficulty |
 |------------------------|------------------------|------------------------|
 | 深海碱性热液喷口 | 持续 H₂、CO₂、金属硫化物催化、天然质子梯度 | 稀释严重；有机物浓度低；高温破坏 RNA |
 | 陆地温泉 / 火山池塘 | 干湿循环、温度循环、浓度高、紫外光可用 | 需要陆地与淡水；紫外与水解都是破坏因素 |
@@ -218,160 +310,272 @@ NASA 的"工作性定义"——生命是能够进行达尔文式演化的自我�
 
 近年一个被反复强调的观点是：**这些环境不是互斥的选项，而可能是串联的反应器**。例如，热液喷口提供还原性小分子与金属催化，陆地池塘提供干湿循环驱动的聚合与浓缩，黏土表面提供模板与手性选择。生命可能不是在某一个"理想地点"诞生的，而是在一个**环境梯度的网络**中逐步组装起来的。
 
-### 2.3 证据的类型与强弱
+A view repeatedly emphasised in recent years is that **these environments are not mutually exclusive options but may be reactors in series**. Hydrothermal vents, for example, supply reducing small molecules and metal catalysis; terrestrial ponds supply wet–dry cycling that drives polymerisation and concentration; clay surfaces supply templates and chiral selection. Life may not have been born in some single "ideal location" but assembled step by step within a **network of environmental gradients**.
+
+### 2.3 证据的类型与强弱 / 2.3 Types of Evidence and Their Strength
 
 讨论早期生命证据时，必须区分四类材料，它们的可靠性差别很大：
 
+When discussing evidence for early life, four classes of material must be distinguished; their reliability differs greatly:
+
 1.  **形态学微体化石**：如 3.5 Ga 的 Apex chert 丝状体。曾被广泛引用，后被质疑为矿物成因。
+1.  **Morphological microfossils**: for example, the filamentous structures in the 3.5 Ga Apex chert. Once widely cited, later challenged as mineral in origin.
 2.  **叠层石与微生物席结构**：3.4–3.5 Ga 的 Strelley Pool 碳酸盐岩中的叠层石，形态与成因仍有争论。
+2.  **Stromatolites and microbial mat structures**: the stromatolites in the 3.4–3.5 Ga Strelley Pool carbonates, whose morphology and origin remain disputed.
 3.  **化学化石（biomarkers）**：特定脂类的碳同位素与结构。曾被用于支持 2.7 Ga 的蓝细菌，后因污染问题受到严重质疑。
+3.  **Chemical fossils (biomarkers)**: carbon isotopes and structures of specific lipids. Once used to support cyanobacteria at 2.7 Ga, later seriously questioned on grounds of contamination.
 4.  **同位素分馏**：如硫同位素、碳同位素的分馏模式。这类证据最稳健，但解释仍需谨慎。
+4.  **Isotopic fractionation**: for example, the fractionation patterns of sulfur and carbon isotopes. This class of evidence is the most robust, but its interpretation still requires caution.
 
 一个诚实的总结是：**3.5 Ga 之前没有任何被普遍接受的生命证据；3.7 Ga 的候选证据都存在争议；4.0 Ga 之前基本没有可靠证据。** 这意味着生命起源的化学过程发生在"没有留下直接记录"的时期——这也是为什么理论模型与实验室模拟如此重要。
 
-### 2.4 早期地球的化学清单
+An honest summary is this: **before 3.5 Ga there is no generally accepted evidence of life; all candidate evidence at 3.7 Ga is contested; before 4.0 Ga there is essentially no reliable evidence.** This means that the chemistry of the origin of life took place in a period that "left no direct record"—which is precisely why theoretical models and laboratory simulations matter so much.
+
+### 2.4 早期地球的化学清单 / 2.4 The Chemical Inventory of the Early Earth
 
 无论具体地点如何，生命起源必须面对同一份"原料清单"：
 
+Whatever the specific location, the origin of life must confront the same "inventory of raw materials":
+
 -   **碳源**：CO₂、CO、CH₄、HCN，以及陨石带来的有机物。
+-   **Carbon sources**: CO₂, CO, CH₄, HCN, and organic matter delivered by meteorites.
 -   **氮源**：N₂（难以活化）、NH₃、HCN、硝酸盐（需闪电或紫外固定）。
+-   **Nitrogen sources**: N₂ (difficult to activate), NH₃, HCN, and nitrate (requiring fixation by lightning or ultraviolet light).
 -   **磷源**：磷酸盐矿物（磷灰石溶解度低）、火山来源的磷化物、陨石中的磷化物。
+-   **Phosphorus sources**: phosphate minerals (apatite has low solubility), volcanic phosphides, and phosphides in meteorites.
 -   **硫源**：H₂S、金属硫化物、亚硫酸盐。
+-   **Sulfur sources**: H₂S, metal sulfides, and sulfites.
 -   **金属**：Fe、Ni、Zn、Mn、Mo、W——既是催化剂，也是电子传递体。
+-   **Metals**: Fe, Ni, Zn, Mn, Mo, W—serving both as catalysts and as electron carriers.
 -   **能量**：紫外辐射、宇宙射线、闪电、放射性衰变、热液梯度、氧化还原不平衡。
+-   **Energy**: ultraviolet radiation, cosmic rays, lightning, radioactive decay, hydrothermal gradients, and redox disequilibria.
 
 真正的瓶颈通常不是"有没有元素"，而是**有没有把元素组装成可反应形式的路径，以及在稀释环境中如何维持浓度**。
 
-### 2.5 本章结论
+The real bottleneck is usually not "whether the elements are present" but **whether there are pathways that assemble them into reactive forms, and how concentration can be maintained in a dilute environment**.
+
+### 2.5 本章结论 / 2.5 Chapter Conclusion
 
 > **已知**：地球在 4.4 Ga 之后逐渐具备液态水与相对稳定的表面环境；3.5 Ga 存在微生物席的较强（但非决定性）证据。 **未决**：生命起源的具体地点（深海、陆地温泉、冰、矿物表面）仍无共识；"甜点窗口"的估计依赖撞击通量模型。
 >
 > **可验证方向**：用更精确的撞击年代学与古地磁/古气候约束，缩小 4.4–4.1 Ga 的环境参数范围；在模拟该窗口条件的连续流反应器中复现关键前生物反应。
 
-## 第三章　从简单化学到前生物化学
+> **Known**: after 4.4 Ga the Earth gradually acquired liquid water and a relatively stable surface environment; at 3.5 Ga there is strong (though not decisive) evidence for microbial mats. **Open**: there is still no consensus on the specific site of the origin of life (deep sea, terrestrial hot springs, ice, mineral surfaces); estimates of the "sweet spot" window depend on impact-flux models.
+>
+> **Testable direction**: use more precise impact chronology together with palaeomagnetic and palaeoclimatic constraints to narrow the range of environmental parameters between 4.4 and 4.1 Ga; reproduce key prebiotic reactions in continuous-flow reactors simulating the conditions of that window.
 
-### 3.1 米勒–尤里实验：意义与局限
+## 第三章　从简单化学到前生物化学 / Chapter 3. From Simple Chemistry to Prebiotic Chemistry
+
+### 3.1 米勒–尤里实验：意义与局限 / 3.1 The Miller–Urey Experiment: Significance and Limitations
 
 1953 年，米勒在尤里的指导下，把 CH₄、NH₃、H₂ 和水蒸气密封在烧瓶中，通电火花，几周后得到氨基酸。这个实验的历史意义巨大：它第一次证明**生命分子可以在非生物条件下自发产生**，从而把活力论从"有机化学"的最后堡垒中赶了出去。
 
+In 1953, working under Urey, Miller sealed CH₄, NH₃, H₂, and water vapour in a flask and passed electric sparks through the mixture; within weeks he obtained amino acids. The historical significance of the experiment is enormous: for the first time it showed that **molecules of life can arise spontaneously under non-biological conditions**, thereby driving vitalism out of its last stronghold, organic chemistry.
+
 但它的局限同样明显：
 
+Its limitations, however, are equally clear:
+
 -   它假设了一个**高度还原性的大气**，而现代地球化学模型更倾向于中性或弱氧化性大气（CO₂、N₂、H₂O，含少量 H₂）。
+-   It assumed a **strongly reducing atmosphere**, whereas modern geochemical models favour a neutral or mildly oxidising atmosphere (CO₂, N₂, H₂O, with a little H₂).
 -   它产生的是**消旋的、稀薄的、复杂的混合物**，而不是可聚合的单体。
+-   It produced a **racemic, dilute, complex mixture** rather than polymerisable monomers.
 -   火花放电产生的能量通量，与早期地球的实际能量分布并不一致。
+-   The energy flux delivered by spark discharge does not match the actual energy distribution of the early Earth.
 
 后续的"再分析"工作（例如重新分析米勒保存的样品）确实发现了更多种类的氨基酸，但并没有解决上述结构性问题。米勒实验的真正遗产不是"生命可以被电火花制造"，而是**前生物化学作为一个实验学科被建立了**。
 
-### 3.2 氰基硫化物路线：从"汤"到"网络"
+Subsequent "re-analysis" work (for example, re-analysis of Miller's preserved samples) did reveal additional amino acids, but it did not resolve these structural problems. The real legacy of the Miller experiment is not that "life can be manufactured by an electric spark" but that **prebiotic chemistry was established as an experimental discipline**.
+
+### 3.2 氰基硫化物路线：从"汤"到"网络" / 3.2 The Cyanosulfidic Route: From "Soup" to "Network"
 
 过去二十年最具影响力的进展，是把前生物化学从"混合物的化学"转变为"**网络的化学**"。
 
+The most influential development of the past two decades has been the transformation of prebiotic chemistry from "the chemistry of mixtures" into **"the chemistry of networks."**
+
 Sutherland 学派提出的氰基硫化物（cyanosulfidic）路线，以 HCN、H₂S、紫外光、铜/铁离子为核心，能够从同一套前体出发，分别合成：
 
+The cyanosulfidic route advanced by the Sutherland group, centred on HCN, H₂S, ultraviolet light, and copper and iron ions, can start from a single set of precursors and separately synthesise:
+
 -   核苷酸（RNA 的四种碱基）；
+-   nucleotides (the four bases of RNA);
 -   氨基酸；
+-   amino acids;
 -   脂质前体（甘油、脂肪酸）；
+-   lipid precursors (glycerol, fatty acids);
 -   以及某些辅因子。
+-   and certain cofactors.
 
 这条路线最有说服力的地方在于**它把原本分散的合成路线统一到同一个化学体系里**，而不是为每种分子单独设计一套"看似合理"的条件（Patel et al. 2015; Sutherland 2016）。
 
+What is most persuasive about this route is that **it unifies previously scattered synthetic pathways within a single chemical system**, instead of designing a separate set of "plausible" conditions for each molecule (Patel et al. 2015; Sutherland 2016).
+
 与此同时，Powner、Szostak 与 Sutherland 的经典工作解决了 RNA 前体合成中的一个死结：在早期地球条件下，核糖与碱基难以直接连接；而通过**氨基噁唑（aminooxazole）+ 磷酸**的路径，可以绕过这个障碍，得到活化的嘧啶核苷酸（Powner et al. 2009）。2019 年，Becker 等人进一步给出了嘧啶与嘌呤核苷酸的统一合成路线。
+
+At the same time, classic work by Powner, Szostak, and Sutherland resolved a deadlock in the synthesis of RNA precursors: under early-Earth conditions, ribose and bases are difficult to join directly, but a pathway through **aminooxazole + phosphate** circumvents this obstacle and yields activated pyrimidine nucleotides (Powner et al. 2009). In 2019, Becker and colleagues further provided a unified synthetic route to pyrimidine and purine nucleotides.
 
 这些工作共同改变了问题的提法：**问题不再是"能不能合成核苷酸"，而是"这些核苷酸如何在稀释环境中聚合成足够长的 RNA，并在水解之前被保护起来"。**
 
-### 3.3 RNA 世界：强假设与弱版本
+Together these studies changed the way the question is posed: **the question is no longer "can nucleotides be synthesised?" but "how can these nucleotides polymerise into sufficiently long RNA in a dilute environment, and be protected before they hydrolyse?"**
+
+### 3.3 RNA 世界：强假设与弱版本 / 3.3 The RNA World: Strong Hypothesis and Weak Version
 
 RNA 世界假说的核心主张是：在 DNA 与蛋白质分工之前，存在一个**既存储信息又催化反应**的 RNA 阶段。
 
+The core claim of the RNA world hypothesis is that, before the division of labour between DNA and proteins, there existed an RNA stage that **both stored information and catalysed reactions**.
+
 支持它的证据包括：
 
+The evidence in its favour includes:
+
 -   核糖体催化中心是 RNA（rRNA），蛋白质只是外围；
+-   the catalytic centre of the ribosome is RNA (rRNA), with proteins only peripheral;
 -   许多辅因子（ATP、NAD、FAD、CoA）含核苷酸结构，像是 RNA 世界的"化石"；
+-   many cofactors (ATP, NAD, FAD, CoA) contain nucleotide structures, like "fossils" of the RNA world;
 -   体外进化可以得到具有聚合酶活性的核酶（ribozyme）；
+-   in vitro evolution can yield ribozymes with polymerase activity;
 -   多种核酶可以催化代谢相关反应。
+-   various ribozymes can catalyse metabolism-related reactions.
 
 但"强版本"（一个自给自足的 RNA 细胞）面临三个硬约束：
 
+But the "strong version"—a self-sufficient RNA cell—faces three hard constraints:
+
 1.  **复制保真度**：核酶的复制错误率决定了可维持的基因组长度上限（Eigen 阈值）。早期核酶的保真度是否足以维持自身？
+1.  **Replication fidelity**: the error rate of ribozyme copying sets an upper bound on the genome length that can be maintained (the Eigen threshold). Was the fidelity of early ribozymes sufficient to maintain themselves?
 2.  **链分离**：双链产物不解开，复制就会停止。
+2.  **Strand separation**: unless the double-stranded product is unwound, replication stops.
 3.  **前生物可得性**：RNA 在早期地球条件下容易水解，且单体活化形式难以稳定积累。
+3.  **Prebiotic availability**: RNA hydrolyses readily under early-Earth conditions, and activated forms of the monomers are difficult to accumulate stably.
 
 2025 年，Holliger 团队在 *Nature Chemistry* 报告了一个重要进展：使用三核苷酸底物，配合 pH 与冻融循环，使聚合酶核酶实现了**指数式的"开放式"RNA 复制**（Attwater et al. 2025）。这项工作解决的是"链分离 + 底物活化"这一长期瓶颈，并展示了复制过程可以突破模板长度的限制。
 
+In 2025, the Holliger group reported an important advance in *Nature Chemistry*: using trinucleotide substrates together with pH and freeze–thaw cycles, they enabled a polymerase ribozyme to achieve **exponential, "open-ended" RNA replication** (Attwater et al. 2025). The work addresses the long-standing bottleneck of "strand separation + substrate activation" and shows that the replication process can escape the limitation of template length.
+
 但必须严格界定它说明了什么：**它证明了一个经过体外进化的核酶系统可以在特定条件下指数复制，而不是证明早期地球上存在这样的系统。** 核酶本身是人类设计的产物；三核苷酸底物的前生物来源、冻融循环的普遍性，都还是开放问题。
 
-### 3.4 代谢优先 vs 遗传优先
+But what it shows must be defined strictly: **it demonstrates that a ribozyme system evolved in vitro can replicate exponentially under specific conditions, not that such a system existed on the early Earth.** The ribozyme itself is a human-designed product; the prebiotic origin of trinucleotide substrates and the ubiquity of freeze–thaw cycles both remain open questions.
+
+### 3.4 代谢优先 vs 遗传优先 / 3.4 Metabolism-First versus Genetics-First
 
 两条路线的分歧可以压缩为一句话：**先有 metabolism，还是先有 genetics？**
 
+The disagreement between the two routes can be compressed into one sentence: **metabolism first, or genetics first?**
+
 -   **代谢优先（metabolism-first）**：先出现一个自我维持的小分子反应网络（例如建立在硫酯、铁硫簇、CO₂ 固定之上的网络），遗传机制是后来"接管"这个网络的。代表：Wächtershäuser 的铁硫世界、Morowitz 的逆向三羧酸循环、Martin 与 Russell 的碱性热液喷口假说。
+-   **Metabolism-first**: a self-sustaining network of small-molecule reactions appears first (for example, a network built on thioesters, iron–sulfur clusters, and CO₂ fixation), and genetic mechanisms later "take over" that network. Representatives: Wächtershäuser's iron–sulfur world, Morowitz's reverse Krebs cycle, and Martin and Russell's alkaline hydrothermal vent hypothesis.
 -   **遗传优先（genetics-first）**：先出现可复制的模板（RNA），代谢是后来由模板编码的酶建立的。代表：RNA 世界及其各种变体。
+-   **Genetics-first**: a replicable template (RNA) appears first, and metabolism is later established by enzymes encoded by that template. Representatives: the RNA world and its various versions.
 
 2020 年，Xavier、Hordijk、Kauffman、Steel 与 Martin 做了一个有分量的工作：他们在现存厌氧自养微生物的代谢网络中，系统搜索**反身自催化且食物生成的网络（RAF）**，发现以 H₂ 和 CO₂ 为原料、含小分子催化剂的代谢网络中，可以找到生成乙酰辅酶 A、氨基酸与碱基的自维持核心；而**如果没有有机催化剂，氨基酸与碱基本身无法生成代谢 RAF**（Xavier et al. 2020）。
 
+In 2020, Xavier, Hordijk, Kauffman, Steel, and Martin produced a substantial piece of work: searching systematically for **reflexively autocatalytic and food-generated networks (RAF)** within the metabolic networks of extant anaerobic autotrophs, they found that networks using H₂ and CO₂ as raw materials and containing small-molecule catalysts can contain a self-sustaining core that generates acetyl-CoA, amino acids, and bases; yet **without organic catalysts, amino acids and bases cannot themselves generate a metabolic RAF** (Xavier et al. 2020).
+
 这个结果常被引用为"代谢优先"的支持证据，但它其实更微妙：它说明**现代代谢中存在一个拓扑上自足的核**，而这既不证明它历史上先出现，也不排除 RNA 后来嵌入其中。
 
-### 3.5 脂质世界、肽优先与混合模型
+This result is often cited as support for "metabolism-first," but it is in fact more subtle: it shows that **a topologically self-sufficient core exists within modern metabolism**, which neither proves that it appeared first historically nor excludes RNA becoming embedded in it later.
+
+### 3.5 脂质世界、肽优先与混合模型 / 3.5 The Lipid World, Peptide-First, and Hybrid Models
 
 除了上述两条主线，还有几种重要的替代或补充模型：
 
--   **脂质世界（lipid world）**：Segré、Lancet 等人主张，最早的"遗传"单位不是聚合物，而是**脂质组合物**——囊泡的脂质比例可以"遗传"给子代囊泡，并在选择压力下改变。这提供了一个不依赖模板复制的演化机制。
--   **肽优先（peptide-first）**：短肽可以自组装成淀粉样纤维、具有催化活性、并能形成选择性边界。二酮哌嗪、非核糖体肽等路径可以在前生物条件下产生短肽。
--   **混合模型**：RNA–肽共进化。2024–2025 年，Carell 团队提出的场景是：含有氨基酸修饰的核苷（如 m⁶t⁶A）可以同时参与 RNA 与肽的合成，从而把两条路线在化学上"焊接"起来。
--   **凝聚体模型**：液–液相分离（LLPS）形成的无膜区室可以浓缩 RNA 与肽，降低对膜的需求。2025 年的一个模型显示，由活性聚合驱动的相分离液滴对外部燃料变化具有滞后（hysteresis）与稳健性（PNAS 2025），为"原始细胞在饥荒中存活"提供了机制。
+Besides these two main lines, there are several important alternative or complementary models:
 
-### 3.6 非酶促聚合与模板复制
+-   **脂质世界（lipid world）**：Segré、Lancet 等人主张，最早的"遗传"单位不是聚合物，而是**脂质组合物**——囊泡的脂质比例可以"遗传"给子代囊泡，并在选择压力下改变。这提供了一个不依赖模板复制的演化机制。
+-   **Lipid world**: Segré, Lancet, and others argue that the earliest "hereditary" unit was not a polymer but a **lipid composition**—the lipid ratios of a vesicle can be "inherited" by daughter vesicles and altered under selection pressure. This supplies an evolutionary mechanism that does not depend on template replication.
+-   **肽优先（peptide-first）**：短肽可以自组装成淀粉样纤维、具有催化活性、并能形成选择性边界。二酮哌嗪、非核糖体肽等路径可以在前生物条件下产生短肽。
+-   **Peptide-first**: short peptides can self-assemble into amyloid fibres, possess catalytic activity, and form selective boundaries. Pathways involving diketopiperazines and non-ribosomal peptides can generate short peptides under prebiotic conditions.
+-   **混合模型**：RNA–肽共进化。2024–2025 年，Carell 团队提出的场景是：含有氨基酸修饰的核苷（如 m⁶t⁶A）可以同时参与 RNA 与肽的合成，从而把两条路线在化学上"焊接"起来。
+-   **Hybrid models**: RNA–peptide coevolution. In 2024–2025, the scenario proposed by the Carell group is that nucleosides bearing amino-acid modifications (such as m⁶t⁶A) can participate simultaneously in the synthesis of RNA and of peptides, thereby chemically "welding" the two routes together.
+-   **凝聚体模型**：液–液相分离（LLPS）形成的无膜区室可以浓缩 RNA 与肽，降低对膜的需求。2025 年的一个模型显示，由活性聚合驱动的相分离液滴对外部燃料变化具有滞后（hysteresis）与稳健性（PNAS 2025），为"原始细胞在饥荒中存活"提供了机制。
+-   **Coacervate models**: membraneless compartments formed by liquid–liquid phase separation (LLPS) can concentrate RNA and peptides, lowering the need for membranes. A 2025 model shows that phase-separated droplets driven by active polymerisation exhibit hysteresis and robustness with respect to changes in external fuel (PNAS 2025), offering a mechanism for "protocells surviving famine."
+
+### 3.6 非酶促聚合与模板复制 / 3.6 Non-Enzymatic Polymerisation and Template Copying
 
 即便有了活化的核苷酸，聚合仍是瓶颈。近年的关键进展包括：
 
+Even with activated nucleotides available, polymerisation remains a bottleneck. Key recent advances include:
+
 -   **甲基异腈（methyl isocyanide）化学**：可以在水相中活化单核苷酸，实现模板导向的聚合，并显著改善 rA/rU 富序列的拷贝偏差（Duzdevich et al. 2024，预印本）。
+-   **Methyl isocyanide chemistry**: it can activate mononucleotides in the aqueous phase, enabling template-directed polymerisation and markedly improving the copying bias for rA/rU-rich sequences (Duzdevich et al. 2024, preprint).
 -   **三核苷酸底物 + 冻融循环**：绕开链分离问题，实现指数复制（Attwater et al. 2025）。
+-   **Trinucleotide substrates + freeze–thaw cycles**: these circumvent the strand-separation problem and achieve exponential replication (Attwater et al. 2025).
 -   **矿物表面与干湿循环**：黏土、碳酸盐、脂肪酸膜都可以在脱水时促进聚合，在复水时释放产物。
+-   **Mineral surfaces and wet–dry cycling**: clays, carbonates, and fatty-acid membranes can all promote polymerisation on dehydration and release the products on rehydration.
 
 这些工作共同支持一个结论：**"聚合"不再是最难的步骤；"持续供给活化的单体，同时让产物不被水解"才是。**
 
-### 3.7 产生生命分子不等于产生生命
+Together these studies support one conclusion: **polymerisation is no longer the hardest step; "continuously supplying activated monomers while preventing the product from hydrolysing" is.**
+
+### 3.7 产生生命分子不等于产生生命 / 3.7 Producing Molecules of Life Is Not Producing Life
 
 这是本章最重要的一句话，值得展开。
 
+This is the most important sentence in this chapter, and it deserves elaboration.
+
 从"能合成核苷酸、氨基酸、脂肪酸"到"有一个能自我维持、可演化、有边界的系统"，中间至少隔着四道鸿沟：
 
+Between "being able to synthesise nucleotides, amino acids, and fatty acids" and "having a system that is self-sustaining, evolvable, and bounded" there lie at least four gaps:
+
 1.  **浓度鸿沟**：前生物合成给出的是稀溶液，而聚合需要高浓度与特定离子条件。
+1.  **The concentration gap**: prebiotic synthesis yields dilute solutions, whereas polymerisation requires high concentrations and specific ionic conditions.
 2.  **纯化鸿沟**：合成产物是复杂混合物，其中大量副产物会抑制聚合或破坏膜。
+2.  **The purification gap**: the products are complex mixtures in which numerous by-products inhibit polymerisation or disrupt membranes.
 3.  **耦合鸿沟**：即使分别得到了 RNA、肽、脂质，它们之间也未必能彼此支持——膜要允许核苷酸进入，酶要能在膜内工作，产物要能留在内部。
+3.  **The coupling gap**: even if RNA, peptides, and lipids are obtained separately, they need not support one another—the membrane must admit nucleotides, the enzymes must work inside the membrane, and the products must be retained within it.
 4.  **遗传鸿沟**：从"能复制"到"能遗传变异并被选择"，需要复制保真度、突变率与群体规模之间形成可行的平衡。
+4.  **The heredity gap**: moving from "able to replicate" to "able to vary heritably and be selected" requires a viable balance among replication fidelity, mutation rate, and population size.
 
 因此，任何声称"合成了生命的构件"的工作，都只是完成了第一段路。下一章要讨论的，正是如何从"构件"跨到"系统"。
 
-### 3.8 本章结论
+Any work that claims to have "synthesised the building blocks of life" has therefore completed only the first leg of the journey. The next chapter addresses precisely how the step from "building blocks" to "system" can be made.
+
+### 3.8 本章结论 / 3.8 Chapter Conclusion
 
 > **已知**：核苷酸、氨基酸、脂质前体在多种模拟早期地球条件下可以被合成；模板导向的非酶促聚合与核酶复制都已在体外实现。 **未决**：这些反应能否在同一个环境中、以足够的浓度与纯度同时发生？RNA 的前生物稳定性是否足以支持复制？ **可验证方向**：在连续流反应器中耦合"合成—浓缩—聚合"三个模块；用微流控测量单个囊泡内的聚合速率与产物长度分布，而不是只看总体平均值。
 
-## 第四章　自组织与生命的涌现
+> **Known**: nucleotides, amino acids, and lipid precursors can be synthesised under a variety of simulated early-Earth conditions; template-directed non-enzymatic polymerisation and ribozyme replication have both been achieved in vitro. **Open**: can these reactions occur simultaneously in the same environment, at sufficient concentration and purity? Is the prebiotic stability of RNA sufficient to support replication? **Testable direction**: couple the three modules "synthesis–concentration–polymerisation" in a continuous-flow reactor; use microfluidics to measure polymerisation rates and product length distributions inside individual vesicles, rather than looking only at population averages.
 
-### 4.1 耗散结构：有序性可以是熵产生的副产品
+## 第四章　自组织与生命的涌现 / Chapter 4. Self-Organization and the Emergence of Life
+
+### 4.1 耗散结构：有序性可以是熵产生的副产品 / 4.1 Dissipative Structures: Order Can Be a By-Product of Entropy Production
 
 普里高津（Ilya Prigogine）在 1977 年因非平衡热力学获诺贝尔化学奖。他的核心结论可以用一个式子概括。对一个开放系统，熵变可以分成两部分：
+
+Ilya Prigogine received the Nobel Prize in Chemistry in 1977 for his work on non-equilibrium thermodynamics. His central conclusion can be summarised in a single expression. For an open system, the change in entropy splits into two parts:
 
 $$\mathrm{d}S = \mathrm{d}_eS + \mathrm{d}_iS$$
 
 其中 $\mathrm{d}_eS$ 是与环境交换的熵流（可正可负），$\mathrm{d}_iS$ 是系统内部不可逆过程产生的熵，且恒有 $\mathrm{d}_iS \ge 0$。**开放系统完全可以在** $\mathrm{d}_eS < 0$ 时维持甚至降低自身熵，代价是向环境排放更多的熵。
 
+Here $\mathrm{d}_eS$ is the entropy flux exchanged with the environment (which may be positive or negative), while $\mathrm{d}_iS$ is the entropy produced by irreversible processes inside the system, with $\mathrm{d}_iS \ge 0$ always. **An open system can perfectly well** maintain or even lower its own entropy when $\mathrm{d}_eS < 0$, at the cost of discharging more entropy into the environment.
+
 更重要的是，在远离平衡的条件下，某些系统会自发形成空间或时间上的有序结构——普里高津称之为**耗散结构（dissipative structure）**。经典例子包括：
 
+More importantly, far from equilibrium, certain systems spontaneously form ordered structures in space or in time—what Prigogine called **dissipative structures**. Classic examples include:
+
 -   Bénard 对流：从下方加热的薄液层，在临界温差以上自发形成六边形对流胞；
+-   Bénard convection: a thin layer of fluid heated from below spontaneously forms hexagonal convection cells above a critical temperature difference;
 -   BZ 反应：在临界参数下出现颜色波与时间振荡；
+-   the BZ reaction: colour waves and temporal oscillations appear beyond critical parameter values;
 -   激光：在泵浦功率超过阈值时，原子自发同相发光。
+-   the laser: once the pump power exceeds a threshold, atoms emit light spontaneously in phase.
 
 这些系统的共同点是：**有序性不是被"设计"出来的，而是能量流在特定条件下自我组织的结果**。这为"生命不需要设计者"提供了一个物理学的先例。
 
+What these systems share is that **the order is not "designed" but the result of an energy flow organising itself under particular conditions**. This supplies a physical precedent for "life without a designer."
+
 但必须小心一个常见的过度推论：耗散结构解释了**有序**，却没有解释**功能**。对流胞的六边形很漂亮，但它不"为了"任何东西而存在；它没有维持自身组成部分的机制，也没有把结构信息传给下一代。
 
-### 4.2 自组织 ≠ 自我维持
+But one common over-extrapolation must be guarded against: dissipative structures explain **order** but not **function**. The hexagons of a convection cell are beautiful, yet they exist "for" nothing; there is no mechanism maintaining the cell's own components, and no transmission of structural information to the next generation.
+
+### 4.2 自组织 ≠ 自我维持 / 4.2 Self-Organisation ≠ Self-Maintenance
 
 区分这两个概念，是理解生命起源的关键一步。
 
-|                | 自组织                 | 自我维持                     |
+Distinguishing these two concepts is a crucial step toward understanding the origin of life.
+
+|                | 自组织 / Self-organisation | 自我维持 / Self-maintenance |
 |----------------|------------------------|------------------------------|
 | 典型例子       | 对流胞、沙堆、BZ 波    | 细胞、火焰（弱）、自催化网络 |
 | 驱动力         | 外部梯度               | 系统自身产物维持梯度         |
@@ -381,135 +585,233 @@ $$\mathrm{d}S = \mathrm{d}_eS + \mathrm{d}_iS$$
 
 自组织只需要**外部驱动的非线性动力学**；自我维持需要**因果闭环**——系统的产物是产生这些产物的条件之一。这个差别，就是"物理有序"与"生命组织"之间的分水岭。
 
-### 4.3 集体自催化集合：Kauffman 的原始论证
+Self-organisation requires only **externally driven nonlinear dynamics**; self-maintenance requires **causal closure**—the products of the system are among the conditions that produce them. This difference is the watershed between "physical order" and "living organisation."
+
+### 4.3 集体自催化集合：Kauffman 的原始论证 / 4.3 Collectively Autocatalytic Sets: Kauffman's Original Argument
 
 1986 年，Kauffman 提出了一个极简的模型。设想一个由 $N$ 种分子组成的"汤"，任意两种分子之间有概率 $p$ 发生催化反应。如果每种分子平均被催化的反应数为 $k = pN$，那么当 $k$ 超过某个阈值时，网络中会出现一个**巨型连通分量**——其中每个反应都被网络内部的某个分子催化。
 
+In 1986, Kauffman proposed a minimal model. Imagine a "soup" of $N$ molecular species in which any two species have probability $p$ of engaging in a catalysed reaction. If the average number of reactions catalysed per species is $k = pN$, then once $k$ exceeds a threshold, a **giant connected component** appears in the network—one in which every reaction is catalysed by some molecule inside the network.
+
 这个论证的力量在于：**它不需要任何"设计"，只需要足够多的分子与足够宽的催化特异性**。用渗流（percolation）的语言说，自催化集合的出现是一个**几何相变**：低于阈值时只有小的催化团簇，高于阈值时突然出现一个覆盖大部分节点的连通核。
+
+The strength of the argument lies in this: **it requires no "design" at all, only enough molecules and sufficiently broad catalytic specificity**. In the language of percolation, the emergence of an autocatalytic set is a **geometric phase transition**: below the threshold there are only small catalytic clusters, while above it a connected core covering most nodes appears abruptly.
 
 批评也很直接：
 
--   真实的催化特异性远低于随机模型假设的 $p$；
--   反应网络不是静态图，产物会不断被消耗；
--   巨型连通分量不等于"能持续运行"——它可能是一个热力学上不可行的循环。
+The criticisms are equally direct:
 
-### 4.4 RAF 理论：把"自催化"变成可判定的数学对象
+-   真实的催化特异性远低于随机模型假设的 $p$；
+-   real catalytic specificity is far lower than the $p$ assumed by the random model;
+-   反应网络不是静态图，产物会不断被消耗；
+-   reaction networks are not static graphs, and products are continually consumed;
+-   巨型连通分量不等于"能持续运行"——它可能是一个热力学上不可行的循环。
+-   a giant connected component is not the same as "able to keep running"—it may be a thermodynamically infeasible cycle.
+
+### 4.4 RAF 理论：把"自催化"变成可判定的数学对象 / 4.4 RAF Theory: Turning "Autocatalysis" into a Decidable Mathematical Object
 
 Hordijk 与 Steel 在 2004 年以后把 Kauffman 的直觉整理成一个严格的形式系统，称为 **RAF 理论**（Reflexively Autocatalytic and Food-generated sets）。
 
+After 2004, Hordijk and Steel organised Kauffman's intuition into a rigorous formal system known as **RAF theory** (Reflexively Autocatalytic and Food-generated sets).
+
 形式化地，一个反应网络由三元组 $(X, R, F)$ 描述：
 
+Formally, a reaction network is described by a triple $(X, R, F)$:
+
 -   $X$：分子集合；
+-   $X$: the set of molecules;
 -   $R$：反应集合，每个反应写作 $(A \to B)$，$A$ 是反应物集合，$B$ 是产物；
+-   $R$: the set of reactions, each written $(A \to B)$, where $A$ is the set of reactants and $B$ the product;
 -   $F \subseteq X$：食物集（food set），即从环境免费获得的分子。
+-   $F \subseteq X$: the food set, that is, the molecules available free of charge from the environment.
 
 一个子集 $R' \subseteq R$ 称为 **RAF**，如果满足两个条件：
 
+A subset $R' \subseteq R$ is called a **RAF** if two conditions hold:
+
 1.  **反身自催化（reflexive autocatalysis）**：$R'$ 中的每一个反应，都至少被 $R'$ 的某个产物（或 $F$ 中的分子）催化；
+1.  **Reflexive autocatalysis**: every reaction in $R'$ is catalysed by at least one product of $R'$ (or by a molecule in $F$);
 2.  **食物生成（food-generated）**：$R'$ 中的每一个反应物，都可以从 $F$ 出发、通过 $R'$ 中的反应有限步生成。
+2.  **Food-generated**: every reactant in $R'$ can be generated from $F$ through reactions in $R'$ in a finite number of steps.
 
 第一条是"闭环"，第二条是"能从环境起步"。两条合起来，就刻画了一个**不需要外部提供复杂中间产物、并且能自我催化**的反应集合。
 
+The first condition is "closure"; the second is "being able to start from the environment." Together they characterise a set of reactions that **requires no externally supplied complex intermediates and is capable of autocatalysis**.
+
 RAF 理论最重要的技术结果是：**在随机催化网络模型中，RAF 的出现存在一个清晰的阈值**——当每个反应平均拥有的催化剂数量超过某个临界值时，网络中存在 RAF 的概率从接近 0 迅速跳到接近 1（Hordijk & Steel 2017; Steel et al. 2019）。
+
+The most important technical result of RAF theory is that **in random catalytic network models there is a sharp threshold for the emergence of RAFs**—once the average number of catalysts available per reaction exceeds a critical value, the probability that a RAF exists in the network jumps rapidly from near 0 to near 1 (Hordijk & Steel 2017; Steel et al. 2019).
 
 这个结果的意义在于：它把"生命需要一个自维持的化学反应核心"这一模糊直觉，变成了**可以计算、可以反驳**的命题。你可以给定一个真实的代谢网络，用算法找出其中最大的 RAF；也可以问"删掉哪些反应会让 RAF 消失"。
 
+The significance of this result is that it turns the vague intuition that "life requires a self-sustaining chemical core" into a proposition that can be **computed and refuted**. Given a real metabolic network, one can use an algorithm to find its largest RAF; one can also ask "which reactions, if deleted, would make the RAF disappear."
+
 但它也有明确的局限：
 
+But it also has clear limitations:
+
 -   RAF 是**存在性**结论，不保证该子网络在动力学上稳定（可能振荡、可能被副反应淹没）；
+-   a RAF is an **existence** result and does not guarantee that the subnetwork is dynamically stable (it may oscillate, or be swamped by side reactions);
 -   RAF 依赖"催化"这一关系是给定的，而**催化特异性本身是演化的产物**；
+-   RAF theory takes the catalysis relation as given, whereas **catalytic specificity is itself a product of evolution**;
 -   阈值结论来自随机图模型，真实化学网络的度分布、动力学与空间结构都可能改变阈值。
+-   the threshold result comes from random-graph models, and the degree distribution, dynamics, and spatial structure of real chemical networks may all shift the threshold.
 
 Xavier 等人 2020 年的工作正是把 RAF 算法应用到真实代谢网络上的范例：在厌氧自养微生物的代谢中，可以找到生成乙酰辅酶 A、氨基酸与碱基的 RAF（Xavier et al. 2020）。这是"从模型到数据"的重要一步，但它依然不能回答"这个 RAF 在历史上是否真的先出现"。
 
-### 4.5 约束闭合：从"反应闭合"到"组织闭合"
+The 2020 work of Xavier and colleagues is precisely an example of applying the RAF algorithm to real metabolic networks: in the metabolism of anaerobic autotrophs, RAFs can be found that generate acetyl-CoA, amino acids, and bases (Xavier et al. 2020). This is an important step "from model to data," but it still cannot answer whether this RAF really appeared first in history.
+
+### 4.5 约束闭合：从"反应闭合"到"组织闭合" / 4.5 Constraint Closure: From "Reaction Closure" to "Organisational Closure"
 
 RAF 描述的是**反应层面的闭合**：每个反应都被网络内部分子催化。但生命还有另一种闭合：**约束的闭合（constraint closure）**。
 
+A RAF describes **closure at the level of reactions**: every reaction is catalysed by molecules inside the network. But life has another kind of closure: **constraint closure**.
+
 这个概念来自 Kauffman，后来被 Moreno 与 Mossio 发展为"生物自主性"（biological autonomy）理论。它的核心是：
+
+The concept originates with Kauffman and was later developed by Moreno and Mossio into a theory of "biological autonomy." Its core is this:
 
 > 一个系统是自主的，如果它的组成部分**相互依赖地维持彼此的存在条件**，并且这种维持是系统自身活动的结果。
 
+> A system is autonomous if its components **depend on one another in maintaining each other's conditions of existence**, and if this maintenance is the result of the system's own activity.
+
 举例说明。在一个原始细胞中：
 
+To illustrate. In a protocell:
+
 -   膜脂限制物质外流，从而维持内部反应的高浓度；
+-   the membrane lipids restrict the outward leakage of material, thereby maintaining high concentrations for the internal reactions;
 -   内部反应合成的能量与前体，维持膜脂的合成；
+-   the energy and precursors synthesised by the internal reactions sustain the synthesis of membrane lipids;
 -   膜上的通道控制物质进出，从而维持反应的原料供给。
+-   channels in the membrane control the passage of material in and out, thereby maintaining the supply of reactants.
 
 这里没有任何一个部件是"为了"整体而被设计出来的，但每个部件都在**维持其他部件存在的条件**。这就是约束闭合：系统的组织构成了对自身组成部分的约束，而这些组成部分又维持了这些约束。
 
+No component here was "designed" for the sake of the whole, yet each component **maintains the conditions under which the others exist**. This is constraint closure: the organisation of the system constitutes a constraint on its own components, and those components in turn maintain the constraints.
+
 与 RAF 相比，约束闭合更强：RAF 只要求"催化关系在集合内闭合"，约束闭合还要求"**结构条件**在集合内闭合"——膜、通道、pH 梯度这些不是催化剂，却是反应能够持续的前提。
 
-### 4.6 自创生：边界与过程的统一
+Compared with a RAF, constraint closure is stronger: a RAF requires only that "the catalysis relations be closed within the set," whereas constraint closure also requires that **structural conditions** be closed within the set—membranes, channels, and pH gradients are not catalysts, yet they are preconditions for the reactions to continue.
+
+### 4.6 自创生：边界与过程的统一 / 4.6 Autopoiesis: The Unity of Boundary and Process
 
 Maturana 与 Varela 在 1972 年提出**自创生（autopoiesis）**：一个自创生系统是一个**持续生产自身组成部分、并通过边界把自身与环境区分开**的网络。
 
+Maturana and Varela proposed **autopoiesis** in 1972: an autopoietic system is a network that **continuously produces its own components and distinguishes itself from its environment by means of a boundary**.
+
 他们给出的最小例子是"自创生单位"（autopoietic unity）：一个由膜包围的反应网络，膜本身由网络内部的反应合成。这个系统没有"目的"，但它有一个明确的组织特征：**它的所有过程都服务于同一个循环——生产自身**。
+
+Their minimal example is the "autopoietic unity": a reaction network enclosed by a membrane, where the membrane itself is synthesised by reactions inside the network. The system has no "purpose," but it has a definite organisational feature: **all of its processes serve a single loop—the production of itself**.
 
 自创生理论在哲学上非常重要，因为它第一次把"个体性"与"过程性"统一起来：个体不是先于过程存在的实体，而是过程在边界处**持续生成**的产物。这直接影响了后面第七章关于个体化的讨论。
 
+Autopoiesis is philosophically important because it unifies "individuality" and "process" for the first time: the individual is not an entity existing prior to the process but a product that the process **continuously generates** at a boundary. This directly informs the discussion of individuation in Chapter 7.
+
 但它也受到两类批评：
 
--   **操作性问题**：如何判定一个系统"真的"在自创生，而不是"看起来像"？判据往往依赖观察者的描述。
--   **演化问题**：自创生描述的是**维持**，不是**变化**。一个完全自创生的系统可以是演化的死胡同，因为它没有变异与选择的机制。
+It has, however, attracted two kinds of criticism:
 
-### 4.7 一个思想实验：没有基因的细胞
+-   **操作性问题**：如何判定一个系统"真的"在自创生，而不是"看起来像"？判据往往依赖观察者的描述。
+-   **The operational problem**: how does one determine whether a system "really" is autopoietic rather than merely "looks like it"? The criteria often depend on the observer's description.
+-   **演化问题**：自创生描述的是**维持**，不是**变化**。一个完全自创生的系统可以是演化的死胡同，因为它没有变异与选择的机制。
+-   **The evolutionary problem**: autopoiesis describes **maintenance**, not **change**. A fully autopoietic system can be an evolutionary dead end, because it has no mechanism for variation and selection.
+
+### 4.7 一个思想实验：没有基因的细胞 / 4.7 A Thought Experiment: A Cell Without Genes
 
 把所有线索合起来，可以构造一个假想系统：
 
+Putting all the threads together, we can construct a hypothetical system:
+
 一个由脂肪酸囊泡包围的小分子反应网络，利用环境中的 H₂ 与 CO₂ 作为能源与碳源，通过铁硫簇催化的还原性路径合成乙酰辅酶 A 与氨基酸；膜脂由网络内部的前体合成；膜上的短肽通道让原料进入、废物排出；当囊泡长大到一定程度，机械不稳定性导致它分裂成两个子囊泡。
+
+A network of small-molecule reactions enclosed by a fatty-acid vesicle, using environmental H₂ and CO₂ as energy and carbon sources, synthesising acetyl-CoA and amino acids through a reductive pathway catalysed by iron–sulfur clusters; the membrane lipids are synthesised from precursors inside the network; short peptide channels in the membrane let raw materials in and waste out; and when the vesicle grows beyond a certain size, mechanical instability causes it to divide into two daughter vesicles.
 
 这个系统满足：自我维持、边界、生长、分裂、约束闭合。它不满足：模板复制、可遗传的变异、开放式演化。
 
+This system satisfies: self-maintenance, boundary, growth, division, and constraint closure. It does not satisfy: template replication, heritable variation, or open-ended evolution.
+
 **它是不是生命？** 按 NASA 定义，不是——因为它不能达尔文式演化。按自创生定义，是——因为它持续生产自身。按"生命性梯度"的观点，它是一个"前生命系统"，处在从化学到生命的中间台阶上。
+
+**Is it life?** Under the NASA definition, no—because it cannot undergo Darwinian evolution. Under the autopoietic definition, yes—because it continuously produces itself. On the "gradient of aliveness" view, it is a "pre-living system" occupying an intermediate step between chemistry and life.
 
 这个思想实验的价值在于：它把"生命"拆成了可分别实现的功能模块，并迫使我们承认——**这些模块并不总是同时出现，也不一定需要同时出现。**
 
-### 4.8 本章结论
+The value of this thought experiment is that it decomposes "life" into functional modules that can be realised separately, and forces us to admit that **these modules do not always appear together, nor do they necessarily need to.**
+
+### 4.8 本章结论 / 4.8 Chapter Conclusion
 
 > **已知**：耗散结构、自催化网络、RAF 与自创生都有严格的数学表述；RAF 在随机催化网络中的阈值行为已被证明；真实代谢网络中确实存在 RAF 核。 **未决**：动力学稳定性、催化特异性的起源、约束闭合的可操作判据。 **可验证方向**：构建一个"最小约束闭合"的化学系统（膜 + 代谢 + 通道），测量它在稀释、渗透压与温度扰动下的恢复时间；用 RAF 算法对合成网络做"删除实验"，预测哪些反应是必需的。
 
-## 第五章　从化学到生命，是不是一次相变？
+> **Known**: dissipative structures, autocatalytic networks, RAFs, and autopoiesis all have rigorous mathematical formulations; the threshold behaviour of RAFs in random catalytic networks has been proved; RAF cores do exist in real metabolic networks. **Open**: dynamical stability, the origin of catalytic specificity, and operational criteria for constraint closure. **Testable direction**: build a "minimally constraint-closed" chemical system (membrane + metabolism + channels) and measure its recovery time under dilution, osmotic, and thermal perturbations; use the RAF algorithm to perform "deletion experiments" on synthetic networks and predict which reactions are indispensable.
 
-### 5.1 相变的基本语言
+## 第五章　从化学到生命，是不是一次相变？ / Chapter 5. Is the Transition from Chemistry to Life a Phase Transition?
+
+### 5.1 相变的基本语言 / 5.1 The Basic Language of Phase Transitions
 
 在物理学中，**相变**指系统在某个控制参数（温度、压力、密度）越过临界值时，宏观状态发生不连续或奇异的变化。
 
+In physics, a **phase transition** refers to a discontinuous or singular change in the macroscopic state of a system when some control parameter (temperature, pressure, density) crosses a critical value.
+
 -   **一阶相变**：序参量不连续跳变（冰→水，有潜热）。
+-   **First-order transition**: the order parameter jumps discontinuously (ice → water, with latent heat).
 -   **连续相变（二阶）**：序参量连续但导数不连续（铁磁体在居里点）。
+-   **Continuous (second-order) transition**: the order parameter is continuous but its derivative is not (a ferromagnet at the Curie point).
 -   **临界现象**：在临界点附近出现幂律、涨落增大、关联长度发散。
+-   **Critical phenomena**: near the critical point one finds power laws, growing fluctuations, and a diverging correlation length.
 
 这里"序参量"是关键：它是用来刻画"有序程度"的宏观变量。问题在于，**生命有对应的序参量吗？**
 
-### 5.2 Kauffman 与 Roli 的 2025 年主张
+The "order parameter" is the key notion here: it is the macroscopic variable that quantifies "degree of order." The question is whether **life has a corresponding order parameter**.
+
+### 5.2 Kauffman 与 Roli 的 2025 年主张 / 5.2 The 2025 Proposal of Kauffman and Roli
 
 Kauffman 与 Roli 在 2025 年 *Philosophical Transactions of the Royal Society B* 的一篇论文中，提出了一个整合性的理论（Kauffman & Roli 2025）。其核心主张可以概括为五点：
 
+In a 2025 paper in *Philosophical Transactions of the Royal Society B*, Kauffman and Roli advance an integrative theory (Kauffman & Roli 2025). Its core claims can be summarised in five points:
+
 1.  集体自催化的小分子集合、DNA 集合、RNA 集合、肽集合都已被发现或构建；
+1.  collectively autocatalytic sets of small molecules, of DNA, of RNA, and of peptides have all been discovered or constructed;
 2.  有可靠的理论支持这类系统可以作为**一阶相变**出现；
+2.  there is solid theoretical support for such systems arising as a **first-order phase transition**;
 3.  这类集合构成**康德式整体**：整体为部分而存在，部分为整体而存在；
+3.  such sets constitute a **Kantian whole**: the whole exists for the parts, and the parts for the whole;
 4.  最早的生命可能始于小分子自催化集合，随后与肽、RNA 自催化集合**融合**为更高阶的整体；
+4.  the earliest life may have begun with a small-molecule autocatalytic set and subsequently **merged** with peptide and RNA autocatalytic sets into higher-order wholes;
 5.  这种融合最终导致了模板复制、编码与核糖体。
+5.  this merging eventually gave rise to template replication, encoding, and the ribosome.
 
 这个理论最有价值的地方，是它把"生命的出现"从"某个分子的偶然合成"转变成"**网络组织方式的相变**"。如果这个图景成立，那么生命起源不需要一个极小概率的分子事件，而需要一个**越过阈值的网络**——这在概率上要合理得多。
 
-### 5.3 相变论证成立吗？——分层评估
+What is most valuable about this theory is that it recasts "the emergence of life" from "the chance synthesis of a particular molecule" into "**a phase transition in the mode of network organisation**." If this picture holds, the origin of life does not require a molecular event of extremely low probability but a **network that crosses a threshold**—which is far more plausible probabilistically.
+
+### 5.3 相变论证成立吗？——分层评估 / 5.3 Does the Phase-Transition Argument Hold? A Tiered Assessment
 
 必须把这一主张拆成三层，分别评估：
 
+The claim must be broken into three tiers and assessed separately:
+
 **第一层：数学模型中的相变。** 在随机催化网络、随机图、渗流模型中，自催化集合的出现确实是尖锐的阈值现象，而且可以计算临界点。这一层是**成立**的，但它成立的是"模型中的相变"，不是"化学系统中的相变"。
+
+**First tier: phase transitions in mathematical models.** In random catalytic networks, random graphs, and percolation models, the emergence of autocatalytic sets is indeed a sharp threshold phenomenon, and the critical point can be computed. This tier **holds**—but what holds is a "phase transition in the model," not a "phase transition in a chemical system."
 
 **第二层：真实化学网络中的相变。** 真实反应网络的催化关系不是随机的：特异性有强弱、反应有速率、产物有抑制、空间有扩散。这些因素通常会把尖锐的阈值**抹平**成渐变。目前没有实验证明某个真实的前生物化学系统在某个参数上表现出真正的一阶跳变。
 
+**Second tier: phase transitions in real chemical networks.** Catalytic relations in real reaction networks are not random: specificities vary in strength, reactions have rates, products inhibit, and diffusion operates in space. These factors usually **smear** a sharp threshold into a gradual crossover. No experiment has yet shown that a real prebiotic chemical system exhibits a genuine first-order jump in any parameter.
+
 **第三层：生命属性的相变。** 即使自催化集合出现了，它是否同时带来"自我维持""边界""可演化"？这三者并不是同一个序参量。更可能的情况是：**它们有各自的阈值，出现在不同的参数位置**。
 
-### 5.4 多个序参量，多次跃迁
+**Third tier: phase transitions in the properties of life.** Even if an autocatalytic set emerges, does it simultaneously bring "self-maintenance," "boundary," and "evolvability"? These three are not the same order parameter. The more likely situation is that **they have separate thresholds, located at different positions in parameter space**.
+
+### 5.4 多个序参量，多次跃迁 / 5.4 Multiple Order Parameters, Multiple Transitions
 
 这正是本文的核心判断之一：**从非生命到生命不是一个相变，而是一系列相变（或准相变）**。
 
+This is one of the central judgements of this article: **the transition from non-life to life is not one phase transition but a series of transitions (or quasi-transitions)**.
+
 ```{r}
 #| label: fig-thresholds
-#| fig-cap: "生命性不是一个序参量。不同的生命属性可能在不同的控制参数处越过各自的阈值：自我维持可能较容易，复制较难，开放式演化最难。曲线的陡峭程度取决于系统大小与噪声——有限系统中阈值会被抹平。"
+#| fig-cap: "生命性不是一个序参量。不同的生命属性可能在不同的控制参数处越过各自的阈值：自我维持可能较容易，复制较难，开放式演化最难。曲线的陡峭程度取决于系统大小与噪声——有限系统中阈值会被抹平。 | Aliveness is not a single order parameter. Different properties of life may cross their own thresholds at different values of the control parameter: self-maintenance may be comparatively easy, replication harder, and open-ended evolution hardest. The steepness of the curves depends on system size and noise—in finite systems thresholds are smeared."
 #| fig-width: 9.0
 #| fig-height: 3.8
 x <- seq(0, 1, length.out = 400)
@@ -555,7 +857,9 @@ p_a | p_b
 
 至少可以区分出四个候选阈值：
 
-| 转变 | 候选序参量 | 现有证据 |
+At least four candidate thresholds can be distinguished:
+
+| 转变 / Transition | 候选序参量 / Candidate order parameter | 现有证据 / Available evidence |
 |------------------------|------------------------|------------------------|
 | 自组织 → 自我维持 | 约束闭合度、恢复能力 | 模型 + 少量囊泡实验 |
 | 自我维持 → 复制 | 模板拷贝数、复制保真度 | 体外核酶复制已实现 |
@@ -564,204 +868,346 @@ p_a | p_b
 
 把四者混为一谈，就会得到"生命是一次相变"的错觉。更准确的表述是：**生命起源是一串阈值事件，其中某些可能很尖锐，某些可能是漫长的渐变。**
 
-### 5.5 为什么不能把生命起源等同于宇宙学奇点
+Conflating the four yields the illusion that "life is a single phase transition." A more accurate formulation is this: **the origin of life is a string of threshold events, some of which may be very sharp while others may be long, gradual crossovers.**
+
+### 5.5 为什么不能把生命起源等同于宇宙学奇点 / 5.5 Why the Origin of Life Should Not Be Equated with a Cosmological Singularity
 
 "生命奇点"（life singularity）这个说法在科普中很流行，但它是一个错误的类比：
 
+The phrase "life singularity" is popular in science communication, but it rests on a false analogy:
+
 -   大爆炸奇点是**时空本身**的起点，所有物理定律在奇点处失效；而生命的出现发生在已有的时空与物理化学定律之内。
+-   the Big Bang singularity is the beginning of **space-time itself**, and all laws of physics break down there, whereas the emergence of life occurs within pre-existing space-time and physico-chemical laws;
 -   奇点是一个**唯一事件**；生命起源可能在地球上发生过多次（甚至可能多次失败），也可能在宇宙中反复发生。
+-   the singularity is a **unique event**, whereas the origin of life may have occurred several times on Earth (and may even have failed several times), and may recur elsewhere in the universe;
 -   奇点没有"之前"；生命起源有明确的化学前史。
+-   the singularity has no "before," whereas the origin of life has a well-defined chemical prehistory.
 
 更恰当的类比不是宇宙学奇点，而是**过冷液体的成核**：在临界过冷度以下，任何扰动都不能形成稳定晶核；超过临界值后，成核概率急剧上升。生命起源可能更像"成核"——需要一个局部涨落越过阈值，然后自我放大。
 
-### 5.6 一次事件还是多次跃迁？
+A more apt analogy is not a cosmological singularity but **nucleation in a supercooled liquid**: below the critical degree of supercooling, no perturbation can form a stable nucleus; beyond the critical value, the nucleation probability rises steeply. The origin of life may be more like "nucleation"—requiring a local fluctuation to cross a threshold and then amplify itself.
+
+### 5.6 一次事件还是多次跃迁？ / 5.6 One Event or Several Transitions?
 
 目前有三种立场：
 
+There are currently three positions:
+
 1.  **单次跃迁论**：生命起源是一个极低概率事件，一旦发生就迅速占据所有可用生态位。支持者常引用"所有已知生命共享同一套遗传密码"这一点。
+1.  **The single-transition view**: the origin of life is an event of extremely low probability which, once it occurs, rapidly occupies every available niche. Supporters often cite the fact that "all known life shares the same genetic code."
 2.  **多次跃迁论**：生命起源是一系列相对容易的步骤，每一步都有自己的化学基础。支持者引用 LUCA 已经非常复杂这一事实——如果 LUCA 之前的每一步都极难，那么时间不够。
+2.  **The multiple-transition view**: the origin of life is a series of comparatively easy steps, each with its own chemical basis. Supporters cite the fact that LUCA is already very complex—if every step before LUCA had been extremely difficult, there would not have been enough time.
 3.  **并行实验论**：地球上可能同时存在多个"原始生命"谱系，最终只有一个存活下来（"最后共同祖先"之前的竞争）。
+3.  **The parallel-experiment view**: several lineages of "primordial life" may have coexisted on Earth, with only one ultimately surviving (competition before the "last universal common ancestor").
 
 现有证据更支持第 2 与第 3 种：LUCA 的复杂性（约 350–500 个基因的估计，依赖方法）说明它不是"第一个生命"，而是**已经演化了一段时间的产物**。
 
-### 5.7 本章结论
+The available evidence favours the second and third: the complexity of LUCA (estimates of roughly 350–500 genes, depending on method) shows that it was not "the first life" but **the product of a period of evolution**.
+
+### 5.7 本章结论 / 5.7 Chapter Conclusion
 
 > **已知**：在随机催化网络模型中，自催化集合的出现具有阈值性质；真实代谢网络中存在 RAF 核。 **未决**：真实化学系统是否表现出一阶相变？多个阈值之间是否存在因果依赖？ **可验证方向**：在微流控中系统扫描"催化分子数量 / 反应种类"这一参数，测量自我维持概率随参数的曲线形状，检验它是阶跃还是渐变。
 
-## 第六章　生命作为信息与计算
+> **Known**: in random catalytic network models, the emergence of autocatalytic sets is threshold-like; RAF cores exist in real metabolic networks. **Open**: do real chemical systems exhibit a first-order phase transition? Are the multiple thresholds causally dependent on one another? **Testable direction**: systematically scan the parameter "number of catalytic molecules / number of reaction types" in microfluidic devices, measure the shape of the curve of self-maintenance probability against that parameter, and test whether it is a step or a gradual crossover.
 
-### 6.1 两种信息：香农信息与功能信息
+## 第六章　生命作为信息与计算 / Chapter 6. Life as Information and Computation
+
+### 6.1 两种信息：香农信息与功能信息 / 6.1 Two Kinds of Information: Shannon Information and Functional Information
 
 香农信息（Shannon information）度量的是**不确定性减少**：
+
+Shannon information measures **the reduction of uncertainty**:
 
 $$H = -\sum_i p_i \log_2 p_i$$
 
 它完全不管信息"是什么意思"。一段随机比特串可以有很高的香农熵，却不携带任何功能信息。
 
+It says nothing at all about what the information "means." A random bit string can have very high Shannon entropy yet carry no functional information.
+
 生物学中的信息是**功能性的**：DNA 序列之所以是信息，是因为它被转录、翻译，并影响表型。这里至少需要三个额外条件：
 
+Information in biology is **functional**: a DNA sequence is information because it is transcribed, translated, and affects the phenotype. At least three additional conditions are required:
+
 1.  **编码（encoding）**：符号与所指之间存在稳定的对应关系；
+1.  **Encoding**: a stable correspondence exists between symbol and referent;
 2.  **解码机制（decoder）**：存在一个物理过程把符号转成功能；
+2.  **A decoder**: a physical process exists that converts the symbol into function;
 3.  **选择历史（selection history）**：这套对应关系之所以存在，是因为它在过去带来了适应性收益。
+3.  **Selection history**: the correspondence exists because it conferred a fitness benefit in the past.
 
 第三点最关键。**没有选择历史，就没有"功能"**——一块石头的形状也可以"编码"某个蛋白的结构，但它不是信息，因为没有任何机制在使用它。
 
-### 6.2 遗传信息何时出现？
+The third point is the most crucial. **Without a history of selection there is no "function"**—the shape of a stone could also "encode" the structure of a protein, but it is not information, because no mechanism makes use of it.
+
+### 6.2 遗传信息何时出现？ / 6.2 When Does Hereditary Information Appear?
 
 这是生命起源中最尖锐的问题之一。有三种可能的答案：
 
+This is one of the sharpest questions in the origin of life. There are three possible answers:
+
 -   **信息先于复制**：在选择出现之前，某些聚合物已经具有"可被读取"的化学性质（例如模板化聚合的选择性）。
+-   **Information before replication**: before selection appeared, certain polymers already had chemical properties that made them "readable" (for example, the selectivity of templated polymerisation).
 -   **复制先于信息**：先出现无模板的自催化复制（例如脂质囊泡的生长分裂），信息是后来才被"编码"进去的。
+-   **Replication before information**: template-free autocatalytic replication appears first (for example, the growth and division of lipid vesicles), and information is "encoded" only later.
 -   **信息与复制同时出现**：模板复制本身就是信息存储的物理实现，两者不可分。
+-   **Information and replication appear together**: template replication is itself the physical implementation of information storage, and the two are inseparable.
 
 第三种立场在工程上最自然：**复制保真度就是信息容量**。一个复制系统能维持多少比特，取决于它的错误率。这正是 Eigen 的贡献。
 
-### 6.3 Eigen 的准物种与错误阈值
+The third position is the most natural from an engineering standpoint: **replication fidelity is information capacity**. How many bits a replicating system can maintain depends on its error rate. This is precisely Eigen's contribution.
+
+### 6.3 Eigen 的准物种与错误阈值 / 6.3 Eigen's Quasispecies and the Error Threshold
 
 1971 年，Eigen 提出**准物种（quasispecies）**理论：在突变–选择平衡下，一个复制分子群体不是单一序列，而是一个以主序列为中心的突变云。
 
+In 1971, Eigen proposed the theory of **quasispecies**: at mutation–selection equilibrium, a population of replicating molecules is not a single sequence but a cloud of mutants centred on a master sequence.
+
 关键结果是**错误阈值（error threshold）**。设序列长度为 $L$，单碱基复制正确率为 $q$，则整条序列的正确复制概率为 $Q = q^L$。若主序列的相对适应度为 $\sigma$，则准物种能够维持的条件近似为：
+
+The key result is the **error threshold**. Let the sequence length be $L$ and the per-base replication accuracy be $q$; then the probability of copying the whole sequence correctly is $Q = q^L$. If the relative fitness of the master sequence is $\sigma$, the condition for the quasispecies to be maintained is approximately:
 
 $$Q \cdot \sigma > 1 \quad \Longrightarrow \quad L < \frac{\ln \sigma}{1-q}$$
 
 这个不等式说明：**基因组越长，要求的复制保真度越高**。以 RNA 核酶为例，若错误率约为 $10^{-3}$/碱基，则最大可持续长度约为 $10^3$ 个碱基量级——这刚好处于"能编码一个有用核酶，但不足以编码一整套代谢酶"的边缘。
 
+The inequality states that **the longer the genome, the higher the replication fidelity required**. For an RNA ribozyme, if the error rate is about $10^{-3}$ per base, the maximum sustainable length is on the order of $10^3$ bases—right at the boundary of "enough to encode a useful ribozyme, but not enough to encode a full set of metabolic enzymes."
+
 这就产生了**Eigen 悖论**：没有酶，复制保真度低；没有高保真复制，就编码不出酶。RNA 世界的解决方案可能是：先用小基因组 + 短肽/小分子辅助，逐步提高保真度；或者用区室化（个体化）来降低有效突变率。
 
-### 6.4 冯·诺依曼：自复制不需要魔法
+This generates the **Eigen paradox**: without enzymes, replication fidelity is low; without high-fidelity replication, enzymes cannot be encoded. Possible solutions within the RNA world are: start with a small genome plus short-peptide or small-molecule assistance and raise fidelity step by step; or use compartmentalisation (individuation) to lower the effective mutation rate.
+
+### 6.4 冯·诺依曼：自复制不需要魔法 / 6.4 von Neumann: Self-Replication Requires No Magic
 
 1948 年前后，冯·诺依曼提出了**自复制自动机**的构造：一个机器包含三部分——
 
+Around 1948, von Neumann proposed the construction of a **self-replicating automaton**: a machine with three parts—
+
 1.  一条描述自身的**纸带**（信息）；
+1.  a **tape** describing itself (information);
 2.  一个**通用构造器**（universal constructor），能读取纸带并构造任何描述所指定的机器；
+2.  a **universal constructor**, able to read the tape and build whatever machine the description specifies;
 3.  一个**复制器**，把纸带复制一份。
+3.  a **copier**, which duplicates the tape.
 
 这个构造的意义在于：它证明了**自复制在逻辑上不需要任何神秘力量**，只需要"描述"与"构造"的分离，以及一个通用构造器。
 
+The significance of this construction is that it proves **self-replication requires no mysterious force in logical terms**; all it requires is the separation of "description" from "construction," together with a universal constructor.
+
 它同时预言了一个深刻的后果：**任何足够强大的自复制系统，都会不可避免地产生寄生者**——一段不构造任何东西、只复制自己的"纸带"。这一点在 Tierra、Avida 与后来的数字生命实验中被反复观察到。
 
-### 6.5 编码、解码与语义
+It also predicts a profound consequence: **any sufficiently powerful self-replicating system will inevitably generate parasites**—a "tape" that constructs nothing and merely copies itself. This has been observed repeatedly in Tierra, Avida, and later experiments on digital life.
+
+### 6.5 编码、解码与语义 / 6.5 Encoding, Decoding, and Semantics
 
 生命系统最特别的地方，可能不是"有信息"，而是**有编码**。
 
+What is most distinctive about living systems may not be that they "have information" but that they **have codes**.
+
 在 DNA → RNA → 蛋白质的流程中，三联体密码与氨基酸之间没有化学必然性——这是一个**任意映射**（arbitrary mapping），只不过被历史固定下来了。这种"任意性 + 稳定性"的组合，是真正意义上的符号系统。
+
+In the DNA → RNA → protein flow, there is no chemical necessity linking a triplet codon to an amino acid—it is an **arbitrary mapping** that has merely been fixed by history. This combination of "arbitrariness + stability" is a symbolic system in the full sense.
 
 由此产生一个难题：**编码系统如何起源？** 如果密码子是任意的，那么在编码出现之前，"正确"的解码方式并不存在；但如果没有解码方式，编码就没有功能。这是一个典型的"鸡与蛋"问题。
 
+This raises a difficulty: **how did the coding system originate?** If codons are arbitrary, then before coding appeared there was no "correct" way to decode; yet without a decoding mechanism, coding has no function. This is a classic chicken-and-egg problem.
+
 可能的解决路径包括：
 
--   **共进化**：某些氨基酸与某些 RNA 序列之间的亲和性，最初只是化学偶然，后来被"锁定"为密码；
--   **逐步扩展**：先有少数几个氨基酸的简单编码，再逐步扩展密码表；
--   **功能借用**：某些 RNA 本来就有催化功能，后来被"征用"为编码元件。
+Possible paths to a solution include:
 
-### 6.6 Walker、Davies 与"算法起源"
+-   **共进化**：某些氨基酸与某些 RNA 序列之间的亲和性，最初只是化学偶然，后来被"锁定"为密码；
+-   **Coevolution**: the affinity between certain amino acids and certain RNA sequences was initially a chemical accident and was later "locked in" as a code;
+-   **逐步扩展**：先有少数几个氨基酸的简单编码，再逐步扩展密码表；
+-   **Gradual expansion**: a simple code for a few amino acids comes first, and the code table is then extended stepwise;
+-   **功能借用**：某些 RNA 本来就有催化功能，后来被"征用"为编码元件。
+-   **Functional co-option**: some RNAs already had catalytic functions and were later "conscripted" as coding elements.
+
+### 6.6 Walker、Davies 与"算法起源" / 6.6 Walker, Davies, and the "Origin of Algorithms"
 
 Walker 与 Davies 在 2013 年提出，生命的起源可以被理解为**算法的起源**：物理系统要成为"活的"，需要能够存储并执行"如何维持自身"的算法（Davies & Walker 2013）。他们强调，信息不是附属于物质的"额外东西"，而是**物理状态之间的相关性**，这种相关性可以被复制、被选择、被累积。
 
+Walker and Davies suggested in 2013 that the origin of life can be understood as **the origin of algorithms**: for a physical system to become "alive," it must be able to store and execute an algorithm for "how to maintain itself" (Davies & Walker 2013). They stress that information is not an "extra thing" attached to matter but a **correlation among physical states**, and that such correlations can be copied, selected, and accumulated.
+
 这一框架的优点是把信息与热力学联系起来：复制一个比特需要消耗能量（Landauer 原理），而自然选择则是在"信息积累"与"能量耗散"之间做权衡。
+
+The advantage of this framework is that it links information to thermodynamics: copying one bit costs energy (the Landauer principle), and natural selection trades off "information accumulation" against "energy dissipation."
 
 它的困难在于：**"算法"这个概念在物理上如何定义？** 一段 DNA 是算法，还是数据？一个反应网络是算法，还是动力学？这些问题目前没有公认答案。
 
-### 6.7 Assembly Theory：主张、证据与争议
+Its difficulty is this: **how is the concept of an "algorithm" to be defined physically?** Is a stretch of DNA an algorithm or data? Is a reaction network an algorithm or dynamics? There is currently no accepted answer to these questions.
+
+### 6.7 Assembly Theory：主张、证据与争议 / 6.7 Assembly Theory: Claims, Evidence, and Controversy
 
 2023 年，Cronin、Walker 与合作者在 *Nature* 发表**组装理论（Assembly Theory）**，提出用两个量刻画复杂对象（Sharma et al. 2023）：
 
+In 2023, Cronin, Walker, and collaborators published **Assembly Theory** in *Nature*, proposing to characterise complex objects with two quantities (Sharma et al. 2023):
+
 -   **组装指数（assembly index,** $a$）：从基本构件出发，构造该对象所需的**最少**递归步骤数；
+-   **Assembly index,** $a$: the **minimum** number of recursive steps needed to construct the object from basic building blocks;
 -   **拷贝数（copy number,** $N$）：在样本中观察到该对象的次数。
+-   **Copy number,** $N$: the number of times the object is observed in the sample.
 
 他们的核心主张是：$a \times N$ 超过某个阈值，就说明该对象是被选择产生的，而不是随机形成的。他们在实验上用质谱测量分子碎片的组装指数，并声称可以把生命与非生命样本区分开。
 
+Their core claim is that when $a \times N$ exceeds a threshold, the object was produced by selection rather than formed at random. Experimentally they used mass spectrometry to measure the assembly index of molecular fragments and claimed to be able to separate living from non-living samples.
+
 这一理论引发了激烈争论，至少有三类批评：
 
+The theory provoked intense debate, with at least three lines of criticism:
+
 1.  **计算复杂性**：计算组装指数是 NP 难问题，实际算法只能给出近似值；近似误差会直接影响"生命/非生命"的判定。
+1.  **Computational complexity**: computing the assembly index is NP-hard, and practical algorithms can give only approximations; approximation error bears directly on the "life/non-life" judgement.
 2.  **理论冗余**：有批评者认为，组装理论的核心思想（"复杂 + 大量拷贝 = 选择"）并没有超出已有的演化理论，只是换了一套语言（"Assembly Theory: What It Does and What It Does Not Do", *J Mol Evol* 2024）。
+2.  **Theoretical redundancy**: some critics hold that the core idea of assembly theory ("complexity + many copies = selection") does not go beyond existing evolutionary theory and merely changes the vocabulary ("Assembly Theory: What It Does and What It Does Not Do", *J Mol Evol* 2024).
 3.  **实验解释**：组装指数高，也可能来自非生物过程（例如某些矿物或工业污染物）；把它当作"生命标志物"需要更多对照实验。
+3.  **Experimental interpretation**: a high assembly index may also arise from abiotic processes (for example, certain minerals or industrial contaminants); treating it as a "biosignature" requires more controlled comparisons.
 
 本文的判断是：组装理论提供了一个**有用的定量指标**，尤其适合行星科学与样本稀少时的分类问题；但它目前还不是一个"生命理论"，更不是一个可以单独判定"这是生命"的判据。
 
-### 6.8 为什么有些系统能"用过去影响未来"
+The judgement of this article is that assembly theory provides a **useful quantitative index**, especially suited to planetary science and classification problems with scarce samples; but it is not yet a "theory of life," still less a criterion that can on its own decide "this is life."
+
+### 6.8 为什么有些系统能"用过去影响未来" / 6.8 Why Some Systems Can "Use the Past to Affect the Future"
 
 回到本章的核心问题：**为什么某些化学系统不再仅由即时条件决定，而能利用保存下来的信息影响未来？**
 
+Return to the core question of this chapter: **why are certain chemical systems no longer determined solely by instantaneous conditions, but able to use stored information to influence the future?**
+
 答案可以分成三层：
 
+The answer can be given on three levels:
+
 1.  **物理层**：系统包含**亚稳态**结构（如聚合物、膜），其寿命远长于反应时间尺度，因此"过去的状态"被保留下来。
+1.  **The physical level**: the system contains **metastable** structures (such as polymers and membranes) whose lifetimes greatly exceed the reaction timescale, so that "past states" are retained.
 2.  **因果层**：这些结构参与后续反应，使系统的当前行为依赖于过去的状态（路径依赖、滞后）。
+2.  **The causal level**: these structures take part in subsequent reactions, so that the current behaviour of the system depends on past states (path dependence, hysteresis).
 3.  **选择层**：当保留下来的是"能提高自身复制概率"的结构时，系统就具有了**功能性记忆**——这才是真正的遗传信息。
+3.  **The selection level**: when what is retained is a structure that "raises its own probability of being replicated," the system possesses **functional memory**—and this is genuine hereditary information.
 
 换句话说：**记忆是物理的，功能是选择的产物。** 一个系统可以"记住"过去（例如滞后），但不一定"利用"过去；只有当记忆被选择机制反复使用时，它才成为信息。
 
-### 6.9 本章结论
+In other words: **memory is physical; function is a product of selection.** A system can "remember" the past (for example through hysteresis) without necessarily "using" it; memory becomes information only when it is repeatedly exploited by a selection mechanism.
+
+### 6.9 本章结论 / 6.9 Chapter Conclusion
 
 > **已知**：准物种与错误阈值理论给出了复制保真度的定量约束；冯·诺依曼自动机证明了自复制的逻辑可能性；组装指数可以被测量。 **未决**：编码系统的起源；功能信息能否被定量定义；组装理论的判据在真实样本中的假阳性率。 **可验证方向**：用体外进化实验测量"复制保真度—基因组长度—适应度"的联合分布，检验 Eigen 阈值在真实核酶系统中的位置；用合成生物学构建"最小编码系统"，观察任意映射如何被锁定。
 
-## 第七章　生命何时成为一个独立的个体？
+> **Known**: quasispecies theory and the error threshold give quantitative constraints on replication fidelity; von Neumann's automaton proves the logical possibility of self-replication; the assembly index can be measured. **Open**: the origin of coding systems; whether functional information can be defined quantitatively; the false-positive rate of assembly theory's criterion in real samples. **Testable direction**: use in vitro evolution experiments to measure the joint distribution of "replication fidelity—genome length—fitness" and locate the Eigen threshold in real ribozyme systems; use synthetic biology to construct a "minimal coding system" and observe how an arbitrary mapping becomes locked in.
 
-### 7.1 边界的三重作用
+## 第七章　生命何时成为一个独立的个体？ / Chapter 7. When Does Life Become an Individual?
+
+### 7.1 边界的三重作用 / 7.1 The Three Roles of a Boundary
 
 在从化学到生命的转变中，边界（boundary）至少扮演三个角色：
 
+In the transition from chemistry to life, a boundary plays at least three roles:
+
 1.  **浓缩**：把稀溶液中的反应物限制在微小体积内，提高有效浓度；
+1.  **Concentration**: it confines reactants from a dilute solution within a tiny volume, raising the effective concentration;
 2.  **保护**：把聚合物与水解环境、紫外辐射、捕食者隔开；
+2.  **Protection**: it shields polymers from the hydrolytic environment, ultraviolet radiation, and predators;
 3.  **区分内外**：创造出一个"内部"，从而使"自我"与"环境"的区分成为可能。
+3.  **Distinguishing inside from outside**: it creates an "interior," making it possible to distinguish "self" from "environment."
 
 第三点常被低估。没有内外之分，就谈不上"自我维持"——因为"维持"总是相对于某个边界内的组织而言的。
 
-### 7.2 脂质囊泡：最接近的模型系统
+The third role is often underestimated. Without a distinction between inside and outside there can be no "self-maintenance"—since "maintenance" is always maintenance of an organisation within some boundary.
+
+### 7.2 脂质囊泡：最接近的模型系统 / 7.2 Lipid Vesicles: The Closest Model System
 
 脂肪酸囊泡是目前最成熟的原始细胞模型：
 
+Fatty-acid vesicles are currently the most mature model of a protocell:
+
 -   脂肪酸在水溶液中自发形成双层囊泡；
+-   fatty acids spontaneously form bilayer vesicles in aqueous solution;
 -   囊泡可以容纳 RNA、酶、荧光染料；
+-   vesicles can encapsulate RNA, enzymes, and fluorescent dyes;
 -   囊泡可以生长（掺入新的脂肪酸）、可以分裂（挤出、剪切、budding）；
+-   vesicles can grow (by incorporating new fatty acids) and can divide (by extrusion, shearing, or budding);
 -   膜的通透性可以通过脂肪酸链长、pH、镁离子浓度调节。
+-   membrane permeability can be tuned by fatty-acid chain length, pH, and magnesium concentration.
 
 Szostak 学派的一系列工作证明：**在合适的条件下，囊泡的生长与分裂可以与内部 RNA 的复制耦合**。例如，膜内 RNA 的渗透压可以驱动囊泡变形与分裂；而膜脂的合成又可以为 RNA 提供稳定的区室。
 
+A series of studies from the Szostak school showed that **under suitable conditions, vesicle growth and division can be coupled to the replication of RNA inside**. For example, the osmotic pressure of RNA within the membrane can drive vesicle deformation and division, while the synthesis of membrane lipids in turn provides RNA with a stable compartment.
+
 2024 年，一项 *JACS* 工作展示了**化学驱动的原始细胞分裂**：脂肪酸囊泡在燃料（化学能）驱动下通过膜出芽（budding）产生子囊泡，并且可以把包裹的物质分配给子代（JACS 2024）。这类实验的意义在于：**分裂不需要复杂的分子机器，只需要膜力学与化学能的耦合。**
+
+In 2024, a *JACS* paper demonstrated **chemically driven protocell division**: fatty-acid vesicles driven by a fuel (chemical energy) produced daughter vesicles through membrane budding, and were able to partition the encapsulated material between the progeny (JACS 2024). The significance of such experiments is that **division requires no complex molecular machinery, only the coupling of membrane mechanics to chemical energy.**
 
 2026 年，另一项工作展示了**从零开始的膜生成**：以乙酸和半胱氨酸为原料，通过可溶性酶合成脂质尾链，自组装成囊泡，并维持质子梯度——这缓解了"膜遗传悖论"（膜需要膜才能生长）（*Nature Communications* 2026）。
 
-### 7.3 膜与反应网络的耦合
+In 2026, another study demonstrated **membrane generation from scratch**: using acetate and cysteine as raw materials, soluble enzymes synthesised lipid tails that self-assembled into vesicles and maintained a proton gradient—mitigating the "membrane inheritance paradox" (the idea that membranes need membranes in order to grow) (*Nature Communications* 2026).
+
+### 7.3 膜与反应网络的耦合 / 7.3 Coupling Between Membrane and Reaction Network
 
 仅有膜不够，仅有反应网络也不够。真正困难的是**耦合**：
 
+A membrane alone is not enough, and a reaction network alone is not enough. What is genuinely difficult is the **coupling**:
+
 -   膜必须允许原料进入，否则内部反应会停止；
+-   the membrane must admit raw materials, or the internal reactions will stop;
 -   膜必须允许废物排出，否则反应会被抑制；
+-   the membrane must allow waste to leave, or the reactions will be inhibited;
 -   膜脂的合成必须依赖内部反应，否则膜会"独立"于网络，失去约束闭合；
+-   the synthesis of membrane lipids must depend on the internal reactions, or the membrane will become "independent" of the network and constraint closure will be lost;
 -   内部反应不能破坏膜，否则系统会自毁。
+-   the internal reactions must not destroy the membrane, or the system will destroy itself.
 
 这四条约束把"囊泡"与"原始细胞"区分开来。一个装满酶的囊泡可以完成一次反应，却不能维持自身；一个能持续合成膜脂、维持梯度的囊泡，才具备原始细胞的基本特征。
 
-### 7.4 自主性与能动性
+These four constraints separate "a vesicle" from "a protocell." A vesicle packed with enzymes can carry out a reaction once, but cannot maintain itself; only a vesicle that continuously synthesises membrane lipids and maintains a gradient has the basic features of a protocell.
+
+### 7.4 自主性与能动性 / 7.4 Autonomy and Agency
 
 **自主性（autonomy）**在生物学哲学中有特定含义：系统自身决定其行为规范，而不是被外部输入直接决定。Moreno 与 Mossio 把它定义为"系统对其自身构成条件的持续自我维持"。
 
+**Autonomy** has a specific meaning in the philosophy of biology: the system itself determines the norms of its behaviour rather than being directly determined by external inputs. Moreno and Mossio define it as "the system's continuous self-maintenance of its own conditions of constitution."
+
 **能动性（agency）**则更进一步：系统不仅维持自身，还能**在多个可能行动中选择**，并根据结果调整。最低限度的能动性可能只需要：
 
+**Agency** goes further: the system not only maintains itself but can **choose among several possible actions** and adjust on the basis of the outcome. Minimal agency may require only:
+
 -   一个内部状态（"我需要 X"）；
+-   an internal state ("I need X");
 -   一个感知机制（"哪里有 X"）；
+-   a sensing mechanism ("where is X");
 -   一个行动机制（"向 X 移动"）。
+-   an action mechanism ("move toward X").
 
 细菌的趋化性常被视为最小能动性的范例：它通过比较不同时间的化学浓度，调整鞭毛旋转方向。这里没有"表征"，但有**功能性指向**——系统的行为指向维持自身。
 
+Bacterial chemotaxis is often treated as a paradigm of minimal agency: the cell compares chemical concentrations over time and adjusts the direction of flagellar rotation. There is no "representation" here, but there is **functional directedness**—the system's behaviour is directed toward maintaining itself.
+
 在生命起源的语境中，能动性可能出现在**选择之前**：一个原始细胞如果能在环境中"找到"更多的脂肪酸，它就会长得更快。这种"偏好"不需要神经系统，只需要物理化学上的选择性。
 
-### 7.5 个体性：Simondon 的个体化
+In the context of the origin of life, agency may appear **before selection**: a protocell that can "find" more fatty acids in its environment will grow faster. Such a "preference" requires no nervous system, only physico-chemical selectivity.
+
+### 7.5 个体性：Simondon 的个体化 / 7.5 Individuality: Simondon's Individuation
 
 Gilbert Simondon 在 1958 年的《个体化》（*L'individuation*）中提出了一个与主流哲学很不同的观点：**个体不是预先存在的实体，而是"个体化过程"的暂时结果**。
 
+In *L'individuation* (1958), Gilbert Simondon advanced a view very different from mainstream philosophy: **the individual is not a pre-existing entity but the provisional result of a process of individuation**.
+
 他用"前个体"（pre-individual）与"亚稳态"（metastable）来描述这个过程：一个系统在亚稳态下蕴含着多种可能的个体化路径；当某个扰动发生时，系统会"解决"自身的张力，从而形成一个个体——但这个个体仍然携带着未解决的张力，因而可以继续个体化。
+
+He describes this process with the notions of the "pre-individual" and the "metastable": a system in a metastable state harbours several possible paths of individuation; when a perturbation occurs, the system "resolves" its own tension and thereby forms an individual—but that individual still carries unresolved tension and can therefore continue to individuate.
 
 这个框架对生命起源的意义在于：**"第一个生命"可能不是一个清晰的个体，而是一个持续个体化的过程**。一个囊泡群体在不断生长、分裂、融合、交换内容物；"个体"的边界是动态的、可渗透的、有时甚至是不确定的。
 
+The significance of this framework for the origin of life is that **"the first life" may not have been a clearly delineated individual but a continuing process of individuation**. A population of vesicles is continually growing, dividing, fusing, and exchanging contents; the boundaries of the "individual" are dynamic, permeable, and sometimes even indeterminate.
+
 这也解释了为什么"个体性"很难被当作生命的必要条件：在生命起源的早期阶段，个体性本身可能还在形成之中。
 
-### 7.6 三种"生命候选"的比较
+This also explains why individuality is hard to treat as a necessary condition for life: at the earliest stages of the origin of life, individuality itself may still have been in the making.
+
+### 7.6 三种"生命候选"的比较 / 7.6 Comparing Three "Candidates for Life"
 
 把前面的内容整理成一张表：
 
-|          | 一个复制分子     | 一套自催化网络   | 一个原始细胞       |
+The preceding material can be assembled into a table:
+
+|          | 一个复制分子 / A replicating molecule | 一套自催化网络 / An autocatalytic set | 一个原始细胞 / A protocell |
 |----------|------------------|------------------|--------------------|
 | 边界     | 无               | 无（或弱）       | 有（脂双层）       |
 | 自我维持 | 弱（靠外部供给） | 强（RAF）        | 强（约束闭合）     |
@@ -773,119 +1219,208 @@ Gilbert Simondon 在 1958 年的《个体化》（*L'individuation*）中提出�
 
 三种候选各自满足不同的子集，没有一个是"完整生命"。这再次说明：**生命不是一个点，而是一片区域。**
 
-### 7.7 本章结论
+The three candidates each satisfy a different subset, and none is "complete life." This again shows that **life is not a point but a region.**
+
+### 7.7 本章结论 / 7.7 Chapter Conclusion
 
 > **已知**：脂肪酸囊泡可以生长、分裂、包裹 RNA；化学能可以驱动分裂；从零合成膜脂已成为可能。 **未决**：膜生长与基因组复制的定量耦合；个体性在何种程度上是生命的前提而非结果。 **可验证方向**：构建"膜脂合成—RNA 复制"耦合的定量模型，预测在什么参数下系统会进入稳定增殖；用微流控追踪单个囊泡的多代演化。
 
-## 第八章　2020–2026：实验走到了哪里？
+> **Known**: fatty-acid vesicles can grow, divide, and encapsulate RNA; chemical energy can drive division; synthesising membrane lipids from scratch has become possible. **Open**: the quantitative coupling of membrane growth to genome replication; the extent to which individuality is a precondition for life rather than a consequence of it. **Testable direction**: build a quantitative model coupling "membrane lipid synthesis—RNA replication" and predict under which parameters the system enters stable proliferation; use microfluidics to track the multi-generational evolution of single vesicles.
+
+## 第八章　2020–2026：实验走到了哪里？ / Chapter 8. 2020–2026: How Far Have the Experiments Come?
 
 这一章不按时间罗列，而按"证明了哪一类生命属性"归类。每项工作都会被追问六个问题：做了什么？证明了什么？缺什么？说明了什么？是否证明了从非生命到生命的转变？下一步需要什么？
 
-### 8.1 复制与信息传递
+This chapter is organised not chronologically but by "which class of life property has been demonstrated." Each study is interrogated with six questions: what was done? What was demonstrated? What is missing? What does it show? Does it demonstrate a transition from non-life to life? What is needed next?
+
+### 8.1 复制与信息传递 / 8.1 Replication and Information Transfer
 
 **（1）三核苷酸底物驱动的指数 RNA 复制（Attwater et al. 2025, *Nature Chemistry*）**
 
+**(1) Exponential RNA replication driven by trinucleotide substrates (Attwater et al. 2025, *Nature Chemistry*)**
+
 -   **做了什么**：使用经过体外进化的聚合酶核酶，以三核苷酸为底物，在 pH 循环与冻融循环下复制 RNA 模板。
+-   **What was done**: an in vitro evolved polymerase ribozyme was used with trinucleotide substrates to copy RNA templates under pH cycles and freeze–thaw cycles.
 -   **证明了什么**：核酶可以突破"链分离"瓶颈，实现指数式、开放式的复制，且不局限于特定模板。
+-   **What was demonstrated**: the ribozyme can overcome the "strand separation" bottleneck and achieve exponential, open-ended replication that is not restricted to a particular template.
 -   **缺什么**：核酶本身是人工进化的产物；三核苷酸的前生物来源未解决；没有区室化。
+-   **What is missing**: the ribozyme itself is a product of artificial evolution; the prebiotic origin of trinucleotides is unresolved; there is no compartmentalisation.
 -   **说明什么**：复制保真度与持续性可以同时达到，Eigen 悖论在工程上有一个可行解。
+-   **What it shows**: replication fidelity and processivity can be achieved at the same time, so the Eigen paradox has a workable engineering solution.
 -   **是否证明生命起源**：否。这是"复制化学"的突破，不是"原始细胞"的突破。
+-   **Does it demonstrate the origin of life**: no. This is a breakthrough in "replication chemistry," not in "protocells."
 -   **下一步**：在囊泡内实现同样的复制；用前生物可得的三核苷酸替代物；测量长期演化中的错误率变化。
+-   **Next steps**: achieve the same replication inside vesicles; use prebiotically plausible substitutes for trinucleotides; measure how the error rate changes over long-term evolution.
 
 **（2）甲基异腈化学下的通用模板拷贝（Duzdevich et al. 2024，预印本）**
 
--   **做了什么**：用甲基异腈活化单核苷酸与随机寡核苷酸混合物，拷贝任意序列模板，包括富含 rA/rU 的困难序列。
--   **证明了什么**：非酶促拷贝的序列偏差与错误率可以被显著降低。
--   **缺什么**：仍依赖人工活化的试剂；拷贝长度有限；需要反复补给。
--   **说明什么**："非酶促复制"正在从"能连上几个碱基"变成"能比较均匀地拷贝一条模板"。
--   **是否证明生命起源**：否，且**这是预印本，尚未经过同行评议**。
--   **下一步**：在矿物表面或干湿循环中实现试剂的原位再生。
+**(2) General template copying with methyl isocyanide chemistry (Duzdevich et al. 2024, preprint)**
 
-### 8.2 边界、分裂与原始细胞
+-   **做了什么**：用甲基异腈活化单核苷酸与随机寡核苷酸混合物，拷贝任意序列模板，包括富含 rA/rU 的困难序列。
+-   **What was done**: methyl isocyanide was used to activate mononucleotides together with random oligonucleotide mixtures, copying arbitrary sequence templates, including difficult rA/rU-rich sequences.
+-   **证明了什么**：非酶促拷贝的序列偏差与错误率可以被显著降低。
+-   **What was demonstrated**: the sequence bias and error rate of non-enzymatic copying can be markedly reduced.
+-   **缺什么**：仍依赖人工活化的试剂；拷贝长度有限；需要反复补给。
+-   **What is missing**: it still relies on artificially activated reagents; copy length is limited; repeated replenishment is required.
+-   **说明什么**："非酶促复制"正在从"能连上几个碱基"变成"能比较均匀地拷贝一条模板"。
+-   **What it shows**: "non-enzymatic replication" is moving from "being able to join a few bases" to "being able to copy a template fairly evenly."
+-   **是否证明生命起源**：否，且**这是预印本，尚未经过同行评议**。
+-   **Does it demonstrate the origin of life**: no, and **this is a preprint that has not yet been peer reviewed**.
+-   **下一步**：在矿物表面或干湿循环中实现试剂的原位再生。
+-   **Next steps**: achieve in situ regeneration of the reagents on mineral surfaces or through wet–dry cycling.
+
+### 8.2 边界、分裂与原始细胞 / 8.2 Boundaries, Division, and Protocells
 
 **（3）化学能驱动的膜出芽分裂（*JACS* 2024）**
 
+**(3) Membrane budding and division driven by chemical energy (*JACS* 2024)**
+
 -   **做了什么**：以化学燃料驱动脂肪酸囊泡出芽，产生子囊泡，并保留包裹物。
+-   **What was done**: a chemical fuel was used to drive budding of fatty-acid vesicles, producing daughter vesicles that retained the encapsulated contents.
 -   **证明了什么**：分裂不需要蛋白质机器，只需要膜力学与化学能输入；分裂具有可调性。
+-   **What was demonstrated**: division requires no protein machinery, only membrane mechanics and an input of chemical energy; division is tunable.
 -   **缺什么**：子代大小分布不均；没有基因组复制；多代稳定性未知。
+-   **What is missing**: the size distribution of the progeny is uneven; there is no genome replication; multi-generational stability is unknown.
 -   **说明什么**：原始细胞分裂的物理门槛比想象中低。
+-   **What it shows**: the physical threshold for protocell division is lower than one might imagine.
 -   **是否证明生命起源**：否。证明了"分裂"这一单项功能。
+-   **Does it demonstrate the origin of life**: no. It demonstrates the single function of "division."
 -   **下一步**：让分裂频率与内部反应速率耦合，形成"生长—分裂"的负反馈。
+-   **Next steps**: couple the division frequency to the rate of internal reactions, creating a "growth–division" negative feedback.
 
 **（4）振荡性自复制囊泡群体（*JACS* 2024）**
 
+**(4) Oscillatory self-replicating vesicle populations (*JACS* 2024)**
+
 -   **做了什么**：构建一个双相反应网络，使囊泡群体出现周期性的自复制—崩解振荡，并用干涉散射显微镜追踪单个囊泡。
+-   **What was done**: a two-phase reaction network was constructed so that a vesicle population exhibits periodic self-replication–disintegration oscillations, and individual vesicles were tracked with interferometric scattering microscopy.
 -   **证明了什么**：囊泡群体可以表现出**群体层面的自维持动力学**，而不只是单个囊泡的瞬时行为。
+-   **What was demonstrated**: a vesicle population can exhibit **population-level self-maintaining dynamics**, not merely the transient behaviour of individual vesicles.
 -   **缺什么**：振荡由外部燃料维持，系统不能"自己决定"何时分裂；没有遗传。
+-   **What is missing**: the oscillations are sustained by external fuel, and the system cannot "decide for itself" when to divide; there is no heredity.
 -   **说明什么**：群体动力学可以成为选择的单位。
+-   **What it shows**: population dynamics can become the unit of selection.
 -   **是否证明生命起源**：否。
+-   **Does it demonstrate the origin of life**: no.
 -   **下一步**：引入可遗传的膜组成差异，观察振荡是否会"选择"某些组成。
+-   **Next steps**: introduce heritable differences in membrane composition and observe whether the oscillations "select" certain compositions.
 
 **（5）从零生成膜：打破"膜遗传悖论"（*Nature Communications* 2026）**
 
+**(5) Generating membranes from scratch: breaking the "membrane inheritance paradox" (*Nature Communications* 2026)**
+
 -   **做了什么**：以乙酸与半胱氨酸为原料，用可溶性酶合成脂质尾链，自组装成囊泡，并维持质子梯度。
+-   **What was done**: using acetate and cysteine as raw materials, soluble enzymes synthesised lipid tails that self-assembled into vesicles and maintained a proton gradient.
 -   **证明了什么**：膜可以在没有现成膜、没有膜蛋白、没有模板的条件下生成。
+-   **What was demonstrated**: membranes can be generated without pre-existing membranes, without membrane proteins, and without a template.
 -   **缺什么**：酶是外加的；系统不能自主复制酶；长期稳定性未知。
+-   **What is missing**: the enzymes are supplied externally; the system cannot replicate the enzymes autonomously; long-term stability is unknown.
 -   **说明什么**：原始细胞不必"继承"膜，可以从代谢产物中重新生成膜。
+-   **What it shows**: a protocell need not "inherit" its membrane; it can regenerate membranes from metabolic products.
 -   **是否证明生命起源**：否，但这是"约束闭合"最接近的实验演示之一。
+-   **Does it demonstrate the origin of life**: no, but this is one of the closest experimental demonstrations of "constraint closure."
 -   **下一步**：把脂质合成酶也纳入同一反应网络，形成"酶—膜"互惠。
+-   **Next steps**: bring the lipid-synthesising enzymes into the same reaction network, creating an "enzyme–membrane" reciprocity.
 
 **（6）活性聚合驱动的相分离原始细胞（*PNAS* 2025）**
 
--   **做了什么**：建立包含自发聚合与燃料驱动聚合的模型，观察液滴的滞后与稳健性。
--   **证明了什么**：无膜区室可以在燃料耗尽后仍保持结构，从而抵抗环境波动。
--   **缺什么**：这是模型，不是实验；没有遗传信息。
--   **说明什么**：原始细胞不一定要有脂膜，凝聚体也可以提供区室化。
--   **是否证明生命起源**：否。
+**(6) Phase-separated protocells driven by active polymerisation (*PNAS* 2025)**
 
-### 8.3 自催化与反应网络
+-   **做了什么**：建立包含自发聚合与燃料驱动聚合的模型，观察液滴的滞后与稳健性。
+-   **What was done**: a model incorporating spontaneous and fuel-driven polymerisation was built to examine the hysteresis and robustness of droplets.
+-   **证明了什么**：无膜区室可以在燃料耗尽后仍保持结构，从而抵抗环境波动。
+-   **What was demonstrated**: membraneless compartments can retain their structure after the fuel is exhausted, thereby resisting environmental fluctuations.
+-   **缺什么**：这是模型，不是实验；没有遗传信息。
+-   **What is missing**: this is a model, not an experiment; there is no hereditary information.
+-   **说明什么**：原始细胞不一定要有脂膜，凝聚体也可以提供区室化。
+-   **What it shows**: a protocell need not have a lipid membrane; coacervates can also provide compartmentalisation.
+-   **是否证明生命起源**：否。
+-   **Does it demonstrate the origin of life**: no.
+
+### 8.3 自催化与反应网络 / 8.3 Autocatalysis and Reaction Networks
 
 **（7）可编程的自催化反应网络（*Nature Communications* 2024）**
 
+**(7) Programmable autocatalytic reaction networks (*Nature Communications* 2024)**
+
 -   **做了什么**：用 Ca²⁺、La³⁺、Nd³⁺ 调控胰蛋白酶催化的自催化网络，改变正反馈性质，实现时间与历史依赖的输出。
+-   **What was done**: Ca²⁺, La³⁺, and Nd³⁺ were used to regulate a trypsin-catalysed autocatalytic network, altering the character of the positive feedback and producing time- and history-dependent outputs.
 -   **证明了什么**：自催化网络可以被外部输入"编程"，表现出类似逻辑门与记忆的行为。
+-   **What was demonstrated**: an autocatalytic network can be "programmed" by external inputs, exhibiting behaviour resembling logic gates and memory.
 -   **缺什么**：网络不能自我维持，需要持续供给底物与酶；没有演化。
+-   **What is missing**: the network cannot maintain itself and requires a continuous supply of substrate and enzyme; there is no evolution.
 -   **说明什么**："化学计算"与"化学记忆"在实验上是可实现的。
+-   **What it shows**: "chemical computation" and "chemical memory" are experimentally realisable.
 -   **是否证明生命起源**：否。
+-   **Does it demonstrate the origin of life**: no.
 
 **（8）最小自催化剂的生长定律与竞争（*Communications Chemistry* 2024）**
 
+**(8) Growth laws and competition of minimal autocatalysts (*Communications Chemistry* 2024)**
+
 -   **做了什么**：系统分析最简单的自催化剂——通过模板连接自我复制的二聚体——的动力学。
+-   **What was done**: the kinetics of the simplest autocatalyst—a dimer that replicates itself through template ligation—were analysed systematically.
 -   **证明了什么**：即使是这样简单的系统，也可以实现指数增长；并且**亚指数增长的自催化剂在竞争共同资源时可能胜过指数增长者**。
+-   **What was demonstrated**: even such a simple system can achieve exponential growth; moreover, **sub-exponentially growing autocatalysts can outcompete exponential growers when competing for a shared resource**.
 -   **说明什么**：这挑战了"生命必然选择最快复制者"的直觉，提示早期选择可能偏好"稳健"而非"快速"。
+-   **What it shows**: this challenges the intuition that "life necessarily selects the fastest replicator" and suggests that early selection may favour "robustness" over "speed."
 -   **是否证明生命起源**：否，且这是理论/模型工作。
+-   **Does it demonstrate the origin of life**: no; this is theoretical and modelling work.
 
 **（9）真实代谢网络中的 RAF（Xavier et al. 2020, *Proc R Soc B*）**
 
--   **做了什么**：在厌氧自养微生物的代谢网络中搜索 RAF。
--   **证明了什么**：存在能生成乙酰辅酶 A、氨基酸与碱基的自维持网络核；有机催化剂是必要的。
--   **缺什么**：这是对现存代谢网络的回溯分析，不是对早期地球的模拟。
--   **说明什么**：现代代谢的拓扑结构保留了"可自催化"的痕迹。
--   **是否证明生命起源**：否，但为"代谢优先"提供了最强的计算证据之一。
+**(9) RAFs in real metabolic networks (Xavier et al. 2020, *Proc R Soc B*)**
 
-### 8.4 理论与人工生命
+-   **做了什么**：在厌氧自养微生物的代谢网络中搜索 RAF。
+-   **What was done**: RAFs were searched for in the metabolic networks of anaerobic autotrophs.
+-   **证明了什么**：存在能生成乙酰辅酶 A、氨基酸与碱基的自维持网络核；有机催化剂是必要的。
+-   **What was demonstrated**: a self-sustaining network core exists that generates acetyl-CoA, amino acids, and bases; organic catalysts are necessary.
+-   **缺什么**：这是对现存代谢网络的回溯分析，不是对早期地球的模拟。
+-   **What is missing**: this is a retrospective analysis of extant metabolic networks, not a simulation of the early Earth.
+-   **说明什么**：现代代谢的拓扑结构保留了"可自催化"的痕迹。
+-   **What it shows**: the topology of modern metabolism retains traces of "autocatalytic capability."
+-   **是否证明生命起源**：否，但为"代谢优先"提供了最强的计算证据之一。
+-   **Does it demonstrate the origin of life**: no, but it provides one of the strongest computational arguments for "metabolism-first."
+
+### 8.4 理论与人工生命 / 8.4 Theory and Artificial Life
 
 **（10）自催化集合作为一阶相变（Kauffman & Roli 2025）**：理论框架，主张小分子、肽、RNA 自催化集合按一阶相变出现，并融合为更高阶的康德式整体。**证明的是模型内部的自洽性，不是自然界的实际历史。**
 
+**(10) Autocatalytic sets as a first-order phase transition (Kauffman & Roli 2025)**: a theoretical framework claiming that autocatalytic sets of small molecules, peptides, and RNA arise through a first-order phase transition and merge into higher-order Kantian wholes. **What it establishes is the internal consistency of the model, not the actual history of nature.**
+
 **（11）组装理论（Sharma et al. 2023, *Nature*）**：提供了可测量的复杂度指标，并在质谱数据上做了演示。争议见 6.7 节。
+
+**(11) Assembly theory (Sharma et al. 2023, *Nature*)**: it provides a measurable index of complexity and was demonstrated on mass-spectrometric data. For the controversy, see Section 6.7.
 
 **（12）随机程序中出现自复制子（Agüera y Arcas et al. 2024，预印本）**：在没有适应度景观的随机程序中，自复制程序自发出现，并伴随寄生者与共生融合。这是**计算实验**，不是化学实验。
 
+**(12) Self-replicators emerging among random programs (Agüera y Arcas et al. 2024, preprint)**: in random programs with no fitness landscape, self-replicating programs appeared spontaneously, accompanied by parasites and symbiotic mergers. This is a **computational experiment**, not a chemical one.
+
 **（13）虚拟人工生命的起源综述（*Phil Trans R Soc B* 2025）**：系统梳理了数字生命中的开放式演化问题，指出经典系统（Tierra、Avida）普遍在初期创新后停滞。
+
+**(13) A review of the origins of virtual artificial life (*Phil Trans R Soc B* 2025)**: it systematically surveys the problem of open-ended evolution in digital life and notes that the classic systems (Tierra, Avida) generally stagnate after an initial burst of innovation.
 
 **（14）合成细胞路线图（*Nature Communications* 2025）**：汇总了构建合成细胞的模块（最小基因组、膜、代谢、分裂），并明确指出**目前没有任何模块组合能实现自主生长与分裂的完整闭环**。
 
-### 8.5 早期地球与化学基础
+**(14) A roadmap for synthetic cells (*Nature Communications* 2025)**: it summarises the modules required to build a synthetic cell (minimal genome, membrane, metabolism, division) and states explicitly that **no combination of modules yet achieves a complete closed loop of autonomous growth and division**.
+
+### 8.5 早期地球与化学基础 / 8.5 The Early Earth and Chemical Foundations
 
 **（15）冥古宙时间线（Mojzsis et al. 2026, *Nature Communications*）**：给出 4.33 Ga 的"甜点窗口"，属于模型推断。
 
+**(15) The Hadean timeline (Mojzsis et al. 2026, *Nature Communications*)**: it proposes the 4.33 Ga "sweet spot" window, which is a model inference.
+
 **（16）前生物网络中的同手性（*PNAS* 2025）**：讨论如何在**整个前生物网络**而非单个分子上实现手性一致，强调基因组是手性选择的关键位点。
+
+**(16) Homochirality in prebiotic networks (*PNAS* 2025)**: it discusses how chiral consistency can be achieved across **an entire prebiotic network** rather than in individual molecules, emphasising that the genome is the key locus of chiral selection.
 
 **（17）从起源到涌现的热力学路径（*Life* 2024）**：主张化学渗透过程是热力学上最简约的生命起点。
 
-### 8.6 一张对照表
+**(17) A thermodynamic path from origin to emergence (*Life* 2024)**: it argues that chemiosmotic processes are the thermodynamically most parsimonious starting point for life.
 
-| 研究 | 核心成果 | 证明的生命属性 | 仍缺失 | 是否等于"创造生命" |
+### 8.6 一张对照表 / 8.6 A Comparison Table
+
+| 研究 / Study | 核心成果 / Core result | 证明的生命属性 / Life property demonstrated | 仍缺失 / Still missing | 是否等于"创造生命" / Equivalent to "creating life"? |
 |---------------|---------------|---------------|---------------|---------------|
 | Attwater 2025 | 指数 RNA 复制 | 复制、开放性 | 区室、前生物可行性 | 否 |
 | Duzdevich 2024（预印本） | 通用模板拷贝 | 复制保真度 | 区室、自主供能 | 否 |
@@ -901,152 +1436,248 @@ Gilbert Simondon 在 1958 年的《个体化》（*L'individuation*）中提出�
 | Agüera y Arcas 2024 | 数字自复制子 | 演化 | 化学实现 | 否 |
 | Mojzsis 2026 | Hadean 时间窗 | （环境约束） | 地质证据 | 否 |
 
-### 8.7 怎样读这些论文：五个追问
+### 8.7 怎样读这些论文：五个追问 / 8.7 How to Read These Papers: Five Questions
 
 1.  **系统是否"自己"维持自己？** 如果每个环节都需要实验者补充试剂、调节 pH、更换缓冲液，那么它离"自主"还很远。
+1.  **Does the system maintain itself "by itself"?** If every step requires the experimenter to add reagents, adjust pH, and change buffer, then it is still far from "autonomous."
 2.  **有没有"代际"？** 一次性的反应不是演化；必须有多代、有变异、有选择。
+2.  **Are there "generations"?** A one-off reaction is not evolution; there must be multiple generations, variation, and selection.
 3.  **选择的是什么？** 是分子序列、膜组成、还是液滴大小？选择单位决定了系统的"个体性"。
+3.  **What is being selected?** Molecular sequence, membrane composition, or droplet size? The unit of selection determines the "individuality" of the system.
 4.  **扰动后能否恢复？** 这是区分"结构"与"组织"的关键实验。
+4.  **Can it recover after perturbation?** This is the decisive experiment for distinguishing "structure" from "organisation."
 5.  **如果移除研究者，系统能维持多久？** 这是最严酷也最有意义的检验。
+5.  **If the researcher is removed, how long can the system persist?** This is the harshest and most meaningful test.
 
-### 8.8 本章结论
+### 8.8 本章结论 / 8.8 Chapter Conclusion
 
 > **已知**：复制、分裂、区室化、自催化网络、化学记忆都已分别被实现；代谢网络中存在 RAF 核；相变理论有严格的模型基础。 **未决**：没有任何一个系统同时具备"自我维持 + 复制 + 选择 + 开放式演化"；没有任何实验证明自然界发生过相变。 **可验证方向**：把"复制模块"与"膜生长模块"放进同一个囊泡，测量多代稳定性；建立标准化的"生命性报告"（life-likeness report），要求每项研究报告扰动恢复、代际数与选择单位。
 
-## 第九章　如果生命可以计算，人工生命是否可能？
+> **Known**: replication, division, compartmentalisation, autocatalytic networks, and chemical memory have each been realised separately; RAF cores exist in metabolic networks; phase-transition theory rests on a rigorous model basis. **Open**: no single system yet possesses "self-maintenance + replication + selection + open-ended evolution" at once; no experiment has shown that a phase transition occurred in nature. **Testable direction**: place the "replication module" and the "membrane growth module" in the same vesicle and measure multi-generational stability; establish a standardised "life-likeness report" requiring every study to report perturbation recovery, number of generations, and unit of selection.
 
-### 9.1 弱人工生命与强人工生命
+## 第九章　如果生命可以计算，人工生命是否可能？ / Chapter 9. If Life Can Be Computed, Is Artificial Life Possible?
+
+### 9.1 弱人工生命与强人工生命 / 9.1 Weak and Strong Artificial Life
 
 Langton 在 1989 年提出"人工生命"（Artificial Life）时，给出的纲领是：**生命是物质组织的一种属性，而不是特定分子的属性**；因此，可以在硅基或其他基质上研究"生命的一般逻辑"。
 
+When Langton proposed "Artificial Life" in 1989, his programme was this: **life is a property of the organisation of matter, not of particular molecules**; consequently, the "general logic of life" can be studied on silicon or in other substrates.
+
 由此产生两个立场：
 
+Two positions follow:
+
 -   **弱人工生命（weak ALife）**：计算模型是对生命某些方面的**模拟**，目的是理解机制。模型不必"真的活着"。
+-   **Weak ALife**: computational models are **simulations** of certain aspects of life, intended to help us understand mechanisms. The model need not "really be alive."
 -   **强人工生命（strong ALife）**：如果一个计算系统实现了相同的组织与因果结构，它就**真的**是生命，而不只是模拟。
+-   **Strong ALife**: if a computational system realises the same organisation and causal structure, it **really is** life, not merely a simulation.
 
 这场争论与心灵哲学中的"模拟 vs 实现"问题同构。支持强 ALife 的论证依赖于**基质独立性**（substrate independence）：如果生命的功能由组织决定，那么基质无关紧要。反对者则指出：生命依赖于具体的物理过程（能量耗散、化学键、空间嵌入），这些在纯符号系统中没有对应物。
 
-### 9.2 经典系统及其局限
+This debate is isomorphic to the "simulation versus realisation" problem in the philosophy of mind. Arguments for strong ALife rely on **substrate independence**: if the functions of life are determined by organisation, then the substrate does not matter. Opponents point out that life depends on specific physical processes (energy dissipation, chemical bonds, spatial embedding) that have no counterpart in a purely symbolic system.
+
+### 9.2 经典系统及其局限 / 9.2 Classic Systems and Their Limitations
 
 -   **Conway 的生命游戏（1970）**：证明简单规则可以产生滑翔机、振荡子等"涌现"结构，但它没有复制、没有选择、没有代谢。
+-   **Conway's Game of Life (1970)**: it showed that simple rules can generate "emergent" structures such as gliders and oscillators, but it has no replication, no selection, and no metabolism.
 -   **Tierra（Ray, 1991）**：自复制机器码在有限内存中竞争，出现了寄生者与超寄生者。它第一次展示了"数字生态"的雏形。
+-   **Tierra (Ray, 1991)**: self-replicating machine code competes within limited memory, and parasites and hyperparasites appear. It offered the first glimpse of a "digital ecology."
 -   **Avida（Adami、Ofria 等）**：在 Tierra 的基础上加入了可测量的"基因组"与适应度，被广泛用于演化实验。
+-   **Avida (Adami, Ofria, and others)**: it added a measurable "genome" and fitness to the Tierra framework and has been widely used in evolution experiments.
 -   **Polyworld、EcoSim 等**：加入神经网络与生态互动。
+-   **Polyworld, EcoSim, and others**: these added neural networks and ecological interactions.
 
 这些系统的共同成就，是证明了**演化可以在非生物基质上发生**；共同局限，是它们都会在初期创新后**趋于停滞**——一旦系统探索完规则允许的可能性，新奇性就枯竭了。这就是"开放式演化"问题。
 
-### 9.3 开放式演化：定义与困难
+The shared achievement of these systems is that they demonstrate **evolution can occur on a non-biological substrate**; the shared limitation is that they all **tend to stagnate** after initial innovation—once the system has explored the possibilities permitted by its rules, novelty runs dry. This is the problem of "open-ended evolution."
+
+### 9.3 开放式演化：定义与困难 / 9.3 Open-Ended Evolution: Definitions and Difficulties
 
 Packard、Taylor 等人把开放式演化（OEE）分为四类（Packard et al. 2019）：
 
+Packard, Taylor, and others divide open-ended evolution (OEE) into four categories (Packard et al. 2019):
+
 1.  持续产生新的实体类型与相互作用；
+1.  the continual generation of new types of entities and interactions;
 2.  演化出"可演化性"（evolvability）；
+2.  the evolution of "evolvability";
 3.  出现重大演化转变（major transitions）；
+3.  the occurrence of major evolutionary transitions;
 4.  语义演化（semantic evolution）——符号与所指的关系本身在变化。
+4.  semantic evolution—the relation between symbol and referent is itself changing.
 
 困难在于：**在一个规则固定的模拟中，可能性空间是封闭的**。你可以不断发现新组合，但无法产生"规则之外"的新事物。因此，真正的 OEE 可能需要：
 
--   规则本身可演化（如可自我修改的程序）；
--   系统与环境的边界可渗透；
--   观察者的表征参与定义"新奇"。
+The difficulty is that **in a simulation with fixed rules the space of possibilities is closed**. One can keep discovering new combinations, but one cannot produce anything "outside the rules." Genuine OEE may therefore require:
 
-### 9.4 2024 年的一个转折：随机程序中的自复制
+-   规则本身可演化（如可自我修改的程序）；
+-   rules that are themselves evolvable (for example, self-modifying programs);
+-   系统与环境的边界可渗透；
+-   a permeable boundary between system and environment;
+-   观察者的表征参与定义"新奇"。
+-   the observer's representation participating in the definition of "novelty."
+
+### 9.4 2024 年的一个转折：随机程序中的自复制 / 9.4 A Turning Point in 2024: Self-Replication Among Random Programs
 
 2024 年，Agüera y Arcas 与合作者发表了一个引人注目的结果（预印本）：在一个极简的"计算汤"中，随机的、非自复制的程序被反复执行、拼接、取回；经过数百万次交互后，**自复制程序自发出现**，并在没有显式适应度函数的情况下扩散、变异，甚至出现寄生与共生。
 
+In 2024, Agüera y Arcas and collaborators published a striking result (preprint): in a minimal "computational soup," random, non-self-replicating programs were repeatedly executed, concatenated, and retrieved; after millions of interactions, **self-replicating programs appeared spontaneously** and spread and mutated in the absence of any explicit fitness function, even giving rise to parasitism and symbiosis.
+
 这个结果的重要性在于：它表明**自复制不需要被"设计"进去**，只需要一个允许程序相互作用与自我修改的基质。它同时展示了"共生融合"（两个复制子合并成一个更复杂的复制子）——这正是 Margulis 式的内共生在计算基质上的类比。
+
+The importance of this result is that it shows **self-replication need not be "designed in"**; all that is required is a substrate permitting programs to interact and modify themselves. It also exhibits "symbiotic merger" (two replicators combining into a more complex one)—precisely a computational analogue of Margulis-style endosymbiosis.
 
 但必须保持克制：这是一个**计算实验**，它展示的是"在特定规则下的涌现"，而不是"生命必然出现"。规则的选择本身就是一个强假设。
 
-### 9.5 AI 与人工生命：两个不同的目标
+But restraint is required: this is a **computational experiment**, and what it shows is "emergence under particular rules," not "life necessarily appears." The choice of rules is itself a strong assumption.
+
+### 9.5 AI 与人工生命：两个不同的目标 / 9.5 AI and Artificial Life: Two Different Goals
 
 近两年，生成式模型与世界模型被引入人工生命研究。例如有工作用基础模型作为"观察者"，在模拟空间中搜索"有趣"的行为，以自动化地发现新的生命形态（Kumar et al. 2024，预印本）。
 
+Over the past two years, generative models and world models have been introduced into artificial life research. One line of work, for example, uses foundation models as "observers" that search a simulated space for "interesting" behaviour, in order to discover new life forms automatically (Kumar et al. 2024, preprint).
+
 这里必须区分两个目标：
 
+Two goals must be distinguished here:
+
 -   **用 AI 研究生命**：模型作为工具，帮助我们搜索参数空间、提出假设、压缩实验数据。这非常有价值，但模型本身不是生命。
+-   **Using AI to study life**: the model serves as a tool that helps us search parameter spaces, generate hypotheses, and compress experimental data. This is extremely valuable, but the model itself is not alive.
 -   **构建本身具有生命性质的计算系统**：系统需要自主维持、复制、变异、开放式演化。这与"预测生命的模型"是完全不同的工程目标。
+-   **Building computational systems that themselves have the properties of life**: such a system must self-maintain, replicate, vary, and evolve open-endedly. This is an entirely different engineering goal from "a model that predicts life."
 
 把两者混为一谈，是当前 AI 时代最容易出现的概念错误。一个能完美预测细菌行为的模型，不比一本教科书更"活"。
 
-### 9.6 计算系统能有真正的自主性吗？
+Conflating the two is the most likely conceptual error of the present AI era. A model that predicts bacterial behaviour perfectly is no more "alive" than a textbook.
+
+### 9.6 计算系统能有真正的自主性吗？ / 9.6 Can Computational Systems Have Genuine Autonomy?
 
 如果自主性被定义为"系统自身维持其构成条件"，那么纯软件系统面临一个根本困难：**它的存在条件由外部提供**——电力、操作系统、内存管理、防止被删除的权限。它不能维持自己的物理基质。
 
+If autonomy is defined as "the system maintaining its own conditions of constitution," purely software systems face a fundamental difficulty: **their conditions of existence are supplied from outside**—electricity, an operating system, memory management, and permissions that prevent deletion. They cannot maintain their own physical substrate.
+
 反驳意见是：生物细胞也不能维持自己的物理定律，它只是维持自己的组织。软件系统同样可以维持自己的组织（例如自修改代码、错误恢复）。区别可能只在于"基质依赖的深度"。
+
+The counter-argument is that a biological cell cannot maintain its own laws of physics either; it maintains only its own organisation. A software system can likewise maintain its own organisation (for example through self-modifying code and error recovery). The difference may lie only in "the depth of substrate dependence."
 
 这个问题目前没有定论。它的价值在于：它迫使我们明确"自主性"到底指什么——是**因果闭合**，还是**物理独立**。
 
-### 9.7 本章结论
+This question is currently unresolved. Its value lies in forcing us to specify what "autonomy" actually means—**causal closure** or **physical independence**.
+
+### 9.7 本章结论 / 9.7 Chapter Conclusion
 
 > **已知**：数字系统可以演化、可以出现寄生与共生、可以在没有显式适应度的情况下产生自复制子。 **未决**：开放式演化能否在封闭规则系统中真正实现？软件系统的"自主性"是否只是隐喻？ **可验证方向**：设计一套"扰动—恢复—代际"测试，用于比较数字系统与生物系统的自主性；建立跨基质的生命性评分标准。
 
-## 第十章　生命是偶然，还是宇宙的必然？
+> **Known**: digital systems can evolve, can produce parasites and symbioses, and can generate self-replicators in the absence of an explicit fitness function. **Open**: can open-ended evolution be genuinely realised in a system with fixed rules? Is the "autonomy" of software systems merely a metaphor? **Testable direction**: design a set of "perturbation–recovery–generation" tests for comparing the autonomy of digital and biological systems; establish a cross-substrate scale for scoring aliveness.
 
-### 10.1 两种立场
+## 第十章　生命是偶然，还是宇宙的必然？ / Chapter 10. Is Life Contingent, or Necessary in the Universe?
+
+### 10.1 两种立场 / 10.1 Two Positions
 
 **偶然论**。Monod 在《偶然与必然》（1970）中写道：宇宙并不"孕育"生命，生命的出现是一个概率极低的偶然事件，随后由自然选择这台"必然性机器"放大。他的论证基于两个观察：分子层面的突变是随机的；生命的生化结构（尤其是遗传密码）没有明显的物理必然性。
 
+**Contingency.** In *Chance and Necessity* (1970), Monod writes that the universe does not "gestate" life; the emergence of life is an event of extremely low probability, subsequently amplified by natural selection, that "machine of necessity." His argument rests on two observations: mutation at the molecular level is random, and the biochemical architecture of life (especially the genetic code) shows no obvious physical necessity.
+
 **必然论**。de Duve 在《蓝图与生命》（1991）中提出相反的看法：给定早期地球的化学条件，生命是"宇宙的必然"（cosmic imperative）。他的论据是：化学反应有方向性，某些路径（如磷酸化、聚合）在热力学与动力学上"容易"发生；只要时间足够，生命就会出现。
+
+**Necessity.** In *Blueprint for a Cell* (1991), de Duve takes the opposite view: given the chemical conditions of the early Earth, life is a "cosmic imperative." His argument is that chemical reactions have directionality, that certain pathways (phosphorylation, polymerisation) are thermodynamically and kinetically "easy," and that given enough time life will appear.
 
 Kauffman 的立场介于两者之间：**个别分子事件是偶然的，但自催化网络的出现是统计上必然的**。他把生命起源比作相变——不是某个特定分子必须出现，而是网络密度超过阈值后，"自维持"几乎必然出现。
 
-### 10.2 选择能在生命之前发生吗？
+Kauffman's position lies between the two: **individual molecular events are contingent, but the emergence of autocatalytic networks is statistically inevitable**. He likens the origin of life to a phase transition—it is not that some particular molecule must appear, but that once network density passes a threshold, "self-maintenance" appears almost inevitably.
+
+### 10.2 选择能在生命之前发生吗？ / 10.2 Can Selection Occur Before Life?
 
 如果"达尔文式演化"被写进生命的定义，那么在任何生命出现之前就不可能有选择——这会陷入循环。破解这个循环的办法，是承认**前生物选择**（prebiotic selection）的存在：
 
+If "Darwinian evolution" is written into the definition of life, then there can be no selection before any life appears—which lands us in a circle. The way out is to acknowledge the existence of **prebiotic selection**:
+
 -   **矿物表面选择**：不同分子在矿物表面的吸附强度不同，导致组成富集；
+-   **Mineral surface selection**: different molecules adsorb to mineral surfaces with different strengths, leading to compositional enrichment;
 -   **囊泡组成选择**：不同脂质比例的囊泡在生长与分裂速率上有差异，且这种差异可以传给子代囊泡；
+-   **Vesicle composition selection**: vesicles with different lipid ratios differ in growth and division rates, and this difference can be passed on to daughter vesicles;
 -   **复制错误选择**：即使没有酶，模板拷贝的错误率也有差异，某些序列被更忠实地复制。
+-   **Copying-error selection**: even without enzymes, template copying error rates differ, and certain sequences are copied more faithfully.
 
 这些机制都满足"变异 + 遗传 + 差异适应度"的最小条件，只是没有基因组。因此，**选择可以先于基因，但不能先于复制**——而"复制"可以是组成性的（compositional）、而非模板性的。
 
-### 10.3 必然性的证据与反证
+All of these mechanisms satisfy the minimal conditions of "variation + heredity + differential fitness" without any genome. Hence **selection can precede genes but not replication**—and "replication" can be compositional rather than templated.
+
+### 10.3 必然性的证据与反证 / 10.3 Evidence For and Against Necessity
 
 支持"生命可能普遍"的证据：
 
+Evidence that life may be common:
+
 -   **化学趋同**：陨石、彗星与实验室合成中都反复出现氨基酸、核碱基、脂肪酸；这些分子的前生物合成路径有重叠。
+-   **Chemical convergence**: amino acids, nucleobases, and fatty acids recur in meteorites, comets, and laboratory syntheses; the prebiotic synthetic pathways to these molecules overlap.
 -   **热力学驱动**：氧化还原不平衡（H₂ + CO₂）在地球、火星、土卫二、木卫二上都存在。
+-   **Thermodynamic drive**: redox disequilibria (H₂ + CO₂) exist on Earth, Mars, Enceladus, and Europa.
 -   **自组织普适性**：自催化、相分离、耗散结构在参数合适时普遍出现。
+-   **The universality of self-organisation**: autocatalysis, phase separation, and dissipative structures appear widely when the parameters are right.
 
 支持"生命可能罕见"的证据：
 
--   **样本量为 1**：我们只知道一种生化方案，无法估计"其他方案"的概率。
--   **LUCA 的复杂性**：LUCA 已经有完整的翻译系统、能量代谢与膜系统；从化学到 LUCA 的路径可能非常狭窄。
--   **时间窗口**：地球在 4.4–3.8 Ga 之间经历了剧烈撞击；如果生命起源需要长期稳定的环境，窗口可能很窄（Mojzsis et al. 2026）。
+Evidence that life may be rare:
 
-### 10.4 非地球生物化学的可能性
+-   **样本量为 1**：我们只知道一种生化方案，无法估计"其他方案"的概率。
+-   **A sample size of one**: we know only one biochemical scheme and cannot estimate the probability of "other schemes."
+-   **LUCA 的复杂性**：LUCA 已经有完整的翻译系统、能量代谢与膜系统；从化学到 LUCA 的路径可能非常狭窄。
+-   **The complexity of LUCA**: LUCA already had a complete translation system, energy metabolism, and membrane systems; the path from chemistry to LUCA may be very narrow.
+-   **时间窗口**：地球在 4.4–3.8 Ga 之间经历了剧烈撞击；如果生命起源需要长期稳定的环境，窗口可能很窄（Mojzsis et al. 2026）。
+-   **The time window**: the Earth suffered violent impacts between 4.4 and 3.8 Ga; if the origin of life required a long period of stable conditions, the window may have been narrow (Mojzsis et al. 2026).
+
+### 10.4 非地球生物化学的可能性 / 10.4 The Possibility of Non-Terrestrial Biochemistry
 
 如果生命是组织规律而非特定物质，那么理论上可以存在：
 
+If life is a regularity of organisation rather than a particular substance, then in principle the following could exist:
+
 -   **硅基化学**：硅–氧键网络丰富，但硅烷在水中的不稳定性是硬约束；
+-   **Silicon-based chemistry**: silicon–oxygen networks are abundant, but the instability of silanes in water is a hard constraint;
 -   **氨溶剂**：低温下氨可以充当溶剂，但可用能量梯度与溶解度窗口不同；
+-   **Ammonia as solvent**: at low temperatures ammonia can serve as a solvent, but the available energy gradients and solubility windows differ;
 -   **非水极性溶剂**（甲酰胺、硫酸）；
+-   **Non-aqueous polar solvents** (formamide, sulfuric acid);
 -   **等离子体或固态系统**：理论上可以承载信息与自组织，但缺乏"化学多样性"。
+-   **Plasma or solid-state systems**: in principle these can carry information and support self-organisation, but they lack "chemical diversity."
 
 这些设想目前都停留在概念层面。它们的方法论价值在于：**帮助我们区分"生命的必要条件"与"地球生命的偶然特征"**。例如，"有水"可能不是必要条件，但"有极性溶剂 + 氧化还原梯度 + 可聚合单体"可能是。
 
-### 10.5 如果宇宙重新开始
+These proposals remain at the conceptual level. Their methodological value is that they **help us separate "the necessary conditions for life" from "the contingent features of terrestrial life."** Water, for example, may not be a necessary condition, whereas "a polar solvent + a redox gradient + polymerisable monomers" may be.
+
+### 10.5 如果宇宙重新开始 / 10.5 If the Universe Started Over
 
 这是一个无法直接检验的反事实问题，但可以拆成可讨论的子问题：
 
+This is a counterfactual question that cannot be tested directly, but it can be broken into discussable sub-questions:
+
 1.  **物理常数不变**：化学规律相同，因此某些反应路径仍然"容易"；生命可能以相似的化学形式出现。
+1.  **Physical constants unchanged**: the laws of chemistry are the same, so certain reaction pathways remain "easy"; life may appear in a similar chemical form.
 2.  **初始条件不同**：如果地球没有液态水或没有板块运动，生命可能出现得更晚，或以完全不同的形式出现。
+2.  **Different initial conditions**: if the Earth had no liquid water or no plate tectonics, life might have appeared later, or in an entirely different form.
 3.  **偶然事件的作用**：如果生命起源依赖于少数极低概率的分子事件（如特定核酶序列的自发出现），那么重来一次可能不会发生。
+3.  **The role of chance events**: if the origin of life depended on a few molecular events of extremely low probability (such as the spontaneous appearance of a particular ribozyme sequence), then a rerun might not produce it at all.
 
 目前最诚实的回答是：**我们不知道**。而"不知道"本身是有价值的结论——它说明我们需要更多关于"前生物化学空间有多大、其中有多少条路径通向自维持系统"的定量研究。
 
-### 10.6 本章结论
+The most honest answer at present is: **we do not know**. And "we do not know" is itself a valuable conclusion—it shows that we need more quantitative work on "how large the space of prebiotic chemistry is, and how many pathways within it lead to self-sustaining systems."
+
+### 10.6 本章结论 / 10.6 Chapter Conclusion
 
 > **已知**：前生物选择机制在实验室与模型中存在；化学趋同现象支持某些分子路径的"容易性"。 **未决**：生命起源的概率无法从单个样本估计；非地球生化方案缺乏实证。 **可验证方向**：用组合化学与高通量实验估计"通向自维持网络的路径密度"；用贝叶斯模型把地球、火星、冰卫星的证据整合为概率区间。
 
-## 第十一章　我们应该怎样定义"生命发生了"？
+> **Known**: prebiotic selection mechanisms exist in the laboratory and in models; chemical convergence supports the "easiness" of certain molecular pathways. **Open**: the probability of the origin of life cannot be estimated from a single sample; non-terrestrial biochemical schemes lack empirical support. **Testable direction**: use combinatorial chemistry and high-throughput experiments to estimate "the density of pathways leading to self-sustaining networks"; use Bayesian models to integrate evidence from Earth, Mars, and icy moons into probability intervals.
 
-### 11.1 从清单到维度
+## 第十一章　我们应该怎样定义"生命发生了"？ / Chapter 11. How Should We Define "Life Has Occurred"?
+
+### 11.1 从清单到维度 / 11.1 From Checklist to Dimensions
 
 前面各章反复出现一个困境：任何"清单式定义"都会被边界案例击穿。可行的替代方案，是把生命性分解为若干**可独立测量的维度**：
 
-| 维度 | 可操作判据 | 测量方法 | 备注 |
+A dilemma recurs throughout the preceding chapters: any "checklist definition" is punctured by boundary cases. A workable alternative is to decompose aliveness into a number of **independently measurable dimensions**:
+
+| 维度 / Dimension | 可操作判据 / Operational criterion | 测量方法 / Measurement method | 备注 / Note |
 |------------------|------------------|------------------|------------------|
 | D1 物质与能量流 | 与环境交换物质，维持非平衡 | 代谢通量、热耗散 | 火焰也满足 |
 | D2 自我维持 | 去除外部扰动后恢复组织 | 扰动—恢复实验 | 区分结构与组织 |
@@ -1058,28 +1689,43 @@ Kauffman 的立场介于两者之间：**个别分子事件是偶然的，但自
 | D8 自主性 | 系统自身设定行为规范 | 扰动下的目标维持 | 哲学争议大 |
 | D9 开放式创新 | 持续产生新组织层次 | 长期演化实验 | 最难测量 |
 
-### 11.2 三种定义策略的比较
+### 11.2 三种定义策略的比较 / 11.2 Comparing Three Definitional Strategies
 
 -   **属性清单式**：列出必要属性，满足即算生命。优点是易操作；缺点是边界模糊，且不同清单互相矛盾。
+-   **Property checklists**: list the necessary properties, and whatever satisfies them counts as life. The advantage is ease of use; the disadvantage is that the boundaries are fuzzy and different checklists contradict one another.
 -   **动力系统式**：把生命定义为某种吸引子或状态空间结构（如"自我维持的远离平衡态"）。优点是数学清晰；缺点是把许多非生命系统也包含进来。
+-   **Dynamical-systems definitions**: define life as a kind of attractor or structure in state space (for example, "a self-maintaining state far from equilibrium"). The advantage is mathematical clarity; the disadvantage is that many non-living systems are included.
 -   **因果组织式**：把生命定义为约束闭合的因果结构（自创生、自主性）。优点是抓住了"关于自身"这一核心；缺点是难以量化。
+-   **Causal-organisation definitions**: define life as a constraint-closed causal structure (autopoiesis, autonomy). The advantage is that it captures the core notion of "being about oneself"; the disadvantage is that it is hard to quantify.
 
 本文倾向于**第三种为主、第一种为辅**：用因果组织给出"什么是生命"的定性回答，用属性清单给出"有多像生命"的定量回答。
 
-### 11.3 一个渐进式评价框架（作者提议，非共识）
+This article favours **the third as primary and the first as auxiliary**: causal organisation gives the qualitative answer to "what life is," while the property checklist gives the quantitative answer to "how much like life something is."
+
+### 11.3 一个渐进式评价框架（作者提议，非共识） / 11.3 A Graduated Assessment Framework (a Proposal, Not a Consensus)
 
 下面这个框架是本文提出的**操作性建议**，不是学术界的共识。它的目的是让不同实验之间的结果可以比较。
 
+The framework below is an **operational proposal** advanced by this article, not a consensus of the field. Its purpose is to make results from different experiments comparable.
+
 **评分规则**：每个维度 0–3 分。
 
+**Scoring rule**: each dimension is scored from 0 to 3.
+
 -   0：完全缺失；
+-   0: entirely absent;
 -   1：被动出现，依赖外部维持；
+-   1: present passively and dependent on external maintenance;
 -   2：系统自身参与维持，但需要频繁干预；
+-   2: the system participates in its own maintenance, but frequent intervention is required;
 -   3：系统自主维持，且能抵抗中等扰动。
+-   3: the system maintains itself autonomously and can resist moderate perturbations.
 
 **分级建议**（仅为工作性阈值）：
 
-| 总分  | 类别           | 典型例子                                   |
+**Suggested bands** (working thresholds only):
+
+| 总分 / Total | 类别 / Category | 典型例子 / Typical example |
 |-------|----------------|--------------------------------------------|
 | 0–5   | 非生命复杂系统 | 火焰、BZ 反应、晶体                        |
 | 6–10  | 前生命系统     | 自催化网络、脂质囊泡                       |
@@ -1089,72 +1735,118 @@ Kauffman 的立场介于两者之间：**个别分子事件是偶然的，但自
 
 **使用这个框架时必须同时报告**：
 
+**Use of this framework must be accompanied by reporting**:
+
 1.  每个维度的测量方法与不确定度；
+1.  the measurement method and uncertainty for each dimension;
 2.  系统在去除研究者干预后的维持时间；
+2.  how long the system persists once researcher intervention is withdrawn;
 3.  观察到的代数与选择单位；
+3.  the observed number of generations and the unit of selection;
 4.  哪些维度是"设计进去的"，哪些是"涌现出来的"。
+4.  which dimensions were "designed in" and which "emerged."
 
 最后一点尤其重要。一个由研究者精心组装、每个部件都为特定功能设计的系统，即使得分很高，也不能说明"生命可以自发出现"——它说明的是"生命可以被工程化"。
 
-### 11.4 可证伪的预测
+The last point is especially important. A system painstakingly assembled by researchers, with every component designed for a specific function, does not show that "life can arise spontaneously" even if it scores highly—it shows that "life can be engineered."
+
+### 11.4 可证伪的预测 / 11.4 Falsifiable Predictions
 
 一个好的框架应该产生可被推翻的预测。本文提出三条：
 
+A good framework should generate predictions that can be overturned. This article offers three:
+
 1.  **扰动恢复预测**：在同等条件下，得分 ≥ 11 的系统在渗透压扰动后的恢复时间应显著短于得分 ≤ 10 的系统。
+1.  **Perturbation-recovery prediction**: under otherwise equal conditions, systems scoring ≥ 11 should recover significantly faster after osmotic perturbation than systems scoring ≤ 10.
 2.  **代际稳定性预测**：具备 D5 + D6 的系统，其子代分布应随代数收敛（而不是发散）。
+2.  **Generational-stability prediction**: in systems possessing D5 + D6, the distribution of progeny should converge (not diverge) with successive generations.
 3.  **开放式创新预测**：只有具备 D8 + D9 的系统，才能在长期培养中持续产生"新类型"，而不仅仅是参数漂移。
+3.  **Open-ended innovation prediction**: only systems possessing D8 + D9 should continue to produce "new types" in long-term culture, rather than merely drifting in parameter space.
 
 如果这些预测在实验中失败，框架就需要修正——这正是它区别于纯哲学分类的地方。
 
-### 11.5 本章结论
+If these predictions fail experimentally, the framework must be revised—and that is precisely what distinguishes it from a purely philosophical taxonomy.
+
+### 11.5 本章结论 / 11.5 Chapter Conclusion
 
 > **已知**：属性清单、动力系统、因果组织三种定义各有优劣；目前没有公认的定量框架。 **未决**：维度之间是否独立？是否存在"必要组合"？ **可验证方向**：用同一套扰动协议测试 5–10 种人工系统（囊泡、凝聚体、自催化网络、最小细胞），比较它们的恢复曲线。
 
-## 第十二章　生命的第二次起源
+> **Known**: the checklist, dynamical-systems, and causal-organisation definitions each have strengths and weaknesses; there is no accepted quantitative framework. **Open**: are the dimensions independent of one another? Is there a "necessary combination"? **Testable direction**: test 5–10 artificial systems (vesicles, coacervates, autocatalytic networks, minimal cells) with the same perturbation protocol and compare their recovery curves.
+
+## 第十二章　生命的第二次起源 / Chapter 12. The Second Origin of Life
 
 第一次生命起源于地球化学。今天，人类开始尝试第二次——不是等待化学偶然，而是**有意识地设计**。
 
+The first origin of life arose from geochemistry. Today humanity is attempting a second—not by waiting for chemical accident but by **deliberate design**.
+
 这带来三个问题。
 
-### 12.1 我们能在实验室里造出可演化的系统吗？
+This raises three questions.
+
+### 12.1 我们能在实验室里造出可演化的系统吗？ / 12.1 Can We Build Evolvable Systems in the Laboratory?
 
 目前最接近的答案是：**能造出部分，不能造出整体**。
 
+The most nearly correct answer at present is: **we can build the parts, but not the whole**.
+
 复制、分裂、区室化、自催化、化学记忆都已分别实现；把它们耦合起来，并维持多代稳定性，仍是未完成的任务。最可能的突破口不是"再合成一个更复杂的分子"，而是**工程化的耦合**：把已知模块放进同一个物理系统，让它们彼此约束。
 
-### 12.2 我们能在计算世界里造出数字生命吗？
+Replication, division, compartmentalisation, autocatalysis, and chemical memory have each been realised separately; coupling them together while maintaining multi-generational stability remains an unfinished task. The most likely breakthrough is not "synthesising yet another, more complex molecule" but **engineered coupling**: placing known modules in the same physical system and letting them constrain one another.
+
+### 12.2 我们能在计算世界里造出数字生命吗？ / 12.2 Can We Build Digital Life in the Computational World?
 
 如果"生命"要求物理层面的能量代谢与化学组织，那么答案可能是"不能"。如果"生命"只要求组织与演化，那么答案可能是"已经部分实现"。
 
+If "life" requires energy metabolism and chemical organisation at the physical level, the answer may be "no." If "life" requires only organisation and evolution, the answer may be "already partly achieved."
+
 关键不在于定义之争，而在于**我们想用数字生命做什么**：如果目标是研究演化的普遍规律，数字系统已经足够；如果目标是创造"真正活着的"实体，那么我们需要说明"活着"在计算基质上意味着什么。
 
-### 12.3 被创造的生命与自然生命有何不同？
+The crux is not the dispute over definitions but **what we want digital life for**: if the goal is to study the general laws of evolution, digital systems already suffice; if the goal is to create entities that are "genuinely alive," then we must specify what "alive" means on a computational substrate.
+
+### 12.3 被创造的生命与自然生命有何不同？ / 12.3 How Does Created Life Differ from Natural Life?
 
 这是三个问题中最哲学的。至少有三点差异：
 
+This is the most philosophical of the three questions. There are at least three differences:
+
 1.  **起源方式**：自然生命没有设计者；被创造的生命有。这不影响它"是否活着"，但影响我们如何理解它的地位。
+1.  **Mode of origin**: natural life has no designer; created life does. This does not affect whether it is "alive," but it affects how we understand its status.
 2.  **目的性**：自然生命的目的（如果有）是内生的、演化的；被创造的生命的目的可能部分由设计者设定。
+2.  **Teleology**: the purposes of natural life (if any) are endogenous and evolved; the purposes of created life may be partly set by its designer.
 3.  **依赖性**：被创造的生命依赖于维持它的技术系统；一旦技术系统消失，它也随之消失。这是一种"浅层自主性"。
+3.  **Dependence**: created life depends on the technological system that sustains it; once that system disappears, so does it. This is a kind of "shallow autonomy."
 
 这三点不构成"被创造的生命不是生命"的论证，但它们说明：**创造生命并不等于理解生命**。我们可能造出一个能自我维持、能演化的系统，却仍然不知道它是如何"成为"生命的。
 
-### 12.4 回到开头
+These three points do not amount to an argument that "created life is not life," but they show that **creating life is not the same as understanding life**. We might build a system that maintains itself and evolves, and still not know how it "became" alive.
+
+### 12.4 回到开头 / 12.4 Returning to the Beginning
 
 回到那块岩石、那团火焰、那杯振荡的反应液和那个细菌。
 
+Return to the rock, the flame, the cup of oscillating reaction liquid, and the bacterium.
+
 岩石没有组织；火焰有耗散结构但没有记忆；振荡反应有记忆但没有边界；细菌有全部，但它的"全部"是四十亿年演化的产物，而不是一次相变的瞬间结果。
+
+The rock has no organisation; the flame has a dissipative structure but no memory; the oscillating reaction has memory but no boundary; the bacterium has everything—but its "everything" is the product of four billion years of evolution, not the instantaneous result of a single phase transition.
 
 所以，本文的结论既不是"生命是偶然的"，也不是"生命是必然的"，而是：
 
+The conclusion of this article is therefore neither "life is contingent" nor "life is necessary," but rather:
+
 > **生命是物质在特定组织条件下反复出现的一种可能性；这种可能性是否被实现，取决于历史的偶然；但它一旦被实现，就会自我放大、自我维持，并打开新的可能性空间。**
+
+> **Life is a possibility that matter repeatedly offers under particular conditions of organisation; whether that possibility is realised depends on historical contingency; but once realised, it amplifies itself, maintains itself, and opens new spaces of possibility.**
 
 这句话的前半部分属于科学，后半部分属于哲学。把两者分开，是我们能对这个问题保持诚实的方式。
 
+The first half of this sentence belongs to science, the second to philosophy. Keeping the two apart is how we can remain honest about this question.
+
 ------------------------------------------------------------------------
 
-## 附录 B　生命起源研究地图
+## 附录 B　生命起源研究地图 / Appendix B. A Map of Origin-of-Life Research
 
-| 理论 | 核心机制 | 代表人物 | 经典文献 | 近期证据 | 主要困难 | 可验证预测 |
+| 理论 / Theory | 核心机制 / Core mechanism | 代表人物 / Key proponents | 经典文献 / Classic references | 近期证据 / Recent evidence | 主要困难 / Main difficulty | 可验证预测 / Testable prediction |
 |-----------|-----------|-----------|-----------|-----------|-----------|-----------|
 | RNA 世界 | 模板复制 + 核酶催化 | Gilbert, Joyce, Szostak | Gilbert 1986; Joyce 2002 | Attwater 2025；Duzdevich 2024 | 前生物可得性、链分离 | 前生物条件下可合成长度 \> 100 nt 的功能 RNA |
 | 代谢优先 | 自催化代谢网络先于基因 | Wächtershäuser, Morowitz, Martin | Wächtershäuser 1988; Martin & Russell 2007 | Xavier 2020（RAF） | 无遗传机制难以演化 | 在模拟热液条件下复现 RAF 核 |
@@ -1167,9 +1859,9 @@ Kauffman 的立场介于两者之间：**个别分子事件是偶然的，但自
 | 组装理论 | 组装指数 + 拷贝数 | Cronin, Walker | Sharma 2023 | 质谱测量 | 计算复杂、特异性争议 | 独立样本中的假阳性率 |
 | 数字生命 | 计算基质上的演化 | Langton, Ray, Adami | Langton 1989; Ray 1991 | Agüera y Arcas 2024 | 开放式演化停滞 | 长期运行中的新类型出现率 |
 
-## 附录 C　研究时间线
+## 附录 C　研究时间线 / Appendix C. Research Timeline
 
-| 年份 | 事件 | 意义 |
+| 年份 / Year | 事件 / Event | 意义 / Significance |
 |------------------------|------------------------|------------------------|
 | 约前 350 | 亚里士多德《论灵魂》 | 形式、潜能与现实 |
 | 1790 | 康德《判断性批判》 | 部分与整体的相互依赖 |
@@ -1198,9 +1890,9 @@ Kauffman 的立场介于两者之间：**个别分子事件是偶然的，但自
 | 2025 | Kauffman & Roli 相变理论；指数 RNA 复制；相分离原始细胞 | 理论与实验同时推进 |
 | 2026 | Hadean 时间线；从零生成膜；OoLEN 综述 | 环境约束与工程整合 |
 
-## 附录 D　关键术语词典
+## 附录 D　关键术语词典 / Appendix D. Glossary of Key Terms
 
-| 术语 | 解释 |
+| 术语 / Term | 解释 / Explanation |
 |------------------------------------|------------------------------------|
 | abiogenesis | 非生物起源，指从非生命化学到生命的转变 |
 | agency | 能动性，系统依据自身状态选择行动的能力 |
@@ -1239,73 +1931,116 @@ Kauffman 的立场介于两者之间：**个别分子事件是偶然的，但自
 | teleonomy | 目的性（演化赋予的），区别于 teleology |
 | vesicle | 囊泡，由脂质双层包围的区室 |
 
-## 附录 E　开放问题清单
+## 附录 E　开放问题清单 / Appendix E. List of Open Questions
 
 1.  前生物条件下，RNA 寡核苷酸能否在无酶情况下达到 100 nt 以上并保持功能？
+1.  Under prebiotic conditions, can RNA oligonucleotides reach more than 100 nt without enzymes while remaining functional?
 2.  膜脂合成与 RNA 复制能否在同一个囊泡内稳定耦合超过 20 代？
+2.  Can membrane lipid synthesis and RNA replication be stably coupled within a single vesicle for more than 20 generations?
 3.  自催化网络在真实化学中是否存在可测的一阶相变？
+3.  Does an autocatalytic network exhibit a measurable first-order phase transition in real chemistry?
 4.  约束闭合能否被操作化为一个可计算的量？
+4.  Can constraint closure be operationalised as a computable quantity?
 5.  编码系统（遗传密码）的起源是否可以在实验室中重演？
+5.  Can the origin of the coding system (the genetic code) be re-enacted in the laboratory?
 6.  前生物选择的最小机制是什么？它需要模板吗？
+6.  What is the minimal mechanism of prebiotic selection, and does it require a template?
 7.  手性一致性是在分子层面还是网络层面形成的？
+7.  Is chiral consistency established at the molecular level or at the level of the network?
 8.  早期地球的磷酸盐浓度是否足以支持聚合？
+8.  Was the phosphate concentration on the early Earth sufficient to support polymerisation?
 9.  生命起源是一次事件还是多次并行事件？
+9.  Was the origin of life a single event or several parallel events?
 10. LUCA 的代谢是自养的还是异养的？
+10. Was the metabolism of LUCA autotrophic or heterotrophic?
 11. 病毒在生命起源中的角色是"寄生者"还是"桥梁"？
+11. In the origin of life, are viruses "parasites" or "bridges"?
 12. 数字系统能否实现真正的开放式演化？
+12. Can digital systems achieve genuine open-ended evolution?
 13. 软件系统的"自主性"是因果闭合还是隐喻？
+13. Is the "autonomy" of software systems causal closure or a metaphor?
 14. 生命性可以被单一定量指标刻画吗？
+14. Can aliveness be captured by a single quantitative index?
 15. 组装理论的判据在其他行星样本上是否成立？
+15. Does the criterion of assembly theory hold for samples from other planets?
 16. 非水溶剂中的生命是否可能？如何检验？
+16. Is life possible in non-aqueous solvents, and how could it be tested?
 17. 生命起源的概率能否被定量估计？
+17. Can the probability of the origin of life be estimated quantitatively?
 18. 人工创造的生命是否具有道德地位？
+18. Does artificially created life have moral status?
 19. 合成细胞的最小基因组是否可以进一步缩减？
+19. Can the minimal genome of a synthetic cell be reduced further?
 20. 我们如何区分"模拟生命"与"实现生命"？
+20. How do we distinguish "simulating life" from "realising life"?
 
-## 附录 F　推荐阅读（20 篇）
+## 附录 F　推荐阅读（20 篇） / Appendix F. Twenty Recommended Readings
 
-**哲学基础**
+**哲学基础 / Philosophical foundations**
 
 1.  Aristotle, *De Anima*（约前 350）。生命哲学的原点。
+1.  Aristotle, *De Anima* (c. 350 BCE). The starting point of the philosophy of life.
 2.  Kant, *Kritik der Urteilskraft*（1790）。部分—整体相互依赖。
+2.  Kant, *Kritik der Urteilskraft* (1790). The mutual dependence of parts and whole.
 3.  Schrödinger, *What is Life?*（1944）。负熵与非周期性晶体。
+3.  Schrödinger, *What is Life?* (1944). Negative entropy and the aperiodic crystal.
 4.  Simondon, *L'individuation à la lumière des notions de forme et d'information*（1958）。个体化过程。
+4.  Simondon, *L'individuation à la lumière des notions de forme et d'information* (1958). The process of individuation.
 5.  Stanford Encyclopedia of Philosophy, "Life"（2026 更新）。定义与边界问题的入口：<https://plato.stanford.edu/entries/life/>
+5.  Stanford Encyclopedia of Philosophy, "Life" (updated 2026). An entry point to the problems of definition and boundary: <https://plato.stanford.edu/entries/life/>
 
-**生命起源化学**
+**生命起源化学 / Chemistry of the origin of life**
 
 6.  Powner, Gerland & Sutherland (2009), *Nature* 459:239–242, doi:10.1038/nature08013。活化嘧啶核苷酸的合成。
+6.  Powner, Gerland & Sutherland (2009), *Nature* 459:239–242, doi:10.1038/nature08013. The synthesis of activated pyrimidine nucleotides.
 7.  Patel et al. (2015), *Nature Chemistry* 7:301–307, doi:10.1038/nchem.2202。氰基硫化物网络。
+7.  Patel et al. (2015), *Nature Chemistry* 7:301–307, doi:10.1038/nchem.2202. The cyanosulfidic network.
 8.  Becker et al. (2019), *Science* 366:76–82。嘌呤与嘧啶的统一合成。
+8.  Becker et al. (2019), *Science* 366:76–82. The unified synthesis of purines and pyrimidines.
 9.  Attwater et al. (2025), *Nature Chemistry*。指数 RNA 复制。
+9.  Attwater et al. (2025), *Nature Chemistry*. Exponential RNA replication.
 10. Deamer (2024), *Journal of Molecular Evolution*, doi:10.1007/s00239-024-10197-6。原始细胞的分阶段路径。
+10. Deamer (2024), *Journal of Molecular Evolution*, doi:10.1007/s00239-024-10197-6. A staged pathway to protocells.
 
-**系统理论**
+**系统理论 / Systems theory**
 
 11. Kauffman (1986), *Journal of Theoretical Biology* 119:1–24。自催化集合。
+11. Kauffman (1986), *Journal of Theoretical Biology* 119:1–24. Autocatalytic sets.
 12. Hordijk & Steel (2017), *Journal of Theoretical Biology*。RAF 的形式理论。
+12. Hordijk & Steel (2017), *Journal of Theoretical Biology*. The formal theory of RAFs.
 13. Xavier et al. (2020), *Proc R Soc B* 287:20192377, doi:10.1098/rspb.2019.2377。代谢 RAF。
+13. Xavier et al. (2020), *Proc R Soc B* 287:20192377, doi:10.1098/rspb.2019.2377. Metabolic RAFs.
 14. Kauffman & Roli (2025), *Phil Trans R Soc B* 380:20240283, doi:10.1098/rstb.2024.0283。相变与康德式整体。
+14. Kauffman & Roli (2025), *Phil Trans R Soc B* 380:20240283, doi:10.1098/rstb.2024.0283. Phase transitions and Kantian wholes.
 15. Moreno & Mossio (2015), *Biological Autonomy*。约束闭合与自主性。
+15. Moreno & Mossio (2015), *Biological Autonomy*. Constraint closure and autonomy.
 
-**人工细胞**
+**人工细胞 / Artificial cells**
 
 16. Szostak, Bartel & Luisi (2001), *Nature* 409:387–390。 "Synthesizing life"。
+16. Szostak, Bartel & Luisi (2001), *Nature* 409:387–390. "Synthesizing life."
 17. Hutchison et al. (2016), *Science* 351:aad6253。JCVI-syn3.0。
+17. Hutchison et al. (2016), *Science* 351:aad6253. JCVI-syn3.0.
 18. Pelletier et al. (2021), *Cell*。最小细胞的分裂基因。
+18. Pelletier et al. (2021), *Cell*. The division genes of a minimal cell.
 
-**人工生命**
+**人工生命 / Artificial life**
 
 19. Langton (1989), "Artificial Life", in *SFI Studies in the Sciences of Complexity*。人工生命纲领。
+19. Langton (1989), "Artificial Life", in *SFI Studies in the Sciences of Complexity*. The artificial life programme.
 20. Agüera y Arcas et al. (2024), arXiv:2406.19108。随机程序中的自复制子（预印本）。
+20. Agüera y Arcas et al. (2024), arXiv:2406.19108. Self-replicators among random programs (preprint).
 
-**综述**
+**综述 / Review**
 
 -   Asche et al. (OoLEN) (2026), *Cell Reports Physical Science* 7:103211, doi:10.1016/j.xcrp.2026.103211。理论与实验方法的整合综述。
+-   Asche et al. (OoLEN) (2026), *Cell Reports Physical Science* 7:103211, doi:10.1016/j.xcrp.2026.103211. An integrated review of theoretical and experimental approaches.
 
-## 参考文献
+## 参考文献 / References
 
 > 说明：以下条目按作者字母排序。标注 DOI 的条目已尽力核对；未标 DOI 的经典文献请以期刊卷页为准。预印本已标注。
+
+> Note: the entries below are ordered alphabetically by author. Entries with a DOI have been checked as far as possible; for classic works without a DOI, please rely on the journal volume and page numbers. Preprints are marked as such.
 
 1.  Adami, C. (2006). *Digital genetics: unravelling the genetic basis of evolution*. Nature Reviews Genetics.
 2.  Agüera y Arcas, B., Alakuijala, J., et al. (2024). Computational Life: How Well-formed, Self-replicating Programs Emerge from Simple Interaction. arXiv:2406.19108. \[预印本\]
@@ -1374,3 +2109,5 @@ Kauffman 的立场介于两者之间：**个别分子事件是偶然的，但自
 65. Wolpert, L. (1994). The evolution of life. *Phil Trans R Soc B* 344:275–280. \[关于"生命是否必然"的经典讨论，可作对照\]
 
 > 参考文献数量说明：本文实际引用约 60 条，其中 2020 年以后约 25 条。由于篇幅与核对成本限制，部分条目未附 DOI；凡涉及关键论断，正文已尽量给出可追溯的作者与期刊信息。
+
+> Note on the number of references: this article cites about 60 works in total, roughly 25 of them published after 2020. Given constraints of length and verification cost, some entries lack a DOI; wherever a key claim is at stake, the main text has been written to provide traceable author and journal information.

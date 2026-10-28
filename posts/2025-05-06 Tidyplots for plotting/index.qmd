@@ -1,5 +1,6 @@
 ---
 title: "tidyplots for R plotting"
+subtitle: "用于 R 绘图的 tidyplots"
 author: "Jie Hua"
 date: "2025-05-06"
 date-modified: "2025-05-06"
@@ -12,23 +13,33 @@ image: "tidyplots.svg"
 source(file.path(dirname(knitr::current_input()), "..", "..", "theme-blog.R"))
 ```
 
-## Basic Information
+## 基本信息 / Basic Information
+
+我注意到 Jan Broder Engler 开发了一个名为 "tidyplots" 的新 R 包。这个包可以用简单的命令生成可直接发表的图，在很大程度上简化了 R 的绘图流程。
 
 I noticed a new R package called "tidyplots" produced by Jan Broder Engler. This package could generate publication ready plots with simple commands, which largely simplified the R plotting process.
 
+手册：https://jbengler.github.io/tidyplots/
+
 The manual: https://jbengler.github.io/tidyplots/
+
+我试用了一下，效果非常好。希望以后会有更多实用的函数。
 
 I had a try and it works very well. I hope there will be more useful functions.
 
+它基于 ggplot2 体系，因此也很容易按我们的需要添加更多特性。
+
 It is based on ggplot2 system, it is also very easy to add more features as we want.
 
-## Installation
+## 安装 / Installation
 
 ```{r}
 #| warning: false
 #| eval: false
 pak::pkg_install("tidyplots")
 ```
+
+开发版本可以通过以下方式安装
 
 The development version could be installed with
 
@@ -37,13 +48,13 @@ The development version could be installed with
 pak::pkg_install("jbengler/tidyplots")
 ```
 
-## Plotting
+## 绘图 / Plotting
 
 ```{r}
 library(tidyplots)
 ```
 
-### Barplot
+### 条形图 / Barplot
 
 ```{r}
 #| echo: false
@@ -68,7 +79,7 @@ blog_tidyplots_theme(
 )
 ```
 
-### Barstack plot
+### 堆叠条形图 / Barstack plot
 
 ```{r}
 #| dpi: 300
@@ -81,9 +92,11 @@ blog_tidyplots_theme(
 )
 ```
 
+它提供了许多实用的绘图函数类型，最好还是到它的官方网站了解如何使用这个包。
+
 It provided many useful types of plotting function, it is better to go to its official website to learn how to use this package.
 
-### Other example
+### 其他示例 / Other example
 
 ```{r}
 #| dpi: 300
@@ -135,6 +148,10 @@ blog_tidyplots_theme(
 )
 ```
 
+如果 tidyplots 能直接读取 .mcool 或 .hic 文件，那将会非常有帮助。
+
 If tidyplots could directly read .mcool or .hic files, it will be very helpful.
+
+我猜测这正是作者计划要做的事情；我们也可以用其他 R 包把 contact matrix 文件读入 data frame 试一试，但这需要付出更多努力。
 
 I guess it is what he plans to do, we can use other R packages to read the contact matrix files into a dataframe to have a try, but it will take more efforts.

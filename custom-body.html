@@ -175,7 +175,7 @@
       menu.className = "sort-menu";
       menu.setAttribute("role", "listbox");
 
-      Array.prototype.forEach.call(select.options, function (option) {
+      Array.prototype.forEach.call(select.options, function (option, index) {
         if (!option.value) return;
         var item = document.createElement("button");
         item.type = "button";
@@ -183,9 +183,12 @@
         item.setAttribute("role", "option");
         item.textContent = option.textContent.trim();
         item.dataset.sortValue = option.value;
+        item.dataset.sortIndex = String(index);
         item.dataset.direction = option.getAttribute("data-direction") || "";
         item.addEventListener("click", function () {
-          select.value = option.value;
+          // options can share the same value and differ only by data-direction,
+          // so select by index instead of by value
+          select.selectedIndex = Number(item.dataset.sortIndex);
           select.dispatchEvent(new Event("change", { bubbles: true }));
           button.querySelector(".sort-toggle-label").textContent = option.textContent.trim();
           menu.querySelectorAll(".sort-option").forEach(function (other) {

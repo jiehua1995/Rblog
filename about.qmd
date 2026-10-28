@@ -6,13 +6,13 @@ toc: false
 section-divs: false
 ---
 
-:::::: {.about-layout}
-::: {.about-portrait}
+::::::::::: about-layout
+::::: about-portrait
 ::: {.avatar-wrap .avatar-wrap-xl}
 ![](favicon.png){alt="Jie Hua"}
 :::
 
-::: {.about-links}
+::: about-links
 [<i class="fa-brands fa-linkedin-in"></i>LinkedIn<i class="fa-solid fa-arrow-up-right-from-square about-link-arrow"></i>](https://www.linkedin.com/in/jiehua/){.about-link target="_blank" rel="noopener"}
 
 [<i class="fa-brands fa-github"></i>GitHub<i class="fa-solid fa-arrow-up-right-from-square about-link-arrow"></i>](https://github.com/jiehua1995){.about-link target="_blank" rel="noopener"}
@@ -23,33 +23,39 @@ section-divs: false
 
 [<i class="fa-solid fa-building-columns"></i>Affiliation<i class="fa-solid fa-arrow-up-right-from-square about-link-arrow"></i>](https://www.sfb1064.med.uni-muenchen.de/personen/sekretariat/hua_-_jie/index.html){.about-link target="_blank" rel="noopener"}
 :::
-:::
+:::::
 
-::: {.about-copy}
-::: {.kicker}
+::::::: about-copy
+::: kicker
 About this site
 :::
 
 # Bioinformatics Notes {.about-name}
 
-::: {.about-role}
+::: about-role
 Maintained by Jie Hua · Biomedical Center, LMU Munich
 :::
 
-::: {.about-lede}
+::: about-lede
 A working notebook of reproducible bioinformatics — short, practical notes on genomes, structures, and the tools that make analysis easier.
 :::
 
 This site collects solutions worth finding twice: plotting recipes, annotation and assembly formats, protein-structure workflows, and command-line patterns. Each note is written to be copy-pasteable and easy to revisit. It is built with Quarto and published on Netlify.
 
+## Language {.about-h2}
+
+I write some notes in English and some in Chinese, depending on the topic and the day. The other language you see in each post is an **AI-generated translation**, added so the material is readable to more people; it has not been reviewed line by line. Where the two versions differ, the language the piece was originally written in is the authoritative one.
+
+我有时用英文写，有时用中文写；每篇文章里出现的另一种语言，都是用 AI 工具自动翻译的，未经逐句人工校对。若两种版本有出入，以原文语言为准。
+
 ## Focus {.about-h2}
 
-::: {.topic-tags}
+::: topic-tags
 [Bioinformatics]{.tag} [Genomics]{.tag} [Proteomics]{.tag} [Data visualization]{.tag} [Annotation]{.tag} [Assembly]{.tag}
 :::
 
 ## Elsewhere {.about-h2}
 
 Find me on [GitHub](https://github.com/jiehua1995), [LinkedIn](https://www.linkedin.com/in/jiehua/), [ORCID](https://orcid.org/0000-0003-4910-0945), or visit my [personal site](https://www.jiehua1995.xyz/) and [personal blog](https://note.jiehua.org/).
-:::
-::::::
+:::::::
+:::::::::::

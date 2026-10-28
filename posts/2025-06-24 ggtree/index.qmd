@@ -1,5 +1,6 @@
 ---
 title: "ggtree for phylogenetic trees"
+subtitle: "用于系统发育树的 ggtree"
 author: "Jie Hua"
 date: "2025-06-24"
 date-modified: "2025-06-24"
@@ -12,15 +13,19 @@ image: "tree.png"
 source(file.path(dirname(knitr::current_input()), "..", "..", "theme-blog.R"))
 ```
 
-## Basic Information
+## 基本信息 / Basic Information
+
+系统发育树用于展示不同物种或基因之间的进化关系。R 中的 `ggtree` 包是可视化这类树的强大工具，支持自定义，也可以与其他类型的数据整合。
 
 Phylogenetic trees are used to show the evolutionary relationships between different species or genes. The `ggtree` package in R is a powerful tool for visualizing these trees, allowing for customization and integration with other data types.
+
+官方教程：<https://bioconductor.org/packages/devel/bioc/vignettes/ggtreeExtra/inst/doc/ggtreeExtra.html>
 
 Official tutorial: <https://bioconductor.org/packages/devel/bioc/vignettes/ggtreeExtra/inst/doc/ggtreeExtra.html>
 
 <https://yulab-smu.top/treedata-book/>
 
-## Installation
+## 安装 / Installation
 
 ```{r}
 #| warning: false
@@ -33,7 +38,7 @@ pak::pkg_install("treeio")
 pak::pkg_install("ggnewscale")
 ```
 
-## Load demo files
+## 载入示例文件 / Load demo files
 
 ```{r}
 #| warning: false
@@ -67,7 +72,7 @@ dat3 <- read.csv(ring2)
 knitr::kable(head(dat3), caption = "Demo tree data 3", format = "pipe")
 ```
 
-## Fan layout tree
+## 扇形布局树 / Fan layout tree
 
 ```{r}
 #| warning: false
@@ -89,7 +94,7 @@ p + theme_blog_overlay
 
 ```
 
-## Add annotation dataset to tree
+## 为树添加注释数据 / Add annotation dataset to tree
 
 ```{r}
 #| warning: false
@@ -170,7 +175,7 @@ p2 + theme_blog_overlay
 
 ```
 
-## Add heatmap layer on the outer ring
+## 在外圈添加热图层 / Add heatmap layer on the outer ring
 
 ```{r}
 #| warning: false
@@ -200,7 +205,7 @@ p3 <- p2 +
 p3 + theme_blog_overlay
 ```
 
-## Add heatmap layer for continuous values
+## 为连续值添加热图层 / Add heatmap layer for continuous values
 
 ```{r}
 #| warning: false
@@ -263,7 +268,7 @@ p5 <- p4 +
 p5 + theme_blog_overlay
 ```
 
-## Add multiple layers on the same position
+## 在同一位置添加多个图层 / Add multiple layers on the same position
 
 ```{r}
 #| warning: false

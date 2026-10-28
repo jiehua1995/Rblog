@@ -1,5 +1,6 @@
 ---
 title: "Dynamically adjust the process cores number"
+subtitle: "动态调整进程核心数"
 author: "Jie Hua"
 date: "2025-01-01"
 date-modified: "2025-01-01"
@@ -8,15 +9,23 @@ engine: knitr
 image: "https://www.researchgate.net/publication/365885884/figure/fig2/AS:11431281104110499@1669950577039/Single-process-left-and-multiple-process-right-parallelization-schemes-for-the_W640.jpg"
 ---
 
-## Introduction
+## 引言 / Introduction
+
+在高性能计算或脚本环境中，根据一天中的时间动态调整所使用的线程数往往很有用。
 
 In high-performance computing or scripting environments, it's often useful to dynamically adjust the number of threads used based on the time of day.
 
+例如，在工作时段，我们可能希望使用较少的线程，以免压垮共享系统；而在夜间，则可以充分利用可用资源。
+
 For example, during working hours, we might want to use fewer threads to avoid overwhelming shared systems, while at night, we can take full advantage of available resources.
+
+本教程演示如何使用一个简单的 Bash 脚本判断当前时间，并据此设置线程数。
 
 This tutorial demonstrates how to use a simple Bash script to determine the current time and set the number of threads accordingly.
 
-## Bash Script
+## Bash 脚本 / Bash Script
+
+下面的脚本使用 `date` 命令获取当前小时数，然后依据预设规则设置线程数：
 
 The following script uses the `date` command to get the current hour and then sets the number of threads based on predefined rules:
 
@@ -42,10 +51,18 @@ echo "Using $threads threads"
 
 ```
 
-## Notes
+## 说明 / Notes
+
+你可以根据自己的系统和策略自定义这些阈值与线程取值。
+
 You can customize the thresholds and thread values based on your system and policy.
+
+这段逻辑可以很容易地嵌入 SLURM 作业脚本或任何基于 shell 的流程中。
 
 This logic can be easily embedded in SLURM job scripts or any shell-based pipeline.
 
-## Conclusion
+## 结论 / Conclusion
+
+这种简单方法让你在一日之中不同的使用模式下都能兼顾资源与响应。它是一种轻量级方案，可在任何类 Unix（Unix-like）环境中运行。
+
 This simple method allows you to be resource-conscious and responsive to different usage patterns throughout the day. It's a lightweight solution that works in any Unix-like environment.

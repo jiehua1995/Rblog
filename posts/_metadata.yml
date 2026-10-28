@@ -14,7 +14,7 @@ toc-depth: 3
 code-overflow: wrap
 code-fold: true
 code-summary: "Code"
-date-format: "MMMM D, YYYY"
+date-format: "MMM D, YYYY"
 
 # Default author
 author: "Jie Hua"

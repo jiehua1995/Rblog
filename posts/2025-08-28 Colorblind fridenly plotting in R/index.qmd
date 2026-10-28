@@ -1,5 +1,6 @@
 ---
 title: "Colorblind fridenly plotting in R"
+subtitle: "在 R 中绘制色盲友好的图"
 author: "Jie Hua"
 date: "2025-08-28"
 date-modified: "2025-08-28"
@@ -12,17 +13,23 @@ image: "index.png"
 source(file.path(dirname(knitr::current_input()), "..", "..", "theme-blog.R"))
 ```
 
-## 0. Basic Information
+## 0. 基本信息 / Basic Information
+
+要在 **R** 中使用色盲友好的调色板，主要需要以下几个包。请务必在保存图片之前，用这些包检查过图。谢谢！
 
 To use colorblind-friendly palettes in **R**, you mainly need the following packages. Be sure that we checked the plots with these packages before saving the plots. Thank you!
 
-## 1. colorbindr
+## 1. 色盲模拟（colorblindr） / 1. colorbindr
+
+> 在可用于生产的 R 图形中模拟色盲效果。作者：Claire D. McWhite 与 Claus O. Wilke。
 
 > Simulate colorblindness in production-ready R figures. Written by Claire D. McWhite and Claus O. Wilke.
 
+官方仓库：<https://github.com/clauswilke/colorblindr>
+
 Official repo: <https://github.com/clauswilke/colorblindr>
 
-### 1.1 Installation
+### 1.1 安装 / 1.1 Installation
 
 ```{r}
 #| warning: false
@@ -32,6 +39,8 @@ install.packages("colorspace", repos = "http://R-Forge.R-project.org")
 remotes::install_github("clauswilke/colorblindr")
 ```
 
+也可以通过以下方式安装：（但你需要先安装 [**pak**](https://github.com/r-lib/pak)。
+
 It could also be installed with: (but you need to install [**pak**](https://github.com/r-lib/pak)first.
 
 ```{r}
@@ -40,7 +49,9 @@ It could also be installed with: (but you need to install [**pak**](https://gith
 pak::pkg_install("clauswilke/colorblindr")
 ```
 
-### 1.2 Demo
+### 1.2 演示 / 1.2 Demo
+
+按照官方文档操作很容易，首先创建一个如下的 ggplot 对象：
 
 It is easy to follow the official document, first make a ggplot object like:
 
@@ -50,12 +61,16 @@ fig <- ggplot(iris, aes(Sepal.Length, fill = Species)) + geom_density(alpha = 0.
 fig
 ```
 
+然后我们可以用这个包在不同的模拟条件下进行检查：
+
 Then we could use this package to check in different simulations:
 
 ```{r}
 library(colorblindr)
 cvd_grid(fig)
 ```
+
+也可以在交互式应用中查看它，这里我只展示脚本，它不会为读者打开新的标签页。
 
 It is also possible to inspect it in the interactive app, I just show the script, it will not open a tab for readers.
 
@@ -64,13 +79,17 @@ It is also possible to inspect it in the interactive app, I just show the script
 view_cvd(fig) # starts the interactive app
 ```
 
-# 2. colorblindcheck
+# 2. 调色板检查（colorblindcheck） / 2. colorblindcheck
+
+> 检查调色板是否存在与色觉缺陷有关的问题
 
 > Check Color Palettes for Problems with Color Vision Deficiency
 
+官方仓库：<https://github.com/Nowosad/colorblindcheck>
+
 Official repo: <https://github.com/Nowosad/colorblindcheck>
 
-### 2.1 Installation
+### 2.1 安装 / 2.1 Installation
 
 ```{r}
 #| warning: false
@@ -78,7 +97,7 @@ Official repo: <https://github.com/Nowosad/colorblindcheck>
 install.packages("colorblindcheck")
 ```
 
-### 2.2 Demo
+### 2.2 演示 / 2.2 Demo
 
 ```{r}
 library(colorblindcheck)

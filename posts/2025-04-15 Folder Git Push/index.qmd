@@ -1,5 +1,6 @@
 ---
 title: "Git Push every repo in a folder"
+subtitle: "批量推送文件夹中的每个 Git 仓库"
 author: "Jie Hua"
 date: "2025-04-15"
 date-modified: "2025-04-15"
@@ -8,17 +9,24 @@ engine: knitr
 image: "https://miro.medium.com/v2/resize:fit:1100/1*CWFkh5z8oa6dZfn5_gkKKQ.jpeg"
 ---
 
-## Introduction
+## 引言 / Introduction
+
+当在同一个父文件夹下管理多个 Git 仓库时，逐个执行 `git pull` 或 `git push` 会非常繁琐。本指南展示如何用简单的 shell 脚本将这些任务自动化。
 
 When working with multiple Git repositories inside a single parent folder, it can be tedious to `git pull` or `git push` each one individually. This guide shows you how to automate these tasks using simple shell scripts.
 
-## Prerequisites
+## 前置条件 / Prerequisites
 
+-   类 Unix shell（Linux/macOS，或 Windows 上的 Git Bash）
 -   A Unix-like shell (Linux/macOS or Git Bash on Windows)
+-   已安装并配置好 Git
 -   Git installed and configured
+-   所有子目录都必须是 Git 仓库（即每个子目录中都有 `.git` 文件夹）
 -   All subdirectories must be Git repositories (i.e., each one has a `.git` folder)
 
-## Step 1: Batch `git pull` for All Repositories
+## 第 1 步：为所有仓库批量执行 `git pull` / Step 1: Batch `git pull` for All Repositories
+
+创建一个名为 `pull_all.sh` 的 shell 脚本：
 
 Create a shell script named `pull_all.sh`:
 
@@ -36,7 +44,9 @@ for dir in */; do
 done
 ```
 
-## Step 2: Batch `git push` for All Repositories
+## 第 2 步：为所有仓库批量执行 `git push` / Step 2: Batch `git push` for All Repositories
+
+类似地，创建一个名为 push_all.sh 的脚本：
 
 Similarly, create a script called push_all.sh:
 
@@ -56,6 +66,8 @@ for dir in */; do
 done
 ```
 
-## Conclusion
+## 结语 / Conclusion
+
+只需几行脚本，就能轻松地一次性管理多个 Git 仓库。在更新多个项目时，这种方法有助于节省时间并减少手动操作带来的错误。
 
 With just a few lines of scripting, you can easily manage multiple Git repositories at once. This method helps save time and reduces manual errors when updating multiple projects.

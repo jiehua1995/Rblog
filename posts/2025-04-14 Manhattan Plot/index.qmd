@@ -1,5 +1,6 @@
 ---
 title: "Manhattan Plot for GWAS Results"
+subtitle: "GWAS 结果的曼哈顿图"
 author: "Jie Hua"
 date: "2025-04-14"
 date-modified: "2025-04-14"
@@ -11,27 +12,39 @@ categories: [Plot]
 source(file.path(dirname(knitr::current_input()), "..", "..", "theme-blog.R"))
 ```
 
-## 参考教程
+## 参考教程 / Reference Tutorials
 
 1.  思问 & StatisticVision. (2025, March 14). *R语言绘图25\|Nature曼哈顿图复现* \[微信公众号\]. R语言绘图25\|Nature曼哈顿图复现. <https://mp.weixin.qq.com/s/3YlnB3Nm85v3FxE8F67oDw>
 
-## 基本信息
+## 基本信息 / Basic Information
 
 曼哈顿图（Manhattan Plot)是基因组范围内关联研究（GWAS）中常用的可视化工具，用于展示单核苷酸多态性（SNP）与表型之间的关联。它通过在x轴上绘制基因组位置，在y轴上绘制-log10(p-value)来显示每个SNP的显著性水平。
 
-## 曼哈顿图的特点
+The Manhattan plot is a visualization tool commonly used in genome-wide association studies (GWAS) to display the association between single nucleotide polymorphisms (SNPs) and phenotypes. It shows the significance level of each SNP by plotting genomic position on the x-axis and -log10(p-value) on the y-axis.
+
+## 曼哈顿图的特点 / Features of a Manhattan Plot
 
 -   X轴： 基因组的位置，按照染色体编号和物理位置排列，每条染色体用不同的颜色区分
 
+-   X-axis: genomic position, arranged by chromosome number and physical position, with each chromosome distinguished by a different color
+
 -   Y轴：用-log~10~(p-value)表示SNPs的显著性水平，越高表示显著性水平越高
+
+-   Y-axis: -log~10~(p-value) represents the significance level of SNPs; the higher the value, the more significant
 
 -   阈值线：图中与X轴平行的一条线，表示不同的显著性水平，分别对应p-value的某些值，比如p\<5x10^-8^
 
+-   Threshold line: a line in the plot parallel to the x-axis, indicating different significance levels, which correspond to certain p-value values, such as p\<5x10^-8^
+
 -   点: 每一个点表示一个SNPs，其高度表示显著性程度
 
-## 相关脚本
+-   Points: each point represents a SNP, and its height indicates the degree of significance
+
+## 相关脚本 / Related Scripts
 
 通过 @lst-loadpackages 加载了需要用到的的 R 包。
+
+The required R packages are loaded via @lst-loadpackages.
 
 ```{r}
 #| lst-label: lst-loadpackages
@@ -42,6 +55,8 @@ library(dplyr)
 ```
 
 生成模拟数据
+
+Generate simulated data
 
 ```{r}
 set.seed(42)
@@ -62,6 +77,8 @@ knitr::kable(head(data), caption = "First 6 rows of the demo data", format = "pi
 
 计算-log~10~(p-value)
 
+Compute -log~10~(p-value)
+
 ```{r}
 data <- data %>%
   mutate(logP = -log10(P))
@@ -75,6 +92,8 @@ knitr::kable(head(data), caption = "First 6 rows of the demo data", format = "pi
 ```
 
 画图展示相关的数据
+
+Plot the data
 
 ```{r}
 ggplot(data, aes(x=BP, y=logP, color=as.factor(CHR)))+ 

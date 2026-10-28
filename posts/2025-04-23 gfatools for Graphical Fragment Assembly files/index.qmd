@@ -1,5 +1,6 @@
 ---
 title: "gfatools for GFA (graphical fragment assembly) files"
+subtitle: "用于 GFA（图形化片段组装）文件的 gfatools"
 author: "Jie Hua"
 date: "2025-04-23"
 date-modified: "2025-04-23"
@@ -8,21 +9,33 @@ engine: knitr
 image: "gfa-card.png"
 ---
 
-## Basic Information
+## 基本信息 / Basic Information
+
+GFA（Graphical Fragment Assembly，图形化片段组装）格式用于序列组装图。它由 Heng Li 博士（Prof. Dr. Heng Li）于 2014 年提出。以下是他当时的提案：<https://lh3.github.io/2014/07/19/a-proposal-of-the-grapical-fragment-assembly-format>。
 
 GFA (Graphical Fragment Assembly) format is used for sequence assembly graphs. It was proposed by Prof. Dr. Heng Li in 2014. Here is his proposal: <https://lh3.github.io/2014/07/19/a-proposal-of-the-grapical-fragment-assembly-format>.
 
+在过去十年里，他不断更新这一格式，使其更加完善。以下是他对 rGFA 格式的说明：<http://www.liheng.org/downloads/rGFA-GAF.pdf>。另一个是 <https://github.com/lh3/gfatools/blob/master/doc/rGFA.md>。
+
 He updated this format in past 10 years to make it better. Here is his description about rGFA format: <http://www.liheng.org/downloads/rGFA-GAF.pdf>. Another one is <https://github.com/lh3/gfatools/blob/master/doc/rGFA.md>.
+
+简而言之，GFA 格式与同样由他开发的 SAM 格式很相似。（我很喜欢他的工作，这对学术界帮助很大。）
 
 Shortly, GFA format is like SAM format, which is also developed by him. (I really like his work, that helped the academia a lot).
 
+> GFA 是一种简单的、以 TAB 分隔的文本格式，由 12 个必需字段组成，用于表示比对到参考泛基因组图（pan-genome graph）上的 reads：• 第 1–4 列：查询名称、长度、起始与结束位置。• 第 5 列：查询链相对于第 6 列中比对路径的方向。• 第 6 列：稳定的图路径，其格式匹配正则表达式 /(\[\>\<\]\[\^\\s\>\<\]+:\\d+- \\d+)+\|(\[\^\\s\>\<\]+)/。小于号或大于号表示片段（segment）的方向。如果一条路径只包含单个片段，则可以省略坐标，并假定其方向为正向“\>”。• 第 7–9 列：路径总长度、在路径正链上的起始与结束比对位置。• 第 10–12 列：匹配碱基数量、比对块长度和比对质量
+
 > GFA is a simple TAB-dellimited text format consisting of 12 mandatory fields to represent reads aligned to a reference pan-genome graph: • Col 1–4: query name, length, start and end positions. • Col 5: the query strand relative to the mapping path in col 6. • Col 6: a stable graph path in the format matching the regular expression /(\[\>\<\]\[\^\\s\>\<\]+:\\d+- \\d+)+\|(\[\^\\s\>\<\]+)/. The less or greater sign indicates the orientation of the segment. If a path consists of a single segment, coordinates can be omitted and its orientation is assumed to be forward “\>”. • Col 7–9: total path length, start and end mapping positions on the forward strand of the path. • Col 10–12: number of matching bases, alignment block length and mapping quality
+>
+> 每一行都可以带有 SAM 格式中的标签。CIGAR 存储在标签中。
 >
 > Each line may have tags as in the SAM format. CIGARs are stored in tags
 
+由于 GFA 格式与 SAM、PAF 格式如此相似，我可以使用此前编写的 R 脚本读取并检查这些文件。改用 `rust` 可能更好，但我还需要时间学习它。
+
 Since the GFA format is so similar to SAM and PAF formats. I could use the R script that I wrote before to read and check those files. It may be better to use `rust`. I still need time to learn it.
 
-## Installation
+## 安装 / Installation
 
 ```{bash}
 #| eval: false
@@ -33,7 +46,7 @@ make
 sudo cp gfatools /usr/local/bin/gfatools
 ```
 
-## Usage
+## 用法 / Usage
 
 ```{bash}
 #| eval: false
@@ -51,5 +64,7 @@ Commands:
   ed          GWFA prefix alignment (for evaluation only)
   version     print version number
 ```
+
+最新的一次提交是 <https://github.com/lh3/gfatools/commit/c31be8a62efc6bdea4576029f7fbe84f345a6eed>。
 
 The most recent commit is <https://github.com/lh3/gfatools/commit/c31be8a62efc6bdea4576029f7fbe84f345a6eed>.

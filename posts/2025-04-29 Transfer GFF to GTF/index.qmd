@@ -1,5 +1,6 @@
 ---
 title: "Transfer GFF to GTF file"
+subtitle: "GFF 转换为 GTF 文件"
 author: "Jie Hua"
 date: "2025-04-29"
 date-modified: "2025-04-29"
@@ -8,7 +9,13 @@ engine: knitr
 image: "gff_teaser.webp"
 ---
 
-## Basic Information
+## 基本信息 / Basic Information
+
+> GFF3（Generic Feature Format Version 3）文件格式以简单的纯文本、制表符分隔的文件来描述基因组特征
+>
+> GFF3 文件包含九个字段（seqid、source、feature、start、end、score、strand、phase 和 attributes）
+>
+> 以“##”开头的行提供文件的元信息，以“#”开头则表示人类可读的注释
 
 > GFF3 (Generic Feature Format Version 3) file format represents the genomic features in a simple text-based tab-delimited file
 >
@@ -16,9 +23,15 @@ image: "gff_teaser.webp"
 >
 > The lines which starts with ‘##’ provides the meta-information of the file and ‘#’ represents the human-readable comments
 
+我们有时需要把 GFF3 转换为 GTF 格式。
+
 We sometimes need to transfer GFF3 to GTF format.
 
+我之前使用过 [gffread](https://github.com/gpertea/gffread)。它通常运行良好，但当我要处理从 NCBI 下载的 GFF3 文件时，会出现一些问题。
+
 I used [gffread](https://github.com/gpertea/gffread) before. It generally works well, but it has some problem when I need to deal with a GFF3 file downloaded from NCBI.
+
+这个文件中有一些类似下面的行：
 
 This file has some lines like:
 
@@ -28,11 +41,15 @@ chrxxx  Gnomon  exon    47054   47468   .   -   .   ID=id-LOC123327042-2;Parent=
 chrxxx  Gnomon  exon    47542   47661   .   -   .   ID=id-LOC123327042-3;Parent=gene-LOC123327042;Dbxref=GeneID:123327042;gbkey=exon;gene=LOC123327042;model_evidence=Supporting evidence includes similarity to: 1 Protein%2C and 74%25 coverage of the annotated genomic feature by RNAseq alignments;pseudo=true
 ```
 
+当我使用 [gffread](https://github.com/gpertea/gffread) 时，它无法读取那些包含 "ID=id\*" 的行，输出的 GTF 文件中会丢失 **gene_id** 属性。
+
 When I used [gffread](https://github.com/gpertea/gffread), it can not read there lines containing "ID=id\*", it will lose the **gene_id** attribute in the output GTF file.
+
+我意识到需要自己写一个脚本。
 
 I realized that I need to write a script by myself.
 
-## Script
+## 脚本 / Script
 
 ``` python
 import sys
@@ -112,13 +129,17 @@ if __name__ == '__main__':
     print(f"Conversion complete. GTF file written to {gtf_file}")
 ```
 
-## Usage
+## 使用方法 / Usage
+
+使用这个脚本非常简单，只需将其保存为 *gff2gtf.py*，然后按如下方式运行
 
 It is very easy to use this script, just save it as *gff2gtf.py* and then run like
 
 ``` bash
 python gff2gtf.py input.gff output.gtf
 ```
+
+结果如下所示
 
 The result looks like
 
