@@ -3397,14 +3397,19 @@ body.quarto-dark .about-name {
   display: none;
 }
 
-.quarto-listing-container-table tbody tr {
+#quarto-document-content .quarto-listing-container-table tbody tr {
   display: flex;
   align-items: center;
   gap: 0.85rem;
   padding: 0.42rem 0.1rem;
-  border-bottom: 1px solid var(--rule);
+  border: 0;
   background: transparent;
   transition: background-color 0.25s ease;
+}
+
+/* the archive title block has no author/date, so this row is empty */
+body:has(.quarto-listing-container-table) #title-block-header.quarto-title-block.default .quarto-title-meta {
+  display: none;
 }
 
 .quarto-listing-container-table tbody tr:last-child {
@@ -3415,7 +3420,7 @@ body.quarto-dark .about-name {
   background: transparent;
 }
 
-.quarto-listing-container-table tbody td {
+#quarto-document-content .quarto-listing-container-table tbody td {
   display: block;
   padding: 0;
   border: 0;
@@ -3475,6 +3480,12 @@ body.quarto-dark .about-name {
   .quarto-listing-container-table tbody td:nth-child(2) a {
     font-size: 0.95rem;
   }
+}
+
+#quarto-document-content .quarto-listing-container-table .listing-categories {
+  display: inline-flex;
+  align-items: center;
+  margin-bottom: 0;
 }
 
 /* long URLs should wrap instead of running under the table of contents */

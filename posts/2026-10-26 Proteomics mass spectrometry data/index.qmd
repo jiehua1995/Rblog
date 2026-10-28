@@ -29,22 +29,22 @@ The most common misunderstanding about proteomics is that many people assume "me
 
 This article follows the order in which the data actually flow:
 
-1.  蛋白质组学要回答什么问题，为什么难；
-2.  What questions proteomics has to answer, and why they are hard;
-3.  一台 LC-MS/MS 里到底发生了什么；
-4.  What actually happens inside an LC-MS/MS instrument;
-5.  原始数据里存了哪些字段；
-6.  Which fields are stored in the raw data;
-7.  DDA、DIA、PRM 三种采集策略；
-8.  The three acquisition strategies: DDA, DIA, and PRM;
-9.  厂商封闭格式与开放格式（mzML 等）的架构差别；
-10. The architectural differences between closed vendor formats and open formats such as mzML;
-11. 用 Python 和 R 把数据读进来；
-12. Reading the data into Python and R;
-13. 从谱图到蛋白表：搜库、FDR、蛋白推断、定量、缺失值；
-14. From spectra to a protein table: database search, FDR, protein inference, quantification, and missing values;
-15. 除了基于质谱的方法，还有哪些蛋白质组学路线，各自能回答什么。
-16. Beyond mass spectrometry, which other proteomics routes exist, and what each of them can answer.
+1. 蛋白质组学要回答什么问题，为什么难；  
+   *What questions proteomics has to answer, and why they are hard.*
+2. 一台 LC-MS/MS 里到底发生了什么；  
+   *What actually happens inside an LC-MS/MS instrument.*
+3. 原始数据里存了哪些字段；  
+   *Which fields are stored in the raw data.*
+4. DDA、DIA、PRM 三种采集策略；  
+   *The three acquisition strategies: DDA, DIA, and PRM.*
+5. 厂商封闭格式与开放格式（mzML 等）的架构差别；  
+   *The architectural differences between closed vendor formats and open formats such as mzML.*
+6. 用 Python 和 R 把数据读进来；  
+   *Reading the data into Python and R.*
+7. 从谱图到蛋白表：搜库、FDR、蛋白推断、定量、缺失值；  
+   *From spectra to a protein table: database search, FDR, protein inference, quantification, and missing values.*
+8. 除了基于质谱的方法，还有哪些蛋白质组学路线，各自能回答什么。  
+   *Beyond mass spectrometry, which other proteomics routes exist, and what each of them can answer.*
 
 目标是写成一份可以按图索骥的技术报告。
 
