@@ -188,6 +188,9 @@ ul.task-list li input[type="checkbox"] {
 <p>A working notebook of reproducible bioinformatics — short, practical notes on genomes, structures, and the tools that make analysis easier.</p>
 </div>
 <p>This site collects solutions worth finding twice: plotting recipes, annotation and assembly formats, protein-structure workflows, and command-line patterns. Each note is written to be copy-pasteable and easy to revisit. It is built with Quarto and published on Netlify.</p>
+<h2 class="about-h2 anchored" id="language">Language</h2>
+<p>I write some notes in English and some in Chinese, depending on the topic and the day. The other language you see in each post is an <strong>AI-generated translation</strong>, added so the material is readable to more people; it has not been reviewed line by line. Where the two versions differ, the language the piece was originally written in is the authoritative one.</p>
+<p>我有时用英文写，有时用中文写；每篇文章里出现的另一种语言，都是用 AI 工具自动翻译的，未经逐句人工校对。若两种版本有出入，以原文语言为准。</p>
 <h2 class="about-h2 anchored" id="focus">Focus</h2>
 <div class="topic-tags">
 <p><span class="tag">Bioinformatics</span> <span class="tag">Genomics</span> <span class="tag">Proteomics</span> <span class="tag">Data visualization</span> <span class="tag">Annotation</span> <span class="tag">Assembly</span></p>
@@ -377,7 +380,7 @@ ul.task-list li input[type="checkbox"] {
       menu.className = "sort-menu";
       menu.setAttribute("role", "listbox");
 
-      Array.prototype.forEach.call(select.options, function (option) {
+      Array.prototype.forEach.call(select.options, function (option, index) {
         if (!option.value) return;
         var item = document.createElement("button");
         item.type = "button";
@@ -385,9 +388,12 @@ ul.task-list li input[type="checkbox"] {
         item.setAttribute("role", "option");
         item.textContent = option.textContent.trim();
         item.dataset.sortValue = option.value;
+        item.dataset.sortIndex = String(index);
         item.dataset.direction = option.getAttribute("data-direction") || "";
         item.addEventListener("click", function () {
-          select.value = option.value;
+          // options can share the same value and differ only by data-direction,
+          // so select by index instead of by value
+          select.selectedIndex = Number(item.dataset.sortIndex);
           select.dispatchEvent(new Event("change", { bubbles: true }));
           button.querySelector(".sort-toggle-label").textContent = option.textContent.trim();
           menu.querySelectorAll(".sort-option").forEach(function (other) {
@@ -602,6 +608,8 @@ ul.task-list li input[type="checkbox"] {
 
       var frame = card.querySelector(".card-img-top");
       var img = frame ? frame.querySelector("img") : null;
+      var hasImage = !!(img && img.getAttribute("src")) &&
+        !(img.complete && img.naturalWidth === 0);
       var done = false;
 
       var useAnime = function () {
@@ -619,23 +627,26 @@ ul.task-list li input[type="checkbox"] {
           });
       };
 
+      // 优先使用正文的第一张图；没有正文图时保留 front matter 的 image，最后才用动漫图
       var upgrade = function () {
         if (done) return;
         done = true;
         var pageUrl = new URL(href, window.location.href).href;
         firstArticleImage(pageUrl).then(function (src) {
-          if (src) applyCardImage(card, src);
-          else useAnime();
-        }).catch(useAnime);
+          if (src) {
+            var next = applyCardImage(card, src);
+            next.addEventListener("error", function () {
+              if (!hasImage) useAnime();
+            }, { once: true });
+          } else if (!hasImage) {
+            useAnime();
+          }
+        }).catch(function () {
+          if (!hasImage) useAnime();
+        });
       };
 
-      if (!img || !img.getAttribute("src")) {
-        upgrade();
-      } else if (img.complete && img.naturalWidth === 0) {
-        upgrade();
-      } else {
-        img.addEventListener("error", upgrade);
-      }
+      upgrade();
     });
   }
 
@@ -669,6 +680,20 @@ ul.task-list li input[type="checkbox"] {
     update();
   }
 
+  /* ---------- let very wide tables scroll inside their own box ---------- */
+  function initTableScroll() {
+    document.querySelectorAll("#quarto-document-content table").forEach(function (table) {
+      var firstRow = table.querySelector("thead tr") || table.querySelector("tr");
+      var cols = firstRow ? firstRow.children.length : 0;
+      if (cols < 6) return;
+      if (table.parentElement && table.parentElement.classList.contains("table-scroll")) return;
+      var wrap = document.createElement("div");
+      wrap.className = "table-scroll";
+      table.parentNode.insertBefore(wrap, table);
+      wrap.appendChild(table);
+    });
+  }
+
   function boot() {
     initLiquidDocks();
     initThemePill();
@@ -683,6 +708,7 @@ ul.task-list li input[type="checkbox"] {
     initMetaCleanup();
     initShare();
     initImageFallback();
+    initTableScroll();
     initReveal();
     initHeader();
     window.setTimeout(initIcons, 350);

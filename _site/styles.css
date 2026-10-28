@@ -1276,7 +1276,7 @@ body.quarto-dark .quarto-grid-item.card {
 .quarto-grid-item .card-img-top {
   margin: 0 !important;
   overflow: hidden;
-  background: var(--paper-2);
+  background: transparent;
 }
 
 .quarto-grid-item .card-img-top img {
@@ -1478,7 +1478,7 @@ body:has(.quarto-listing-container-table) main.content {
 }
 
 .quarto-listing-container-table thead th:first-child {
-  width: 58%;
+  width: 8.4rem;
 }
 
 .quarto-listing-container-table thead a {
@@ -1514,7 +1514,7 @@ body:has(.quarto-listing-container-table) main.content {
 }
 
 .quarto-listing-container-table tbody td {
-  padding: 1.15rem 0.8rem;
+  padding: 0.42rem 0.6rem;
   border-bottom: 1px solid var(--rule);
   vertical-align: middle;
   color: var(--muted);
@@ -1523,30 +1523,55 @@ body:has(.quarto-listing-container-table) main.content {
   letter-spacing: 0.02em;
 }
 
+/* first column = date: plain text, no background */
+.quarto-listing-container-table tbody td:first-child {
+  width: 8.4rem;
+  padding: 0.38rem 0;
+  color: var(--ink);
+  font-family: var(--font-display);
+  font-size: 0.94rem;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  text-align: left;
+  white-space: nowrap;
+}
+
 .quarto-listing-container-table tbody tr {
   transition: background-color 0.25s ease;
 }
 
 .quarto-listing-container-table tbody tr:hover {
-  background: var(--accent-soft);
+  background: transparent;
 }
 
 .quarto-listing-container-table tbody tr:last-child td {
   border-bottom: 0;
 }
 
-.quarto-listing-container-table tbody td a {
+.quarto-listing-container-table tbody td:nth-child(2) a {
   font-family: var(--font-display);
-  font-size: 1.24rem;
+  font-size: 1.04rem;
   font-weight: 500;
-  line-height: 1.3;
-  letter-spacing: -0.015em;
+  line-height: 1.25;
+  letter-spacing: -0.012em;
   color: var(--ink);
   text-decoration: none;
 }
 
-.quarto-listing-container-table tbody td a:hover {
+.quarto-listing-container-table tbody td:nth-child(2) a:hover {
   color: var(--accent);
+}
+
+@media (max-width: 767px) {
+  .quarto-listing-container-table tbody td:first-child {
+    width: auto;
+    padding: 0.28rem 0.6rem;
+    font-size: 0.8rem;
+  }
+
+  .quarto-listing-container-table tbody td:nth-child(2) a {
+    font-size: 0.98rem;
+  }
 }
 
 /* category sidebar (Archive listings only — never the article TOC) */
@@ -2106,6 +2131,20 @@ body.quarto-dark .quarto-title-banner {
   line-height: 1.06;
   letter-spacing: -0.035em;
   color: var(--ink);
+}
+
+/* english subtitle above the title (optional, only when front matter has one) */
+.quarto-title-banner .subtitle {
+  max-width: 46ch;
+  margin: 0.55rem 0 0.75rem;
+  color: var(--ink-soft);
+  font-family: var(--font-display);
+  font-size: clamp(0.95rem, 1.5vw, 1.12rem);
+  font-style: italic;
+  font-weight: 400;
+  line-height: 1.35;
+  letter-spacing: 0.005em;
+  opacity: 1;
 }
 
 .quarto-title-banner .quarto-categories {
@@ -2884,8 +2923,9 @@ body:has(.quarto-title-banner) #quarto-document-content h3 {
   }
 
   .navbar .navbar-nav .nav-item.compact .nav-link {
-    width: 36px;
-    height: 36px;
+    width: 42px;
+    min-width: 42px;
+    height: 42px;
     padding: 0;
     display: inline-grid;
     place-items: center;
@@ -2896,7 +2936,7 @@ body:has(.quarto-title-banner) #quarto-document-content h3 {
   .navbar .navbar-nav .nav-item.compact .nav-link i {
     width: auto;
     flex: 0 0 auto;
-    font-size: 0.8rem;
+    font-size: 0.95rem;
   }
 
   .navbar .navbar-nav .nav-item.compact .menu-text {
@@ -3333,4 +3373,160 @@ body.quarto-dark .about-name {
     opacity: 1;
     transform: none;
   }
+}
+
+/* ==========================================================================
+   Archive: compact list with a fluid date pill
+   ========================================================================== */
+
+#quarto-document-content .quarto-listing-container-table table,
+#quarto-document-content .quarto-listing-container-table tbody,
+.quarto-listing-container-table table,
+.quarto-listing-container-table tbody {
+  display: block;
+  width: 100%;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+}
+
+.quarto-listing-container-table thead {
+  display: none;
+}
+
+#quarto-document-content .quarto-listing-container-table tbody tr {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  padding: 0.42rem 0.1rem;
+  border: 0;
+  background: transparent;
+  transition: background-color 0.25s ease;
+}
+
+/* the archive title block has no author/date, so this row is empty */
+body:has(.quarto-listing-container-table) #title-block-header.quarto-title-block.default .quarto-title-meta {
+  display: none;
+}
+
+.quarto-listing-container-table tbody tr:last-child {
+  border-bottom: 0;
+}
+
+.quarto-listing-container-table tbody tr:hover {
+  background: transparent;
+}
+
+#quarto-document-content .quarto-listing-container-table tbody td {
+  display: block;
+  padding: 0;
+  border: 0;
+  background: none;
+  font-size: 0.68rem;
+}
+
+/* date: plain, larger, no background */
+.quarto-listing-container-table tbody td:first-child {
+  flex: 0 0 7.6rem;
+  width: 7.6rem;
+  padding: 0.3rem 0;
+  color: var(--ink);
+  font-family: var(--font-display);
+  font-size: 0.98rem;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  text-align: left;
+  white-space: nowrap;
+}
+
+.quarto-listing-container-table tbody td:nth-child(2) {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.quarto-listing-container-table tbody td:nth-child(2) a {
+  font-family: var(--font-display);
+  font-size: 1.02rem;
+  font-weight: 500;
+  line-height: 1.25;
+  letter-spacing: -0.012em;
+  color: var(--ink);
+  text-decoration: none;
+}
+
+.quarto-listing-container-table tbody td:nth-child(2) a:hover {
+  color: var(--accent);
+}
+
+.quarto-listing-container-table tbody td:nth-child(3) {
+  flex: 0 0 auto;
+}
+
+@media (max-width: 767px) {
+  .quarto-listing-container-table tbody tr {
+    gap: 0.6rem;
+  }
+
+  .quarto-listing-container-table tbody td:first-child {
+    flex: 0 0 auto;
+    width: auto;
+    padding: 0.24rem 0.6rem;
+    font-size: 0.78rem;
+  }
+
+  .quarto-listing-container-table tbody td:nth-child(2) a {
+    font-size: 0.95rem;
+  }
+}
+
+#quarto-document-content .quarto-listing-container-table .listing-categories {
+  display: inline-flex;
+  align-items: center;
+  margin-bottom: 0;
+}
+
+/* long URLs should wrap instead of running under the table of contents */
+#quarto-document-content a {
+  overflow-wrap: anywhere;
+}
+
+/* keep wide article tables inside the text column */
+#quarto-document-content table {
+  width: 100%;
+  max-width: 100%;
+  table-layout: auto;
+}
+
+#quarto-document-content table th,
+#quarto-document-content table td {
+  overflow-wrap: break-word;
+  word-break: normal;
+}
+
+/* headers should wrap at spaces, never inside a word */
+#quarto-document-content table th {
+  overflow-wrap: normal;
+  word-break: keep-all;
+}
+
+/* let browser balance column widths from content instead of equal columns */
+#quarto-document-content table colgroup col {
+  width: auto !important;
+}
+
+/* very wide tables scroll inside their own box instead of breaking words */
+.table-scroll {
+  width: 100%;
+  max-width: 100%;
+  margin: 1rem 0;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.table-scroll table {
+  min-width: 680px;
+  margin: 0;
 }

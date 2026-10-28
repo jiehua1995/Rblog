@@ -29,22 +29,22 @@ The most common misunderstanding about proteomics is that many people assume "me
 
 This article follows the order in which the data actually flow:
 
-1. 蛋白质组学要回答什么问题，为什么难；  
-   *What questions proteomics has to answer, and why they are hard.*
-2. 一台 LC-MS/MS 里到底发生了什么；  
-   *What actually happens inside an LC-MS/MS instrument.*
-3. 原始数据里存了哪些字段；  
-   *Which fields are stored in the raw data.*
-4. DDA、DIA、PRM 三种采集策略；  
-   *The three acquisition strategies: DDA, DIA, and PRM.*
-5. 厂商封闭格式与开放格式（mzML 等）的架构差别；  
-   *The architectural differences between closed vendor formats and open formats such as mzML.*
-6. 用 Python 和 R 把数据读进来；  
-   *Reading the data into Python and R.*
-7. 从谱图到蛋白表：搜库、FDR、蛋白推断、定量、缺失值；  
-   *From spectra to a protein table: database search, FDR, protein inference, quantification, and missing values.*
-8. 除了基于质谱的方法，还有哪些蛋白质组学路线，各自能回答什么。  
-   *Beyond mass spectrometry, which other proteomics routes exist, and what each of them can answer.*
+1.  蛋白质组学要回答什么问题，为什么难；\
+    *What questions proteomics has to answer, and why they are hard.*
+2.  一台 LC-MS/MS 里到底发生了什么；\
+    *What actually happens inside an LC-MS/MS instrument.*
+3.  原始数据里存了哪些字段；\
+    *Which fields are stored in the raw data.*
+4.  DDA、DIA、PRM 三种采集策略；\
+    *The three acquisition strategies: DDA, DIA, and PRM.*
+5.  厂商封闭格式与开放格式（mzML 等）的架构差别；\
+    *The architectural differences between closed vendor formats and open formats such as mzML.*
+6.  用 Python 和 R 把数据读进来；\
+    *Reading the data into Python and R.*
+7.  从谱图到蛋白表：搜库、FDR、蛋白推断、定量、缺失值；\
+    *From spectra to a protein table: database search, FDR, protein inference, quantification, and missing values.*
+8.  除了基于质谱的方法，还有哪些蛋白质组学路线，各自能回答什么。\
+    *Beyond mass spectrometry, which other proteomics routes exist, and what each of them can answer.*
 
 目标是写成一份可以按图索骥的技术报告。
 
@@ -396,7 +396,7 @@ p_dda | p_dia
 *English*
 
 | Dimension | DDA | DIA | PRM |
-|----------------|----------------|-----------------------|------------------|
+|-----------------|-----------------|---------------------|-----------------|
 | Precursor selection | Real time, intensity-dependent | No selection, everything in the window is acquired | Specified in advance |
 | Spectrum content | Single precursor (approximately) | Mixture of multiple precursors | Single precursor, long accumulation |
 | Missing values | More (random missed acquisition) | Few (systematic coverage) | Only the target peptides |
@@ -1219,7 +1219,7 @@ Suggested practices:
 *English*
 
 | Term | Meaning |
-|---------------------|---------------------------------------------------|
+|----------------------|--------------------------------------------------|
 | PSM | peptide-spectrum match, the match between one spectrum and one peptide |
 | FDR | false discovery rate |
 | precursor | the selected precursor ion (peptide ion) |

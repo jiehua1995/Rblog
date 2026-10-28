@@ -123,14 +123,14 @@ Tensor shapes: the input is an integer tensor $[B, L]$, embedded to $[B, L, D]$.
 
 ### 3.2 信息在哪里丢失 / Where information is lost
 
-- **绝对丰度**完全丢失：把所有非零值乘以 100，得到的输入完全相同。  
-  *Absolute abundance is lost: multiplying every non-zero value by 100 yields an identical input.*
-- **比值信息**丢失：只要排序不变，G5 是 G3 的 15 倍还是 1.5 倍，模型看到的都一样。  
-  *Ratios are lost: as long as the ordering is unchanged, a 15-fold versus 1.5-fold difference is invisible.*
-- **截断**：第 2049 名之后的基因被直接丢弃，低表达但关键的调控基因可能消失。  
-  *Truncation: genes below rank 2049 disappear, including potentially important lowly expressed regulators.*
-- **零值**：不进入序列，因此"这个基因没表达"与"这个基因不在面板上"在输入上无法区分。  
-  *Zeros never enter the sequence, so "not expressed" and "not on the panel" are indistinguishable.*
+-   **绝对丰度**完全丢失：把所有非零值乘以 100，得到的输入完全相同。\
+    *Absolute abundance is lost: multiplying every non-zero value by 100 yields an identical input.*
+-   **比值信息**丢失：只要排序不变，G5 是 G3 的 15 倍还是 1.5 倍，模型看到的都一样。\
+    *Ratios are lost: as long as the ordering is unchanged, a 15-fold versus 1.5-fold difference is invisible.*
+-   **截断**：第 2049 名之后的基因被直接丢弃，低表达但关键的调控基因可能消失。\
+    *Truncation: genes below rank 2049 disappear, including potentially important lowly expressed regulators.*
+-   **零值**：不进入序列，因此"这个基因没表达"与"这个基因不在面板上"在输入上无法区分。\
+    *Zeros never enter the sequence, so "not expressed" and "not on the panel" are indistinguishable.*
 
 ### 3.3 为什么这样做有效 / Why it works
 
@@ -160,14 +160,14 @@ input  <- gene_emb[tok] + value_emb[val] + pos_emb(seq_along(tok))  # [L, D]
 
 ### 4.2 信息在哪里丢失 / Where information is lost
 
-- **箱宽**：边界通常由训练集的分位数或对数范围决定；两个相差 10% 的值可能落入同一箱。  
-  *Bin width: boundaries are usually set from training-set quantiles or log ranges; two values differing by 10% may share a bin.*
-- **长尾**：极高表达被压到最后一个箱，箱内差异消失。  
-  *Long tail: very high values collapse into the last bin, erasing within-bin differences.*
-- **零值语义**：零被当作一个普通类别，模型必须自己学会"零"与"低表达"的区别。  
-  *Zero semantics: zero becomes an ordinary category, and the model must learn the difference between "zero" and "low" by itself.*
-- **跨数据集**：若新数据的动态范围超出训练边界，大量值会被压到首尾箱。  
-  *Cross-dataset: if a new dataset exceeds the training range, many values pile into the edge bins.*
+-   **箱宽**：边界通常由训练集的分位数或对数范围决定；两个相差 10% 的值可能落入同一箱。\
+    *Bin width: boundaries are usually set from training-set quantiles or log ranges; two values differing by 10% may share a bin.*
+-   **长尾**：极高表达被压到最后一个箱，箱内差异消失。\
+    *Long tail: very high values collapse into the last bin, erasing within-bin differences.*
+-   **零值语义**：零被当作一个普通类别，模型必须自己学会"零"与"低表达"的区别。\
+    *Zero semantics: zero becomes an ordinary category, and the model must learn the difference between "zero" and "low" by itself.*
+-   **跨数据集**：若新数据的动态范围超出训练边界，大量值会被压到首尾箱。\
+    *Cross-dataset: if a new dataset exceeds the training range, many values pile into the edge bins.*
 
 ### 4.3 分箱的隐含假设 / The implicit assumption
 
@@ -219,12 +219,12 @@ Continuous values preserve dose information but hand the **scaling problem** to 
 
 ### 6.1 基因词表的三种来源 / Three sources of gene identity
 
-- **可学习词表**：每个基因 ID 对应一个自由向量（Geneformer、scGPT）。灵活，但只能表示训练中出现过的基因。  
-  *Learnable vocabulary: one free vector per gene ID (Geneformer, scGPT). Flexible, but limited to genes seen in training.*
-- **基因共表达先验**：用 gene2vec 之类的共表达嵌入初始化（scBERT）。在数据稀少时提供归纳偏置。  
-  *Co-expression priors: initialization from gene2vec-style embeddings (scBERT), providing inductive bias when data are scarce.*
-- **蛋白质语言模型**：用 ESM2 的蛋白序列嵌入作为基因向量（UCE、scPRINT）。跨物种可用，且新基因只要知道序列就能编码。  
-  *Protein language models: ESM2 sequence embeddings as gene vectors (UCE, scPRINT). Species-agnostic, and a new gene can be encoded as long as its sequence is known.*
+-   **可学习词表**：每个基因 ID 对应一个自由向量（Geneformer、scGPT）。灵活，但只能表示训练中出现过的基因。\
+    *Learnable vocabulary: one free vector per gene ID (Geneformer, scGPT). Flexible, but limited to genes seen in training.*
+-   **基因共表达先验**：用 gene2vec 之类的共表达嵌入初始化（scBERT）。在数据稀少时提供归纳偏置。\
+    *Co-expression priors: initialization from gene2vec-style embeddings (scBERT), providing inductive bias when data are scarce.*
+-   **蛋白质语言模型**：用 ESM2 的蛋白序列嵌入作为基因向量（UCE、scPRINT）。跨物种可用，且新基因只要知道序列就能编码。\
+    *Protein language models: ESM2 sequence embeddings as gene vectors (UCE, scPRINT). Species-agnostic, and a new gene can be encoded as long as its sequence is known.*
 
 ### 6.2 为什么这决定了"零样本"能力 / Why this determines zero-shot behaviour
 
@@ -340,7 +340,7 @@ Keeping all genes is therefore computationally infeasible; keeping the top 2,048
 ### 7.3 比较表 / Comparison table
 
 | 方法 / Method | 代表模型 / Models | Token 组成 / Composition | 零值 / Zeros | 长度 / Length | 主要损失 / Main loss |
-|---|---|---|---|---|---|
+|------------|------------|------------|------------|------------|------------|
 | Rank | Geneformer | gene ID only | 丢弃 / dropped | 2,048 固定 | 绝对量与比值 |
 | Binned | scGPT | gene + bin + pos | bin 0 token | HVG 数 | 箱内差异、长尾 |
 | Soft-binned | scFoundation | gene + 100 桶权重 | 丢弃 / dropped | 非零基因数 | 桶数上限 |
@@ -355,41 +355,43 @@ Differences in benchmark performance **cannot** be attributed to the encoding sc
 
 ## 8. 开放问题 / Open questions
 
-1. **单调不变性是否是优点？** 排序编码对平台差异鲁棒，但它是否也在结构上阻止了剂量—效应学习？  
-   *Is monotone invariance a virtue? Rank encoding is robust to platform shifts, but does it structurally prevent learning dose–response?*
-2. **零的语义**：把零当作一个 token、直接丢弃、还是用零膨胀似然建模，哪一种最有利于扰动预测？  
-   *Semantics of zero: token, drop, or zero-inflated likelihood — which best serves perturbation prediction?*
-3. **跨物种与跨平台**：蛋白序列初始化的基因嵌入是否真的优于可学习词表？现有证据多来自聚类任务，缺少扰动任务的对照。  
-   *Cross-species and cross-platform: are protein-sequence-initialized gene embeddings really better than learnable vocabularies? Most evidence comes from clustering, not perturbation.*
-4. **多组学**：ATAC、蛋白、空间信息如何与表达值编码对齐？简单相加是否足够？  
-   *Multi-omics: how should ATAC, protein, and spatial modalities be aligned with expression encoding? Is summation enough?*
-5. **token 预算**：在固定算力下，是"更多基因 × 更低分辨率"更好，还是"更少基因 × 更高分辨率"更好？  
-   *Token budget: at fixed compute, is "more genes × lower resolution" better than "fewer genes × higher resolution"?*
+1.  **单调不变性是否是优点？** 排序编码对平台差异鲁棒，但它是否也在结构上阻止了剂量—效应学习？\
+    *Is monotone invariance a virtue? Rank encoding is robust to platform shifts, but does it structurally prevent learning dose–response?*
+2.  **零的语义**：把零当作一个 token、直接丢弃、还是用零膨胀似然建模，哪一种最有利于扰动预测？\
+    *Semantics of zero: token, drop, or zero-inflated likelihood — which best serves perturbation prediction?*
+3.  **跨物种与跨平台**：蛋白序列初始化的基因嵌入是否真的优于可学习词表？现有证据多来自聚类任务，缺少扰动任务的对照。\
+    *Cross-species and cross-platform: are protein-sequence-initialized gene embeddings really better than learnable vocabularies? Most evidence comes from clustering, not perturbation.*
+4.  **多组学**：ATAC、蛋白、空间信息如何与表达值编码对齐？简单相加是否足够？\
+    *Multi-omics: how should ATAC, protein, and spatial modalities be aligned with expression encoding? Is summation enough?*
+5.  **token 预算**：在固定算力下，是"更多基因 × 更低分辨率"更好，还是"更少基因 × 更高分辨率"更好？\
+    *Token budget: at fixed compute, is "more genes × lower resolution" better than "fewer genes × higher resolution"?*
 
 ## 9. 对虚拟细胞模型的实用建议 / Practical recommendations
 
-- **保留数值通道**：即使主编码用 rank，也建议额外提供一个低维连续值通道（例如前 2,048 个基因的表达分位数），用于剂量相关任务。  
-  *Keep a value channel: even with rank as the main encoding, add a low-dimensional continuous channel (e.g., expression quantiles of the top genes) for dose-sensitive tasks.*
-- **显式建模零**：不要把零与缺失混为一谈；至少提供 `expressed / not expressed` 的掩码。  
-  *Model zeros explicitly: do not conflate zero with missing; provide at least an expressed/not-expressed mask.*
-- **基因身份与物种解耦**：优先使用序列或同源映射，避免 `<unk>` 在跨物种时吞掉信息。  
-  *Decouple gene identity from species: prefer sequence or orthology mappings so that `<unk>` does not swallow information cross-species.*
-- **报告编码消融**：任何声称"编码更好"的工作，都应固定架构、数据与训练目标，只改变编码。  
-  *Report encoding ablations: any claim that an encoding is better should hold architecture, data, and objective fixed and vary only the encoding.*
-- **控制 token 预算**：在比较不同编码时，应让总 token 数（或总算力）匹配，否则比较的是成本而非编码。  
-  *Match the token budget: when comparing encodings, match total tokens (or compute); otherwise you compare cost, not encoding.*
+-   **保留数值通道**：即使主编码用 rank，也建议额外提供一个低维连续值通道（例如前 2,048 个基因的表达分位数），用于剂量相关任务。\
+    *Keep a value channel: even with rank as the main encoding, add a low-dimensional continuous channel (e.g., expression quantiles of the top genes) for dose-sensitive tasks.*
+-   **显式建模零**：不要把零与缺失混为一谈；至少提供 `expressed / not expressed` 的掩码。\
+    *Model zeros explicitly: do not conflate zero with missing; provide at least an expressed/not-expressed mask.*
+-   **基因身份与物种解耦**：优先使用序列或同源映射，避免 `<unk>` 在跨物种时吞掉信息。\
+    *Decouple gene identity from species: prefer sequence or orthology mappings so that `<unk>` does not swallow information cross-species.*
+-   **报告编码消融**：任何声称"编码更好"的工作，都应固定架构、数据与训练目标，只改变编码。\
+    *Report encoding ablations: any claim that an encoding is better should hold architecture, data, and objective fixed and vary only the encoding.*
+-   **控制 token 预算**：在比较不同编码时，应让总 token 数（或总算力）匹配，否则比较的是成本而非编码。\
+    *Match the token budget: when comparing encodings, match total tokens (or compute); otherwise you compare cost, not encoding.*
 
 ## 10. 值得测试的四个技术问题 / Four testable questions
 
-1. **单调变换消融**：在同一模型上，把输入从 rank 改为"rank + 表达值分位数"，在扰动预测任务上是否提升？若提升，说明剂量信息确实被 rank 编码丢弃了。  
-   *Monotone-transform ablation: with the same model, replace rank input by "rank + expression quantile" and test perturbation prediction. Any gain indicates that dose information is indeed lost under rank encoding.*
-2. **箱数扫描**：固定架构与数据，把 bin 数从 11、51、201 扫到连续值，画出"分辨率—性能"曲线，观察是否存在平台期。  
-   *Bin sweep: with architecture and data fixed, sweep bin counts (11, 51, 201, continuous) and plot resolution versus performance to see whether a plateau exists.*
+1.  **单调变换消融**：在同一模型上，把输入从 rank 改为"rank + 表达值分位数"，在扰动预测任务上是否提升？若提升，说明剂量信息确实被 rank 编码丢弃了。\
+    *Monotone-transform ablation: with the same model, replace rank input by "rank + expression quantile" and test perturbation prediction. Any gain indicates that dose information is indeed lost under rank encoding.*
 
-3. **零处理消融**：在 scGPT 式架构上比较"bin-0 token"与"直接丢弃零"两种策略，评估对零膨胀基因（如低表达转录因子）的影响。  
-   *Zero-handling ablation: in a scGPT-style architecture, compare bin-0 tokens against dropping zeros, focusing on zero-inflated genes such as lowly expressed transcription factors.*
-4. **长度—分辨率权衡**：在固定算力下比较"4,096 个基因 × rank"与"1,024 个基因 × 连续值"，检验在跨数据集迁移上哪一个更稳。  
-   *Length–resolution trade-off: at fixed compute, compare "4,096 genes × rank" with "1,024 genes × continuous values" on cross-dataset transfer.*
+2.  **箱数扫描**：固定架构与数据，把 bin 数从 11、51、201 扫到连续值，画出"分辨率—性能"曲线，观察是否存在平台期。\
+    *Bin sweep: with architecture and data fixed, sweep bin counts (11, 51, 201, continuous) and plot resolution versus performance to see whether a plateau exists.*
+
+3.  **零处理消融**：在 scGPT 式架构上比较"bin-0 token"与"直接丢弃零"两种策略，评估对零膨胀基因（如低表达转录因子）的影响。\
+    *Zero-handling ablation: in a scGPT-style architecture, compare bin-0 tokens against dropping zeros, focusing on zero-inflated genes such as lowly expressed transcription factors.*
+
+4.  **长度—分辨率权衡**：在固定算力下比较"4,096 个基因 × rank"与"1,024 个基因 × 连续值"，检验在跨数据集迁移上哪一个更稳。\
+    *Length–resolution trade-off: at fixed compute, compare "4,096 genes × rank" with "1,024 genes × continuous values" on cross-dataset transfer.*
 
 ## 参考文献 / References
 

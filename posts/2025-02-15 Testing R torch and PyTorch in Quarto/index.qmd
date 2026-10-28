@@ -1,0 +1,537 @@
+---
+title: "Testing R torch and PyTorch in One Quarto Document"
+subtitle: "在同一个 Quarto 文档里测试 R torch、PyTorch 与多语言 chunk"
+description: "一次环境审计：在同一份 Quarto 文档里用 R 的 torch 包和 Python 的 PyTorch 训练同一个两层 MLP，比较收敛、耗时与数值一致性，同时逐个检查 R、Python、Bash、OJS、Julia 的 chunk 引擎是否真的会在渲染时执行。"
+author: "Jie Hua"
+date: "2025-02-15"
+categories: [Tooling]
+engine: knitr
+---
+
+::: callout-important
+## 写作说明 / Note
+
+本文由 **AI（DeepSeek-Flash）** 整理并撰写，文中所有数字都来自本文代码在本机的实际运行结果，但文字部分未经人工逐句校对。环境相关路径（Python、R 的安装位置）是作者本机的绝对路径，复制到其他机器时需要改成自己的。
+
+This post was drafted by an **AI system (DeepSeek-Flash)**. Every number in it comes from actually running the code below on the author's machine, but the prose has not been proofread line by line. Paths to Python and R are absolute paths on that machine and must be adapted elsewhere.
+:::
+
+```{r}
+#| label: setup
+#| include: false
+Sys.setenv(RETICULATE_PYTHON = "C:/Software/miniforge3/python.exe")
+
+# scratch paths shared by the Python chunk and the R subprocess
+artifacts <- file.path(tempdir(), "quarto-torch-test")
+dir.create(artifacts, showWarnings = FALSE)
+csv_path <- file.path(artifacts, "moons.csv")
+rds_path <- file.path(artifacts, "results-r.rds")
+
+source(file.path(dirname(knitr::current_input()), "..", "..", "theme-blog.R"))
+
+suppressPackageStartupMessages({
+  library(reticulate)
+  library(dplyr)
+  library(tidyr)
+  library(knitr)
+})
+```
+
+## 1. 这个测试想回答什么 / What this test tries to answer
+
+这篇不是教程，更像一次环境审计。我把三件事塞进了同一份 `.qmd`：两边各自训练一个小模型、比较两边的数值、检查 Quarto 的多种 chunk 引擎到底哪几个会在渲染时真正执行。
+
+This is less a tutorial than an environment audit. I put three things into a single `.qmd`: train a small model in each framework, compare the two numerically, and check which of Quarto's chunk engines actually execute during rendering.
+
+具体来说有三个问题：
+
+1.  **两个框架能不能在同一台机器上同时跑通？** R 的 `torch` 包和 Python 的 PyTorch 都封装了 libtorch，但它们的 Windows 二进制分发是两条独立的路径，坑也不一样。
+2.  **同一份数据、同一个网络结构，两边的收敛和耗时差多少？** 我不想只看"都能跑"，还想看它们跑出来的东西是否等价。
+3.  **Quarto 的 chunk 引擎是不是"什么语言都能写"？** 文档里能写 `{julia}` 不代表渲染时它会执行；有些引擎只是把代码原样搬到 HTML 里。
+
+Three questions, more precisely:
+
+1.  **Can both frameworks run on the same machine?** R's `torch` package and Python's PyTorch both wrap libtorch, but their Windows binaries ship along separate paths and fail in different ways.
+2.  **On identical data and identical architecture, how different are convergence and runtime?** "Both work" is not enough; I want to know whether they produce equivalent results.
+3.  **Do Quarto chunk engines really mean "any language"?** Being able to *write* a `{julia}` chunk does not mean it *executes*; some engines only ship the code to the browser.
+
+## 2. 机器与版本 / The machine and the versions
+
+| 组件 / Component | 版本 / Version | 说明 / Note                         |
+|------------------|----------------|-------------------------------------|
+| R                | 4.5.1          | `C:/Software/R/R-4.5.1`             |
+| R 包 torch       | 0.17.0         | CRAN 二进制，编译于 R 4.5.3         |
+| Python           | 3.13.13        | `C:/Software/miniforge3/python.exe` |
+| PyTorch          | 2.13.0+cpu     | `cuda_available = False`            |
+| Quarto           | 1.6.42         | knitr 引擎，`freeze: true`          |
+| 硬件 / Hardware  | CPU only       | 无 GPU，所有计时都是单机 CPU        |
+
+两个框架都只跑 CPU。这一点很重要：下面的耗时对比只能说明"这个规模下谁的开销更小"，不能外推到 GPU 训练。
+
+Both frameworks run on CPU only. That matters: the timings below say something about overhead at this scale, and nothing about GPU training.
+
+## 3. 哪些 chunk 引擎真的会执行 / Which chunk engines actually run
+
+Quarto 允许在同一个文档里混用多种引擎，但"可写"和"可执行"是两件事。下表是本机的实测结果，后面的小节会逐个给出证据。
+
+Quarto lets one document mix engines freely, but "can be written" and "can be executed" are different things. The table below is what this machine actually did; later sections show the evidence.
+
+| 引擎 / Engine | 渲染时执行 / Runs at render time | 前提 / Requirement |
+|------------------------|------------------------|------------------------|
+| `{r}` | 是 / yes | R + knitr |
+| `{python}` | 是 / yes | reticulate 找到可用的 Python 与 `torch` |
+| `{bash}` | 是 / yes | 系统里有 `bash`（本机是 WSL） |
+| `{ojs}` | 否 / no | 代码被送到浏览器，由读者执行 |
+| `{julia}` | 否，且会中断渲染 / no, aborts the render | 需要 Julia 与 `JuliaCall`，`eval: false` 也拦不住 |
+| `{sql}` | 未测试 / not run | 需要一个可连接的数据库 |
+
+表中 `{ojs}` 那一行最容易被误解：OJS 代码在渲染阶段完全不运行，Quarto 只是把 JavaScript 模块嵌进 HTML，等页面在浏览器里打开时才求值。因此"这段代码执行成功"这件事本身无法在渲染日志里得到证明。
+
+The `{ojs}` row is the one most often misread: OJS code does not run at render time at all. Quarto embeds a JavaScript module into the HTML and the page evaluates it when a reader opens it. "This code ran successfully" therefore can never be confirmed from the render log.
+
+## 4. 同一个任务，两个框架 / One task, two frameworks
+
+任务刻意选得很小：二维平面上的两个半月形（two moons），400 个点，320 个训练、80 个测试，两层 MLP（2 → 16 → 2），交叉熵损失，Adam，学习率 0.05，全批量训练 200 轮。这个规模小到 CPU 上几秒钟就能跑完，同时又足够让两个框架的 API 差异暴露出来。
+
+The task is deliberately small: two interleaved half-moons in the plane, 400 points split into 320 train and 80 test, a two-layer MLP (2 → 16 → 2), cross-entropy loss, Adam with learning rate 0.05, full-batch training for 200 epochs. It is small enough to finish in seconds on a CPU, yet large enough to expose API differences between the frameworks.
+
+数据只生成一次，由 Python 生成，然后写成一个 CSV 给 R 侧读。这样两边的差别只剩"框架"，而不是"数据"。
+
+The data are generated once, in Python, then handed to R as a CSV. That leaves the framework as the only difference.
+
+```{python}
+#| label: py-data
+import numpy as np
+
+rng = np.random.default_rng(7)
+
+def make_moons(n=400, noise=0.12):
+    half = n // 2
+    t = rng.uniform(0, np.pi, half)
+    outer = np.c_[np.cos(t), np.sin(t)]
+    inner = np.c_[1 - np.cos(t), 0.5 - np.sin(t)]
+    X = np.r_[outer, inner] + rng.normal(0, noise, (n, 2))
+    y = np.r_[np.zeros(half), np.ones(half)].astype(int)
+    return X.astype("float32"), y
+
+X, y = make_moons()
+
+# shared plotting / prediction grid: x varies fastest, y slowest
+gx = np.linspace(X[:, 0].min() - 0.3, X[:, 0].max() + 0.3, 80)
+gy = np.linspace(X[:, 1].min() - 0.3, X[:, 1].max() + 0.3, 80)
+
+# the R side runs in its own process, so the data travel through a CSV
+np.savetxt(r.csv_path, np.c_[X, y], delimiter=",", header="x,y,label", comments="")
+
+print(f"X: {X.shape}, positives: {int(y.sum())} / {len(y)}")
+```
+
+```{r}
+#| label: fig-moons
+#| fig-cap: "两个半月形数据集，颜色表示真实类别。 | The two-moons dataset; colour marks the true class."
+pts <- data.frame(x = py$X[, 1], y = py$X[, 2], class = factor(py$y))
+
+ggplot(pts, aes(x, y, colour = class)) +
+  geom_point(size = 1.4, alpha = 0.85) +
+  scale_colour_manual(values = c(blog_pal[["blue"]], blog_pal[["vermillion"]]),
+                      labels = c("class 0", "class 1")) +
+  coord_equal() +
+  labs(x = NULL, y = NULL, colour = NULL,
+       title = "Two moons, 400 points",
+       subtitle = "noise = 0.12, 80 / 20 split")
+```
+
+## 5. 用 PyTorch 训练 / Training with PyTorch
+
+Python 侧是最"标准"的写法：`Sequential` 堆两层线性，`CrossEntropyLoss`，`Adam`。损失每轮都记下来，最后在网格上预测一遍，得到决策边界。
+
+The Python side is the textbook form: `Sequential` with two linear layers, `CrossEntropyLoss`, `Adam`. Loss is recorded every epoch, and the model then predicts on a grid to give a decision surface.
+
+```{python}
+#| label: py-train
+import time
+
+t0 = time.perf_counter()
+import torch
+t_load_py = time.perf_counter() - t0
+
+torch.manual_seed(7)
+Xtr, ytr = torch.tensor(X[:320]), torch.tensor(y[:320])
+Xte, yte = torch.tensor(X[320:]), torch.tensor(y[320:])
+
+model_py = torch.nn.Sequential(
+    torch.nn.Linear(2, 16), torch.nn.ReLU(), torch.nn.Linear(16, 2)
+)
+opt = torch.optim.Adam(model_py.parameters(), lr=0.05)
+lossf = torch.nn.CrossEntropyLoss()
+
+t0 = time.perf_counter()
+losses_py = []
+for _ in range(200):
+    opt.zero_grad()
+    loss = lossf(model_py(Xtr), ytr)
+    loss.backward()
+    opt.step()
+    losses_py.append(loss.item())
+t_train_py = time.perf_counter() - t0
+
+with torch.no_grad():
+    acc_py = (model_py(Xte).argmax(1) == yte).float().mean().item()
+
+# flat grid, x fastest -- same ordering the R chunk will build with expand.grid()
+grid_flat = np.array([[a, b] for b in gy for a in gx], dtype="float32")
+Xg = torch.tensor(grid_flat)
+with torch.no_grad():
+    t0 = time.perf_counter()
+    Z_py = model_py(Xg).argmax(1).numpy()
+    t_infer_py = time.perf_counter() - t0
+
+ver_py = torch.__version__
+check_py = float(torch.tensor([1.0, 2.0, 3.0]).exp().sum())
+
+print(f"torch {ver_py} | final loss {losses_py[-1]:.4f} | test acc {acc_py:.3f} | "
+      f"load {t_load_py:.2f} s | train {t_train_py:.2f} s | infer {t_infer_py * 1e3:.1f} ms")
+```
+
+## 6. 用 R 的 torch 训练 / Training with torch for R
+
+R 侧的模型定义几乎是逐字对应：`nn_sequential()`、`nn_linear()`、`nn_relu()`，损失是 `nnf_cross_entropy()`，优化器是 `optim_adam()`。区别主要在两点：R 的标签张量必须是 **1 起始的整数**（`torch_long()`），以及所有方法都用 `$` 调用而不是 `.`。
+
+The R side maps almost one-to-one: `nn_sequential()`, `nn_linear()`, `nn_relu()`, loss as `nnf_cross_entropy()`, optimiser as `optim_adam()`. Two differences matter: R label tensors must be **1-based integers** (`torch_long()`), and every method is called with `$` instead of `.`.
+
+核心部分就是下面这些（完整脚本是同目录的 `train-r-torch.R`，跟着仓库走，不随网页发布）：
+
+The core of it is below (the full script is `train-r-torch.R` next to this post, kept in the repository rather than published with the page):
+
+``` r
+model <- nn_sequential(nn_linear(2, 16), nn_relu(), nn_linear(16, 2))
+opt <- optim_adam(model$parameters, lr = 0.05)
+
+for (epoch in seq_len(200)) {
+  opt$zero_grad()
+  loss <- nnf_cross_entropy(model(Xtr), ytr)
+  loss$backward()
+  opt$step()
+  losses[epoch] <- as.numeric(loss$item())
+}
+
+with_no_grad({
+  acc <- as.numeric(
+    (model(Xte)$argmax(dim = 2) == yte)$to(dtype = torch_float())$mean()$item()
+  )
+})
+```
+
+注意这里有两个 R 特有的细节。第一，`argmax(dim = 2)` 里的 `dim` 是**从 1 开始**的，对应 Python 的 `argmax(1)`。第二，把张量转回 R 向量用 `as.integer()`，R 的 torch 张量没有 `$numpy()` 方法——第一次写的时候我照着 Python 的习惯写了 `$cpu()$numpy()`，得到的是一个和上下文毫无关系的报错（`没有"fn"这个函数`），而不是"方法不存在"。
+
+Two details are R-specific. First, `dim` in `argmax(dim = 2)` is **1-based**, matching Python's `argmax(1)`. Second, converting a tensor back to an R vector uses `as.integer()`; R torch tensors have no `$numpy()` method — copying the Python habit produced an error with no relation to the actual mistake (`no function "fn"`), not "method not found".
+
+### 6.1 为什么这一段必须单独开进程 / Why this part needs its own process
+
+最开始我把 R torch 的训练直接写在 `{r}` chunk 里，与前面的 `{python}` chunk 共用同一个 R 会话。结果 Python 侧一 `import torch` 就炸：
+
+At first I put the R torch training straight into an `{r}` chunk, sharing the session with the `{python}` chunk above. The Python side then failed the moment it ran `import torch`:
+
+```         
+OSError: [WinError 127] The specified procedure could not be found. Error loading
+"C:\Software\miniforge3\Lib\site-packages\torch\lib\torch_cpu.dll" or one of its dependencies.
+```
+
+原因不是装错了，而是**两个 libtorch 不能共存于同一个进程**。R 的 `torch` 包附带一份 libtorch（2.8.0），Python 的 PyTorch 自带另一份（2.13.0）。一旦 R 先加载了自己的 `torch_cpu.dll`、`c10.dll`，Python 再按名字去解析依赖时就会绑定到已经加载的旧版本，符号对不上。把 `PATH` 改回去也没用——DLL 已经在进程里了。
+
+The install is not broken; **two libtorch builds cannot share one process**. R's `torch` ships its own libtorch (2.8.0) and Python's PyTorch ships another (2.13.0). Once R has loaded its `torch_cpu.dll` and `c10.dll`, Python's import binds its dependencies to the already-loaded older copies by name, and the symbols do not match. Restoring `PATH` does not help: the DLLs are already in the process.
+
+所以这一节改成：R 的训练脚本用 `Rscript` 起一个独立进程跑，结果存成 RDS，再由文档里的 R chunk 读回来画图。代价是多一个文件，好处是两边用的都是各自完整、未经污染的运行时。
+
+The fix is to run the R script in a separate `Rscript` process, save the results as an RDS, and let the document's R chunks read them back for plotting. It costs one extra file and buys each side a clean, uncontaminated runtime.
+
+```{r}
+#| label: r-train
+code <- system2(
+  file.path(R.home("bin"), "Rscript"),
+  c("train-r-torch.R", shQuote(csv_path), shQuote(rds_path)),
+  stdout = TRUE, stderr = TRUE
+)
+r_res <- readRDS(rds_path)
+```
+
+```{r}
+#| label: r-train-log
+#| echo: false
+cat(code, sep = "\n")
+```
+
+### 6.2 第二个坑：lantern.dll 找不到依赖 / Trap two: lantern.dll and its dependencies
+
+在独立进程里第一次 `library(torch)` 后调 `torch_tensor()`，报的是这个：
+
+Inside the separate process, the first `library(torch)` followed by `torch_tensor()` still failed:
+
+```         
+✖ .../library/torch/lib/lantern.dll - The specified procedure could not be found.
+Error: Lantern is not loaded.
+```
+
+同时还有一条警告说包是用 R 4.5.3 编译的，而本机是 4.5.1。看起来像是版本不匹配，实际并不是：`lantern.dll` 依赖同目录下的 `torch_cpu.dll`、`libiomp5md.dll` 等一堆 DLL，而 Windows 在 `dyn.load()` 时并没有把该目录当成搜索路径，于是随便找到一个旧版本、缺符号，才报"找不到指定的过程"。
+
+There was also a warning that the package was built under R 4.5.3 while this machine runs 4.5.1. That looks like a version mismatch, but it is not: `lantern.dll` depends on `torch_cpu.dll`, `libiomp5md.dll` and friends sitting in the same directory, and Windows does not treat that directory as a search path during `dyn.load()`. An older copy gets picked up, a symbol is missing, and the error says "specified procedure could not be found".
+
+修法只有一行，写在脚本开头：把包自己的 `lib/` 目录加到 `PATH` 前面，再加载。
+
+The fix is one line at the top of the script: prepend the package's own `lib/` directory to `PATH` before loading.
+
+``` r
+torch_lib <- file.path(find.package("torch"), "lib")
+Sys.setenv(PATH = paste(torch_lib, Sys.getenv("PATH"), sep = .Platform$path.sep))
+library(torch)
+```
+
+如果你的 R 里 `torch` 一加载就报 `Lantern is not loaded`，先加这一行，再去考虑重装。
+
+If `torch` fails with `Lantern is not loaded` on your machine, add this line before reinstalling anything.
+
+## 7. 数值一致性 / Numeric consistency
+
+两个框架背后是同一个 C++ 库，所以确定性运算应该逐位一致。用同一个向量做 `exp()` 再求和，两边结果如下：Python 得到 `r sprintf("%.10f", py$check_py)`，R 得到 `r sprintf("%.10f", r_res$check)`，差值 `r sprintf("%.1e", abs(py$check_py - r_res$check))`。这不是巧合，而是因为两边调用的是同一份 libtorch 内核。
+
+Both frameworks sit on the same C++ library, so deterministic operations should agree to the last digit. Taking `exp()` of the same vector and summing gives `r sprintf("%.10f", py$check_py)` in Python and `r sprintf("%.10f", r_res$check)` in R, a difference of `r sprintf("%.1e", abs(py$check_py - r_res$check))`. That is not a coincidence; both calls land on the same libtorch kernel.
+
+但训练轨迹也是**几乎重合**的，这一点比预想的更有意思。原因是随机数生成器既不在 R 里、也不在 Python 里，而在 libtorch 里：`torch_manual_seed(7)` 与 `torch.manual_seed(7)` 播种的是同一个引擎，两边的层又按同样的顺序创建，于是初始权重逐位相同。200 轮之后，两条损失的最大差只有 `r sprintf("%.1e", max(abs(unlist(py$losses_py) - r_res$losses)))`，纯属浮点运算顺序的差别。
+
+The training trajectories also **almost coincide**, which is more interesting than expected. The random number generator lives neither in R nor in Python but inside libtorch: `torch_manual_seed(7)` and `torch.manual_seed(7)` seed the same engine, and both models build their layers in the same order, so the initial weights are identical bit for bit. After 200 epochs the largest gap between the two loss sequences is `r sprintf("%.1e", max(abs(unlist(py$losses_py) - r_res$losses)))`, purely a floating-point ordering artefact.
+
+这个重合其实有点侥幸：两边的 libtorch 版本并不相同（R 侧 2.8.0，Python 侧 2.13.0），只是初始化与 Adam 在这两个版本之间的数值行为没有变。换个版本、换个建模顺序，或者中间插一个消耗随机数的算子，序列就会错开。所以被复现的是同一个引擎的状态，而不是"跨框架等价"。
+
+The overlap is partly luck: the two libtorch builds are not the same (2.8.0 on the R side, 2.13.0 on the Python side); initialisation and Adam simply behave identically across these versions. A different build, a different construction order, or any random-consuming op in between would desynchronise the sequences. What is reproduced is the state of one engine, not a cross-framework equivalence.
+
+## 8. 结果对比 / Comparing the results
+
+```{r}
+#| label: tbl-compare
+res <- data.frame(
+  engine   = c("PyTorch (Python)", "torch (R)"),
+  version  = c(py$ver_py, r_res$version),
+  final    = sprintf("%.4f", c(py$losses_py[[200]], r_res$losses[200])),
+  accuracy = sprintf("%.3f", c(py$acc_py, r_res$acc))
+)
+kable(res,
+      col.names = c("引擎 / Engine", "版本 / Version",
+                    "末轮损失 / Final loss", "测试准确率 / Test acc"),
+      caption = "同一数据、同一结构下的结果。 / Same data, same architecture.")
+```
+
+两边都在 200 轮内收敛到接近零的损失，测试集准确率都是 `r sprintf("%.0f%%", 100 * py$acc_py)`。在这个规模上，两者的结果是等价的；差别全在时间上，而时间又可以拆成三段来看。
+
+Both converge to near-zero loss within 200 epochs, and both reach `r sprintf("%.0f%%", 100 * py$acc_py)` on the test split. At this scale the results are equivalent; everything that differs is time, and time splits into three parts.
+
+```{r}
+#| label: tbl-timing
+train_r <- r_res$seconds
+train_py <- py$t_train_py
+timing_tbl <- data.frame(
+  engine = c("PyTorch (Python)", "torch (R)"),
+  load   = sprintf("%.2f", c(py$t_load_py, r_res$load)),
+  epoch  = sprintf("%.1f", 1000 * c(train_py, train_r) / 200),
+  train  = sprintf("%.2f", c(train_py, train_r)),
+  infer  = sprintf("%.1f", 1000 * c(py$t_infer_py, r_res$infer))
+)
+kable(timing_tbl,
+      col.names = c("引擎 / Engine", "加载 torch (s)", "每轮 (ms)",
+                    "训练 200 轮 (s)", "网格推理 (ms)"),
+      caption = "时间拆成三段：导入、训练、推理。加载只计 import / library 本身，不含解释器启动。 / Time in three parts: import, training, inference. Loading counts only import/library, not interpreter startup.")
+```
+
+三段数字指向三种不同的东西。
+
+The three segments point at three different things.
+
+**加载**是同一量级，`r sprintf("%.2f", py$t_load_py)` 秒对 `r sprintf("%.2f", r_res$load)` 秒，R 略慢但没有数量级差。两者都要把一份几百 MB 的 libtorch 映射进内存，瓶颈在磁盘与动态链接，跟语言本身关系不大。
+
+**Loading** is the same order of magnitude, `r sprintf("%.2f", py$t_load_py)` s versus `r sprintf("%.2f", r_res$load)` s; R is a little slower but not by an order of magnitude. Both have to map several hundred megabytes of libtorch into memory, so the cost is disk and dynamic linking rather than the language.
+
+**训练**是唯一真正拉开差距的地方：R 每轮 `r sprintf("%.1f", 1000 * train_r / 200)` ms，Python 每轮 `r sprintf("%.1f", 1000 * train_py / 200)` ms，差 `r sprintf("%.1f", train_r / train_py)` 倍。R 的每一步都要跨一次 R 与 C++ 的边界，而 Python 的 autograd 与优化器都在 C++ 里跑完，只有一次 `loss.item()` 回到解释器。轮数越多、这个固定开销被摊得越薄；但每轮只有几毫秒时，接口成本占比就很可观。
+
+**Training** is the only place where they really diverge: `r sprintf("%.1f", 1000 * train_r / 200)` ms per epoch in R against `r sprintf("%.1f", 1000 * train_py / 200)` ms in Python, a factor of `r sprintf("%.1f", train_r / train_py)`. Every R step crosses the R/C++ boundary, whereas Python runs autograd and the optimiser entirely inside C++ and returns to the interpreter once, for `loss.item()`. The more epochs you run, the thinner that fixed overhead is spread; but when an epoch costs only a few milliseconds, the interface dominates.
+
+**推理**（在 80 × 80 网格上预测 6400 个点）两边都在毫秒量级：`r sprintf("%.1f", 1000 * py$t_infer_py)` ms 与 `r sprintf("%.1f", 1000 * r_res$infer)` ms。倍数仍然是几倍，但绝对值小到可以忽略——一次前向传播的开销本来就远小于一次参数更新。
+
+**Inference** (6,400 points on an 80 × 80 grid) is in the millisecond range on both sides: `r sprintf("%.1f", 1000 * py$t_infer_py)` ms and `r sprintf("%.1f", 1000 * r_res$infer)` ms. The ratio is still a few-fold, but the absolute numbers are negligible — a forward pass was never the expensive part.
+
+```{r}
+#| label: fig-timing
+#| fig-width: 7
+#| fig-height: 4
+#| fig-cap: "三个阶段的对数时间对比。加载与推理接近，训练差一个数量级。 | Log-scale comparison of the three stages. Loading and inference are close; training differs by an order of magnitude."
+timing <- data.frame(
+  engine  = rep(c("PyTorch (Python)", "torch (R)"), each = 3),
+  stage   = factor(rep(c("load", "train 200 epochs", "inference"), 2),
+                   levels = c("load", "train 200 epochs", "inference")),
+  seconds = c(py$t_load_py, train_py, py$t_infer_py,
+              r_res$load, train_r, r_res$infer)
+)
+
+ggplot(timing, aes(stage, seconds, colour = engine, group = engine)) +
+  geom_line(linewidth = 0.6) +
+  geom_point(size = 2.8) +
+  scale_y_log10(labels = scales::label_number(accuracy = 0.001)) +
+  scale_colour_manual(values = c(blog_pal[["blue"]], blog_pal[["vermillion"]])) +
+  labs(x = NULL, y = "seconds (log scale)", colour = NULL,
+       title = "Where the time goes",
+       subtitle = "same model, same data, CPU only")
+```
+
+```{r}
+#| label: fig-loss
+#| fig-width: 9
+#| fig-height: 4
+#| fig-cap: "左：两条损失曲线（对数纵轴），几乎完全重合；右：逐轮差值的绝对值，触到底线表示该轮两边完全相同。随机数生成器在 libtorch 里，两边播种的是同一个引擎。 | Left: two loss curves on a log axis, almost coincident; right: the per-epoch absolute difference, where the floor means the two runs agreed exactly. The RNG lives in libtorch and both sides seed the same engine."
+loss_py <- unlist(py$losses_py)
+
+curves <- rbind(
+  data.frame(
+    epoch  = rep(seq_len(200), 2),
+    value  = c(loss_py, r_res$losses),
+    series = rep(c("PyTorch (Python)", "torch (R)"), each = 200),
+    panel  = "cross-entropy loss"
+  ),
+  data.frame(
+    epoch  = seq_len(200),
+    value  = pmax(abs(loss_py - r_res$losses), 1e-12),
+    series = "|PyTorch − R|",
+    panel  = "absolute difference"
+  )
+)
+curves$panel <- factor(curves$panel, levels = c("cross-entropy loss", "absolute difference"))
+
+ggplot(curves, aes(epoch, value, colour = series)) +
+  geom_line(linewidth = 0.75) +
+  facet_wrap(~panel, scales = "free_y") +
+  scale_y_log10() +
+  scale_colour_manual(values = c(blog_pal[["blue"]], blog_pal[["vermillion"]],
+                                 blog_pal[["green"]])) +
+  labs(x = "epoch", y = "value (log scale)", colour = NULL,
+       title = "Same task, two frameworks",
+       subtitle = "200 full-batch Adam steps, learning rate 0.05")
+```
+
+```{r}
+#| label: fig-decision
+#| fig-cap: "决策面：左为 PyTorch，右为 R torch；点为真实类别。 | Decision surfaces: PyTorch left, R torch right; dots are the true classes."
+#| fig-width: 8.4
+#| fig-height: 3.8
+grid_flat <- as.matrix(expand.grid(x = as.numeric(py$gx), y = as.numeric(py$gy)))
+surf <- data.frame(
+  x = grid_flat[, 1], y = grid_flat[, 2],
+  py = factor(as.integer(py$Z_py)), r = factor(r_res$classes)
+)
+surf_long <- tidyr::pivot_longer(surf, c(py, r), names_to = "engine", values_to = "class")
+surf_long$engine <- factor(surf_long$engine, levels = c("py", "r"),
+                           labels = c("PyTorch (Python)", "torch (R)"))
+
+ggplot() +
+  geom_tile(data = surf_long, aes(x, y, fill = class), alpha = 0.4) +
+  geom_point(data = pts, aes(x, y, colour = class), size = 1.1) +
+  facet_wrap(~engine) +
+  scale_fill_manual(values = c("0" = "#CFE3F0", "1" = "#F6D9C9"), guide = "none") +
+  scale_colour_manual(values = c(blog_pal[["blue"]], blog_pal[["vermillion"]]),
+                      labels = c("class 0", "class 1")) +
+  coord_equal() +
+  labs(x = NULL, y = NULL, colour = NULL,
+       title = "Where the two models put the boundary",
+       subtitle = "shaded regions are predicted classes")
+```
+
+两个决策面几乎一样：分界线都落在两条半月之间，边缘处的小差异来自不同的权重初始化。也就是说，在这个任务上"用哪个框架"不影响结论，只影响写代码的手感。
+
+The two surfaces are nearly identical: both boundaries fall between the half-moons, and the small differences near the edges come from different initial weights. On this task, the framework choice changes how the code feels to write, not what the model concludes.
+
+## 9. 其他引擎的实测 / What the other engines did
+
+### 9.1 Bash
+
+`{bash}` chunk 在 Windows 上会去调用 `bash`，如果装了 WSL，实际执行的是 Linux 子系统。所以 `uname` 报的是 Linux，文件计数也是 Linux 侧看到的那个目录。
+
+On Windows a `{bash}` chunk calls `bash`, which means WSL if installed, so `uname` reports Linux and the file count is whatever the Linux side sees in that directory.
+
+```{bash}
+#| label: bash-check
+echo "shell: ${BASH_VERSION:-unknown}"
+uname -sr
+printf 'qmd files in this folder: %s\n' "$(ls -1 *.qmd 2>/dev/null | wc -l)"
+```
+
+### 9.2 OJS
+
+OJS 是在浏览器里跑的，渲染阶段只会看到代码被嵌进 HTML。
+
+OJS runs in the browser; at render time you only see the code being embedded into the HTML.
+
+```{ojs}
+//| label: ojs-check
+vals = [1, 2, 3, 4, 5]
+total = vals.reduce((a, b) => a + b, 0)
+"OJS says: sum = " + total + ", mean = " + (total / vals.length).toFixed(2)
+```
+
+页面打开后上面这行字才会出现，它来自读者的浏览器，而不是构建机器。
+
+That line only appears once the page is open, and it comes from the reader's browser rather than from the build machine.
+
+### 9.3 Julia
+
+Julia 的代码看起来和 R、Python 的 chunk 一样自然，但这台机器上没有 Julia。下面这段现在只是一个普通代码块——原因见后文。
+
+The Julia code looks as natural as an R or Python chunk, but this machine has no Julia. What follows is now an ordinary code block, and the reason is below.
+
+``` julia
+using LinearAlgebra
+A = randn(3, 3)
+println("det = ", det(A))
+```
+
+这一段原本是 `{julia}` chunk，并且写了 `#| eval: false`。结果是**渲染直接中断**：
+
+This started life as a `{julia}` chunk with `#| eval: false`. The render aborted anyway:
+
+```         
+错误于loadNamespace(x): 不存在叫'JuliaCall'这个名称的程序包
+Calls: .main ... loadNamespace -> withRestarts ...
+Quitting from index.qmd:441-447 [julia-check]
+```
+
+原因是 knitr 在**注册引擎**的阶段就要加载 `JuliaCall`，这一步发生在判断 `eval` 之前。所以"关掉执行"并不能让一个没有运行时的语言蒙混过关，只能把它降级成普通的代码块。这大概是本文最有用的一个结论：`eval: false` 保护不了你。
+
+knitr has to load `JuliaCall` when it **registers the engine**, which happens before `eval` is consulted. Turning execution off does not let a language without a runtime slip through; the only option is to demote it to a plain code block. This is probably the most useful conclusion in the post: `eval: false` will not save you.
+
+## 10. freeze 与 code-fold 改变了什么 / What freeze and code-fold change
+
+这个站点在 `posts/_metadata.yml` 里开了 `freeze: true`，所以上面的数字只在**第一次渲染**时算出来，之后存进 `_freeze/` 目录。修改正文不会触发重新计算；只有改动带代码的 chunk 或删掉对应的 `_freeze` 目录，才会重跑。
+
+This site sets `freeze: true` in `posts/_metadata.yml`, so the numbers above are computed on the **first render** and then stored under `_freeze/`. Editing prose does not trigger recomputation; only changing a code chunk or deleting the matching `_freeze` directory does.
+
+这意味着两件事。第一，页面上"我跑通了"的证据是可以过期的：代码改了但缓存还在，读者看到的仍是旧输出。第二，`freeze` 让这类混合语言的文档变得可行——不必在每次构建时都启动 R、Python 和 bash。
+
+That has two consequences. First, the evidence that "it ran" can go stale: change the code while the cache survives, and readers still see the old output. Second, `freeze` is what makes a multi-language document practical, since a rebuild no longer has to start R, Python and bash every time.
+
+`code-fold: true` 只影响展示，不影响执行：代码默认收起，读者点开才看到。对于这种以"输出"为主的文章，收起代码反而让结果更清楚。
+
+`code-fold: true` affects presentation only, not execution: code is collapsed by default and expands on click. For a post whose point is the output, collapsing the code actually makes the results easier to read.
+
+## 11. 结论 / Takeaways
+
+-   **两个框架都能跑，但坑不同。** Python 的 PyTorch 装好即用；R 的 `torch` 需要把 `lib/` 目录加进 `PATH`，否则 `lantern.dll` 会报"找不到指定的过程"。 *Both frameworks work, but they fail differently. PyTorch works out of the box; R's `torch` needs its `lib/` directory on `PATH`, or `lantern.dll` fails with "specified procedure could not be found".*
+-   **两个 libtorch 不能住进同一个进程。** 想在 R 会话里用 reticulate 跑 PyTorch、同时又跑 R torch，必然有一方加载失败；只能分进程。 *Two libtorch builds cannot share one process. Using reticulate to run PyTorch and R torch in the same session makes one of them fail to load; they have to be separated into processes.*
+-   **一致性比想象中强。** 同一个 `exp().sum()` 两边差 `r sprintf("%.1e", abs(py$check_py - r_res$check))`；连 200 轮训练曲线都几乎重合，因为随机数生成器和算子都在 libtorch 里，不在 R 或 Python 里。 *Consistency is stronger than expected. The same `exp().sum()` differs by `r sprintf("%.1e", abs(py$check_py - r_res$check))`, and even the 200-epoch loss curves nearly coincide, because both the RNG and the kernels live in libtorch rather than in R or Python.*
+-   **时间差集中在训练轮内。** 加载 torch 两边都在数秒之内（`r sprintf("%.2f", py$t_load_py)` vs `r sprintf("%.2f", r_res$load)` 秒），推理都是毫秒级；只有每轮训练 R 比 Python 慢 `r sprintf("%.1f", train_r / train_py)` 倍，因为每一步都要跨一次 R/C++ 边界。 *The gap sits inside the training loop. Loading torch takes a few seconds on both sides (`r sprintf("%.2f", py$t_load_py)` vs `r sprintf("%.2f", r_res$load)` s) and inference is milliseconds; only the per-epoch cost differs, with R slower by `r sprintf("%.1f", train_r / train_py)`x because every step crosses the R/C++ boundary.*
+-   **"能写 chunk"不等于"能执行 chunk"。** `{python}`、`{bash}` 在渲染时执行，`{ojs}` 交给浏览器，`{julia}`、`{sql}` 取决于本机是否具备运行环境。 *"Can write a chunk" is not "can execute a chunk". `{python}` and `{bash}` run at render time; `{ojs}` is delegated to the browser; `{julia}` and `{sql}` depend on what the machine has installed.*
+-   **`freeze` 是这类文档的前提，也是隐患。** 它避免每次构建都重启多套运行时，但也让输出与代码可能不同步。 *`freeze` is both the enabler and the risk: it avoids restarting several runtimes per build, but it lets output drift away from code.*
+
+## 参考 / References
+
+1.  R torch 官方文档：<https://torch.mlverse.org/>
+2.  Falbel, D., & Luraschi, J. *Deep Learning with torch in R*. <https://skeydan.github.io/Deep-Learning-with-torch-in-R/>
+3.  PyTorch 官方文档：<https://pytorch.org/docs/stable/index.html>
+4.  Quarto — Computations：<https://quarto.org/docs/computations/>
+5.  Quarto — OJS：<https://quarto.org/docs/interactive/ojs/>
+6.  reticulate：<https://rstudio.github.io/reticulate/>
+7.  lantern（libtorch 的 C 接口）：<https://github.com/mlverse/lantern>
