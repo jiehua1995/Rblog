@@ -52,6 +52,7 @@ gx <- seq(min(X[, 1]) - 0.3, max(X[, 1]) + 0.3, length.out = 80)
 gy <- seq(min(X[, 2]) - 0.3, max(X[, 2]) + 0.3, length.out = 80)
 grid_flat <- as.matrix(expand.grid(x = gx, y = gy))
 grid_tensor <- torch_tensor(grid_flat, dtype = torch_float())
+with_no_grad(model(grid_tensor))  # warm-up: the first forward pays one-off kernel setup
 
 t0 <- Sys.time()
 with_no_grad({

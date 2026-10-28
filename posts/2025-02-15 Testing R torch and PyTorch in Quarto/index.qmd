@@ -182,6 +182,7 @@ with torch.no_grad():
 grid_flat = np.array([[a, b] for b in gy for a in gx], dtype="float32")
 Xg = torch.tensor(grid_flat)
 with torch.no_grad():
+    model_py(Xg)  # warm-up: the first forward pays one-off kernel setup
     t0 = time.perf_counter()
     Z_py = model_py(Xg).argmax(1).numpy()
     t_infer_py = time.perf_counter() - t0
@@ -338,7 +339,7 @@ timing_tbl <- data.frame(
 kable(timing_tbl,
       col.names = c("引擎 / Engine", "加载 torch (s)", "每轮 (ms)",
                     "训练 200 轮 (s)", "网格推理 (ms)"),
-      caption = "时间拆成三段：导入、训练、推理。加载只计 import / library 本身，不含解释器启动。 / Time in three parts: import, training, inference. Loading counts only import/library, not interpreter startup.")
+      caption = "时间拆成三段：导入、训练、推理。加载只计 import / library 本身，不含解释器启动；推理前先各跑一次预热。 / Time in three parts: import, training, inference. Loading counts only import/library, not interpreter startup, and inference is measured after one warm-up pass.")
 ```
 
 三段数字指向三种不同的东西。
