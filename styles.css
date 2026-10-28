@@ -2108,6 +2108,20 @@ body.quarto-dark .quarto-title-banner {
   color: var(--ink);
 }
 
+/* english subtitle above the title (optional, only when front matter has one) */
+.quarto-title-banner .subtitle {
+  max-width: 46ch;
+  margin: 0.55rem 0 0.75rem;
+  color: var(--ink-soft);
+  font-family: var(--font-display);
+  font-size: clamp(0.95rem, 1.5vw, 1.12rem);
+  font-style: italic;
+  font-weight: 400;
+  line-height: 1.35;
+  letter-spacing: 0.005em;
+  opacity: 1;
+}
+
 .quarto-title-banner .quarto-categories {
   display: flex;
   flex-wrap: wrap;
