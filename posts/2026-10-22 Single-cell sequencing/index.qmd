@@ -230,18 +230,33 @@ ggplot(platforms, aes(cells, reads, colour = mode)) +
   )
 ```
 
-| 平台 / Platform | 捕获方式 / Capture | 转录本覆盖 / Transcript coverage | UMI | 典型用途 / Typical use |
+| 平台 | 捕获方式 | 转录本覆盖 | UMI | 典型用途 |
 |---------------|---------------|---------------|---------------|---------------|
-| 10x Chromium 3' | 液滴 / droplet | 3' 端 / 3' end | 有 / yes | 常规 scRNA-seq、细胞图谱 / routine scRNA-seq, cell atlas |
-| 10x Chromium 5' | 液滴 / droplet | 5' 端 / 5' end | 有 / yes | V(D)J、TCR/BCR 克隆型 / V(D)J, TCR/BCR clonotypes |
-| 10x Multiome | 液滴 / droplet | RNA + ATAC | 有 / yes | 调控元件与表达联合 / regulatory elements with expression |
-| Smart-seq2 | FACS 孔板 / FACS plate | 全长 / full-length | 无（用 Tn5 或分子标签） / no (Tn5 or molecular tags) | 低通量、高灵敏、可变剪接 / low throughput, high sensitivity, alternative splicing |
-| Smart-seq3 | FACS 孔板 / FACS plate | 全长 + 5' UMI / full-length + 5' UMI | 部分 / partial | 等位基因表达、剪接 / allele-specific expression, splicing |
-| Drop-seq | 液滴 / droplet | 3' 端 / 3' end | 有 / yes | 低成本、方法学 / low cost, methodology |
-| Seq-Well | 微孔 / microwell | 3' 端 / 3' end | 有 / yes | 低输入、临床样本 / low input, clinical samples |
-| BD Rhapsody | 微孔 / microwell | 靶向或全转录组 / targeted or whole transcriptome | 有 / yes | 靶向 panel、蛋白联合 / targeted panel, protein co-measurement |
-| CITE-seq | 液滴 + 抗体 / droplet + antibody | RNA + 表面蛋白 / RNA + surface protein | 有 / yes | 免疫分型 / immune phenotyping |
-| Visium / Xenium | 空间 / spatial | 3' 端或靶向 / 3' end or targeted | 有 / yes | 组织原位状态 / in situ tissue state |
+| 10x Chromium 3' | 液滴 | 3' 端 | 有 | 常规 scRNA-seq、细胞图谱 |
+| 10x Chromium 5' | 液滴 | 5' 端 | 有 | V(D)J、TCR/BCR 克隆型 |
+| 10x Multiome | 液滴 | RNA + ATAC | 有 | 调控元件与表达联合 |
+| Smart-seq2 | FACS 孔板 | 全长 | 无（用 Tn5 或分子标签） | 低通量、高灵敏、可变剪接 |
+| Smart-seq3 | FACS 孔板 | 全长 + 5' UMI | 部分 | 等位基因表达、剪接 |
+| Drop-seq | 液滴 | 3' 端 | 有 | 低成本、方法学 |
+| Seq-Well | 微孔 | 3' 端 | 有 | 低输入、临床样本 |
+| BD Rhapsody | 微孔 | 靶向或全转录组 | 有 | 靶向 panel、蛋白联合 |
+| CITE-seq | 液滴 + 抗体 | RNA + 表面蛋白 | 有 | 免疫分型 |
+| Visium / Xenium | 空间 | 3' 端或靶向 | 有 | 组织原位状态 |
+
+*English*
+
+| Platform | Capture | Transcript coverage | UMI | Typical use |
+|---------------|---------------|---------------|---------------|---------------|
+| 10x Chromium 3' | droplet | 3' end | yes | routine scRNA-seq, cell atlas |
+| 10x Chromium 5' | droplet | 5' end | yes | V(D)J, TCR/BCR clonotypes |
+| 10x Multiome | droplet | RNA + ATAC | yes | regulatory elements with expression |
+| Smart-seq2 | FACS plate | full-length | no (Tn5 or molecular tags) | low throughput, high sensitivity, alternative splicing |
+| Smart-seq3 | FACS plate | full-length + 5' UMI | partial | allele-specific expression, splicing |
+| Drop-seq | droplet | 3' end | yes | low cost, methodology |
+| Seq-Well | microwell | 3' end | yes | low input, clinical samples |
+| BD Rhapsody | microwell | targeted or whole transcriptome | yes | targeted panel, protein co-measurement |
+| CITE-seq | droplet + antibody | RNA + surface protein | yes | immune phenotyping |
+| Visium / Xenium | spatial | 3' end or targeted | yes | in situ tissue state |
 
 选平台时真正要权衡的是四个量：**细胞数、每个细胞的深度、每个细胞的价格、以及是否要全长/多组学/空间信息**。10x 3' 适合“细胞多、问题偏组成和类型”；Smart-seq 适合“细胞少、问题偏异构体、融合基因、低丰度转录本”。
 
@@ -447,16 +462,29 @@ In this small 60 × 40 matrix, `r round(100 * mean(counts == 0))`% of the entrie
 
 Beyond MTX, real projects more often use various container formats. They are essentially different ways of packaging **a matrix + row and column annotations + dimensionality-reduction results**.
 
-| 格式 / Format | 产生者 / Producer | 内容 / Content | 读取方式 / Reading |
+| 格式 | 产生者 | 内容 | 读取方式 |
 |------------------|------------------|------------------|------------------|
-| `.h5` | Cell Ranger | 稀疏矩阵 + 基因/细胞名 + 元数据 / sparse matrix + gene and cell names + metadata | `h5py`、`Seurat::Read10X_h5` |
+| `.h5` | Cell Ranger | 稀疏矩阵 + 基因/细胞名 + 元数据 | `h5py`、`Seurat::Read10X_h5` |
 | `.h5ad` | Scanpy / AnnData | `X`、`obs`、`var`、`obsm`、`layers`、`uns` | `scanpy.read_h5ad` |
-| `.loom` | loompy | 矩阵 + `row_attr` / `col_attr` 属性 / matrix with `row_attr` and `col_attr` attributes | `scanpy.read_loom`、`Seurat::ReadLoom` |
-| `.rds` | Seurat / R | 完整 R 对象（含聚类、降维、图） / full R object (with clusters, reductions, graphs) | `readRDS` |
-| `.arrow` / SOMA | TileDB-SOMA | 列式存储，适合百万级细胞 / columnar storage, suited to millions of cells | `tiledbsoma` |
-| `.zarr` | AnnData / xarray | 分块数组，适合云端 / chunked arrays, suited to the cloud | `anndata.read_zarr` |
-| `fragments.tsv.gz` | 10x ATAC | 每个 fragment 的 chrom/start/end/barcode / chrom/start/end/barcode per fragment | ArchR、Signac |
-| `.tif` + `positions.csv` | Visium / Xenium | 组织图像 + 斑点/细胞坐标 / tissue image + spot and cell coordinates | Space Ranger、Seurat |
+| `.loom` | loompy | 矩阵 + `row_attr` / `col_attr` 属性 | `scanpy.read_loom`、`Seurat::ReadLoom` |
+| `.rds` | Seurat / R | 完整 R 对象（含聚类、降维、图） | `readRDS` |
+| `.arrow` / SOMA | TileDB-SOMA | 列式存储，适合百万级细胞 | `tiledbsoma` |
+| `.zarr` | AnnData / xarray | 分块数组，适合云端 | `anndata.read_zarr` |
+| `fragments.tsv.gz` | 10x ATAC | 每个 fragment 的 chrom/start/end/barcode | ArchR、Signac |
+| `.tif` + `positions.csv` | Visium / Xenium | 组织图像 + 斑点/细胞坐标 | Space Ranger、Seurat |
+
+*English*
+
+| Format | Producer | Content | Reading |
+|------------------|------------------|------------------|------------------|
+| `.h5` | Cell Ranger | sparse matrix + gene and cell names + metadata | `h5py`, `Seurat::Read10X_h5` |
+| `.h5ad` | Scanpy / AnnData | `X`, `obs`, `var`, `obsm`, `layers`, `uns` | `scanpy.read_h5ad` |
+| `.loom` | loompy | matrix with `row_attr` and `col_attr` attributes | `scanpy.read_loom`, `Seurat::ReadLoom` |
+| `.rds` | Seurat / R | full R object (with clusters, reductions, graphs) | `readRDS` |
+| `.arrow` / SOMA | TileDB-SOMA | columnar storage, suited to millions of cells | `tiledbsoma` |
+| `.zarr` | AnnData / xarray | chunked arrays, suited to the cloud | `anndata.read_zarr` |
+| `fragments.tsv.gz` | 10x ATAC | chrom/start/end/barcode per fragment | ArchR, Signac |
+| `.tif` + `positions.csv` | Visium / Xenium | tissue image + spot and cell coordinates | Space Ranger, Seurat |
 
 `.h5ad` 的内部结构值得单独记住，因为几乎所有 Python 单细胞工具都以它为中心：
 
@@ -932,11 +960,11 @@ ggplot(grid, aes(cluster, gene)) +
 Three routes to annotation:
 
 1.  **人工 marker**：可解释性最好，但依赖经验，且对稀有类型不敏感。
-1.  **Manual markers**: the most interpretable, but depends on experience and is insensitive to rare types.
-2.  **参考映射**：把细胞投影到已注释的参考图谱（Azimuth、scType、CellTypist、scANVI），适合免疫、脑等有成熟图谱的组织。
-2.  **Reference mapping**: project the cells onto an annotated reference atlas (Azimuth, scType, CellTypist, scANVI), suited to tissues with mature atlases such as immune and brain.
-3.  **自动聚类 + 差异基因**：先找每个 cluster 的 top genes，再和文献/数据库比对。
-3.  **Automatic clustering + differential genes**: find the top genes of each cluster and then compare them with the literature or databases.
+2.  **Manual markers**: the most interpretable, but depends on experience and is insensitive to rare types.
+3.  **参考映射**：把细胞投影到已注释的参考图谱（Azimuth、scType、CellTypist、scANVI），适合免疫、脑等有成熟图谱的组织。
+4.  **Reference mapping**: project the cells onto an annotated reference atlas (Azimuth, scType, CellTypist, scANVI), suited to tissues with mature atlases such as immune and brain.
+5.  **自动聚类 + 差异基因**：先找每个 cluster 的 top genes，再和文献/数据库比对。
+6.  **Automatic clustering + differential genes**: find the top genes of each cluster and then compare them with the literature or databases.
 
 注释之后建议做两件事：**亚聚类**（在某个类型内部再分状态）和**独立验证**（蛋白流式、原位杂交、空间转录组）。只靠同一批 marker 循环论证，是单细胞文章最常见的硬伤。
 
@@ -1131,20 +1159,37 @@ ggplot(steps, aes(x = x, y = 0)) +
 
 ## 16. 术语表 / Glossary
 
-| 术语 / Term | 含义 / Meaning |
+| 术语 | 含义 |
 |----------------|------------------------------------------|
-| Cell barcode   | 16 bp 细胞标签，标识一个液滴/细胞 / a 16 bp cell tag that identifies a droplet or cell |
-| UMI            | 分子标签，用于去除 PCR 重复 / a molecular tag used to remove PCR duplicates |
-| Whitelist      | 平台预设的合法条码列表 / the list of valid barcodes predefined by the platform |
-| Empty droplet  | 不含细胞、只有背景 RNA 的液滴 / a droplet with no cell and only background RNA |
-| Ambient RNA    | 空液滴中的游离 RNA，会污染真细胞 / free RNA from empty droplets that contaminates real cells |
-| Doublet        | 两个细胞进入同一个液滴 / two cells entering the same droplet |
-| Count matrix   | 基因 × 细胞的 UMI 计数矩阵 / a gene × cell UMI count matrix |
-| HVG            | 高变基因，用于降维 / highly variable genes, used for dimensionality reduction |
-| Pseudobulk     | 把同一细胞类型的细胞计数相加成样本级表达 / summing counts of cells of the same type into sample-level expression |
-| Label transfer | 把参考图谱的细胞类型标签映射到新数据 / mapping cell-type labels from a reference atlas onto new data |
-| Pseudotime     | 按表达相似性推断的细胞顺序 / a cell ordering inferred from expression similarity |
-| RNA velocity   | 用剪接比例预测细胞状态变化方向 / predicting the direction of state change from splicing ratios |
+| Cell barcode   | 16 bp 细胞标签，标识一个液滴/细胞 |
+| UMI            | 分子标签，用于去除 PCR 重复 |
+| Whitelist      | 平台预设的合法条码列表 |
+| Empty droplet  | 不含细胞、只有背景 RNA 的液滴 |
+| Ambient RNA    | 空液滴中的游离 RNA，会污染真细胞 |
+| Doublet        | 两个细胞进入同一个液滴 |
+| Count matrix   | 基因 × 细胞的 UMI 计数矩阵 |
+| HVG            | 高变基因，用于降维 |
+| Pseudobulk     | 把同一细胞类型的细胞计数相加成样本级表达 |
+| Label transfer | 把参考图谱的细胞类型标签映射到新数据 |
+| Pseudotime     | 按表达相似性推断的细胞顺序 |
+| RNA velocity   | 用剪接比例预测细胞状态变化方向 |
+
+*English*
+
+| Term | Meaning |
+|----------------|------------------------------------------|
+| Cell barcode | a 16 bp cell tag that identifies a droplet or cell |
+| UMI | a molecular tag used to remove PCR duplicates |
+| Whitelist | the list of valid barcodes predefined by the platform |
+| Empty droplet | a droplet with no cell and only background RNA |
+| Ambient RNA | free RNA from empty droplets that contaminates real cells |
+| Doublet | two cells entering the same droplet |
+| Count matrix | a gene × cell UMI count matrix |
+| HVG | highly variable genes, used for dimensionality reduction |
+| Pseudobulk | summing counts of cells of the same type into sample-level expression |
+| Label transfer | mapping cell-type labels from a reference atlas onto new data |
+| Pseudotime | a cell ordering inferred from expression similarity |
+| RNA velocity | predicting the direction of state change from splicing ratios |
 
 ## 17. 参考 / References
 

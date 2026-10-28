@@ -475,6 +475,20 @@
     update();
   }
 
+  /* ---------- let very wide tables scroll inside their own box ---------- */
+  function initTableScroll() {
+    document.querySelectorAll("#quarto-document-content table").forEach(function (table) {
+      var firstRow = table.querySelector("thead tr") || table.querySelector("tr");
+      var cols = firstRow ? firstRow.children.length : 0;
+      if (cols < 6) return;
+      if (table.parentElement && table.parentElement.classList.contains("table-scroll")) return;
+      var wrap = document.createElement("div");
+      wrap.className = "table-scroll";
+      table.parentNode.insertBefore(wrap, table);
+      wrap.appendChild(table);
+    });
+  }
+
   function boot() {
     initLiquidDocks();
     initThemePill();
@@ -489,6 +503,7 @@
     initMetaCleanup();
     initShare();
     initImageFallback();
+    initTableScroll();
     initReveal();
     initHeader();
     window.setTimeout(initIcons, 350);

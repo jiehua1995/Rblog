@@ -30,21 +30,21 @@ The most common misunderstanding about proteomics is that many people assume "me
 This article follows the order in which the data actually flow:
 
 1.  蛋白质组学要回答什么问题，为什么难；
-1.  What questions proteomics has to answer, and why they are hard;
-2.  一台 LC-MS/MS 里到底发生了什么；
-2.  What actually happens inside an LC-MS/MS instrument;
-3.  原始数据里存了哪些字段；
-3.  Which fields are stored in the raw data;
-4.  DDA、DIA、PRM 三种采集策略；
-4.  The three acquisition strategies: DDA, DIA, and PRM;
-5.  厂商封闭格式与开放格式（mzML 等）的架构差别；
-5.  The architectural differences between closed vendor formats and open formats such as mzML;
-6.  用 Python 和 R 把数据读进来；
-6.  Reading the data into Python and R;
-7.  从谱图到蛋白表：搜库、FDR、蛋白推断、定量、缺失值；
-7.  From spectra to a protein table: database search, FDR, protein inference, quantification, and missing values;
-8.  除了基于质谱的方法，还有哪些蛋白质组学路线，各自能回答什么。
-8.  Beyond mass spectrometry, which other proteomics routes exist, and what each of them can answer.
+2.  What questions proteomics has to answer, and why they are hard;
+3.  一台 LC-MS/MS 里到底发生了什么；
+4.  What actually happens inside an LC-MS/MS instrument;
+5.  原始数据里存了哪些字段；
+6.  Which fields are stored in the raw data;
+7.  DDA、DIA、PRM 三种采集策略；
+8.  The three acquisition strategies: DDA, DIA, and PRM;
+9.  厂商封闭格式与开放格式（mzML 等）的架构差别；
+10. The architectural differences between closed vendor formats and open formats such as mzML;
+11. 用 Python 和 R 把数据读进来；
+12. Reading the data into Python and R;
+13. 从谱图到蛋白表：搜库、FDR、蛋白推断、定量、缺失值；
+14. From spectra to a protein table: database search, FDR, protein inference, quantification, and missing values;
+15. 除了基于质谱的方法，还有哪些蛋白质组学路线，各自能回答什么。
+16. Beyond mass spectrometry, which other proteomics routes exist, and what each of them can answer.
 
 目标是写成一份可以按图索骥的技术报告。
 
@@ -117,11 +117,19 @@ ggplot(ab, aes(rank, log_ab)) +
 
 Translated into the language of data, this becomes three questions at different levels:
 
-| 层次 / Level | 问题 / Question | 数据产物 / Data product |
+| 层次 | 问题 | 数据产物 |
 |------------------------|------------------------|------------------------|
 | 鉴定（identification） | 样本里有哪些肽段和蛋白 | PSM 表、peptide 表、protein 表 |
 | 定量（quantification） | 每个蛋白在不同样本里有多少 | 强度矩阵、比值、差异检验结果 |
 | 状态（state） | 修饰位点、互作、定位、结构 | 位点表、互作网络、交联对、HDX 曲线 |
+
+*English*
+
+| Level | Question | Data product |
+|------------------------|------------------------|------------------------|
+| Identification | Which peptides and proteins are present in the sample | PSM table, peptide table, protein table |
+| Quantification | How much of each protein is present in each sample | Intensity matrix, ratios, differential test results |
+| State | Modification sites, interactions, localization, structure | Site table, interaction network, cross-linked pairs, HDX curves |
 
 后面所有的文件格式和分析步骤，都是为这三层服务。
 
@@ -377,13 +385,23 @@ p_dia <- ggplot(dia) +
 p_dda | p_dia
 ```
 
-| 维度 / Dimension | DDA              | DIA                      | PRM                |
+| 维度     | DDA              | DIA                      | PRM                |
 |----------|------------------|--------------------------|--------------------|
 | 前体选择 | 实时、依赖强度   | 无选择，窗口内全采       | 事先指定           |
 | 谱图内容 | 单前体（近似）   | 多前体混合               | 单前体、长时间累积 |
 | 缺失值   | 较多（随机漏采） | 少（系统性覆盖）         | 只针对目标肽段     |
 | 数据分析 | 直接搜库         | 谱图库 / 伪谱库 / 去卷积 | 提取离子色谱       |
 | 典型用途 | 发现型研究       | 大队列定量               | 验证与临床检测     |
+
+*English*
+
+| Dimension | DDA | DIA | PRM |
+|----------------|----------------|-----------------------|------------------|
+| Precursor selection | Real time, intensity-dependent | No selection, everything in the window is acquired | Specified in advance |
+| Spectrum content | Single precursor (approximately) | Mixture of multiple precursors | Single precursor, long accumulation |
+| Missing values | More (random missed acquisition) | Few (systematic coverage) | Only the target peptides |
+| Data analysis | Direct database search | Spectral library / pseudo-spectral library / deconvolution | Extracted ion chromatogram |
+| Typical use | Discovery research | Large-cohort quantification | Validation and clinical testing |
 
 ## 5. 原始数据格式的架构 / The architecture of raw data formats
 
@@ -392,13 +410,13 @@ p_dda | p_dia
 This is the core part of the article. The key to understanding the formats is to divide a file into **four layers**:
 
 1.  **厂商原始层**：仪器直接写出的文件，包含完整扫描信息，但二进制结构不公开。
-1.  **Vendor raw layer**: the file the instrument writes directly, containing complete scan information, but with a binary structure that is not public.
-2.  **开放谱图层**：把原始层无损转换成语义明确的谱图格式，主要是 mzML。
-2.  **Open spectra layer**: a lossless conversion of the raw layer into a spectra format with explicit semantics, mainly mzML.
-3.  **鉴定结果层**：搜库软件输出的 PSM / peptide / protein 记录（mzIdentML、pepXML、mzTab）。
-3.  **Identification result layer**: the PSM / peptide / protein records output by search software (mzIdentML, pepXML, mzTab).
-4.  **定量与处理层**：矩阵、报告表、项目文件（parquet、TSV、Skyline `.sky`、FragPipe 输出等）。
-4.  **Quantification and processing layer**: matrices, report tables, and project files (parquet, TSV, Skyline `.sky`, FragPipe output, etc.).
+2.  **Vendor raw layer**: the file the instrument writes directly, containing complete scan information, but with a binary structure that is not public.
+3.  **开放谱图层**：把原始层无损转换成语义明确的谱图格式，主要是 mzML。
+4.  **Open spectra layer**: a lossless conversion of the raw layer into a spectra format with explicit semantics, mainly mzML.
+5.  **鉴定结果层**：搜库软件输出的 PSM / peptide / protein 记录（mzIdentML、pepXML、mzTab）。
+6.  **Identification result layer**: the PSM / peptide / protein records output by search software (mzIdentML, pepXML, mzTab).
+7.  **定量与处理层**：矩阵、报告表、项目文件（parquet、TSV、Skyline `.sky`、FragPipe 输出等）。
+8.  **Quantification and processing layer**: matrices, report tables, and project files (parquet, TSV, Skyline `.sky`, FragPipe output, etc.).
 
 ```{r}
 #| label: fig-format-tree
@@ -455,13 +473,23 @@ ggplot(fmt) +
 
 ### 5.1 厂商封闭格式 / Closed vendor formats
 
-| 平台 / Platform | 扩展名 / Extension | 实际结构 / Actual structure | 说明 / Notes |
+| 平台 | 扩展名 | 实际结构 | 说明 |
 |------------------|------------------|------------------|------------------|
 | Thermo Fisher（Orbitrap、Astral、TSQ） | `.raw` | 单文件，内部是扫描头 + 二进制数组 | 最常见；读取需要官方 RawFileReader 或先转换 |
 | Bruker（timsTOF、maXis） | `.d` | **目录**，含 `analysis.tdf`、`analysis.tdf_bin`、`*.baf` | 4D 数据（含离子淌度），几乎必须先用厂商 SDK 或 alphatims |
 | SCIEX（TripleTOF、ZenoTOF） | `.wiff` + `.wiff.scan`，或 `.wiff2` | 元数据与扫描数据分离（新版合并） | 转换前务必两个文件放一起 |
 | Agilent（Q-TOF、6545） | `.d` | **目录**，`AcqData/*.bin` | MassHunter 结构 |
 | Waters（Synapt、Xevo） | `.raw`（目录） | **目录**，MassLynx 内部结构 | 与 Thermo 的 `.raw` 同名但完全不同 |
+
+*English*
+
+| Platform | Extension | Actual structure | Notes |
+|------------------|------------------|------------------|------------------|
+| Thermo Fisher (Orbitrap, Astral, TSQ) | `.raw` | Single file; internally a scan header plus binary arrays | Most common; reading it requires the official RawFileReader or a prior conversion |
+| Bruker (timsTOF, maXis) | `.d` | **Directory** containing `analysis.tdf`, `analysis.tdf_bin`, `*.baf` | 4D data (including ion mobility); almost always requires the vendor SDK or alphatims first |
+| SCIEX (TripleTOF, ZenoTOF) | `.wiff` + `.wiff.scan`, or `.wiff2` | Metadata and scan data are stored separately (merged in newer versions) | Always keep the two files together before conversion |
+| Agilent (Q-TOF, 6545) | `.d` | **Directory**, `AcqData/*.bin` | MassHunter structure |
+| Waters (Synapt, Xevo) | `.raw` (directory) | **Directory**, MassLynx internal structure | Same name as Thermo `.raw` but completely different |
 
 封闭格式的共同问题：
 
@@ -542,7 +570,7 @@ A few details that are easy to overlook but important:
 
 There are also several variants around mzML:
 
-| 格式 / Format | 载体 / Carrier | 适用场景 / Use case | 局限 / Limitation |
+| 格式 | 载体 | 适用场景 | 局限 |
 |------------------|------------------|------------------|------------------|
 | mzML | XML | 通用交换格式，几乎所有工具都支持 | 文件大、解析慢 |
 | mzMLb | HDF5 | 大文件、需要快速随机访问 | 工具支持少 |
@@ -550,13 +578,23 @@ There are also several variants around mzML:
 | imzML + .ibd | XML + 二进制 | 质谱成像（MALDI） | 只适用于成像数据 |
 | mzPeak | 列式（parquet 风格） | 新提出的高性能开放格式 | 生态仍在建设中 |
 
+*English*
+
+| Format | Carrier | Use case | Limitation |
+|------------------|------------------|------------------|------------------|
+| mzML | XML | General exchange format, supported by almost all tools | Large files, slow parsing |
+| mzMLb | HDF5 | Large files that need fast random access | Limited tool support |
+| MGF | Plain text | Stores only MS2 peaks; used for spectral libraries and machine learning | Loses MS1 and most metadata |
+| imzML + .ibd | XML + binary | Mass spectrometry imaging (MALDI) | Only applies to imaging data |
+| mzPeak | Columnar (parquet style) | Newly proposed high-performance open format | Ecosystem still under construction |
+
 ### 5.3 鉴定与定量层的格式 / Formats in the identification and quantification layers
 
 搜库之后，数据不再是"谱图"，而是"谱图与肽段的对应关系"：
 
 After database search, the data are no longer "spectra" but "correspondences between spectra and peptides":
 
-| 格式 / Format | 内容 / Content | 典型来源 / Typical source |
+| 格式 | 内容 | 典型来源 |
 |------------------------|------------------------|------------------------|
 | mzIdentML (`.mzid`) | PSM、肽段、蛋白、打分、FDR、修饰 | MS-GF+、Comet、Mascot、MS Amanda |
 | pepXML | 每个谱图的候选肽段与打分 | TPP、Comet |
@@ -566,6 +604,19 @@ After database search, the data are no longer "spectra" but "correspondences bet
 | `.osw` | SQLite 结构的 OpenSWATH 结果 | OpenSWATH |
 | `.sky` / `.blib` | 项目文件 / 谱图库 | Skyline |
 | `combined_protein.tsv` | 蛋白滚动汇总 | FragPipe |
+
+*English*
+
+| Format | Content | Typical source |
+|------------------------|------------------------|------------------------|
+| mzIdentML (`.mzid`) | PSMs, peptides, proteins, scores, FDR, modifications | MS-GF+, Comet, Mascot, MS Amanda |
+| pepXML | Candidate peptides and scores for each spectrum | TPP, Comet |
+| mzTab | Summary tables at the protein/peptide level (tab-delimited) | OpenMS, some pipelines |
+| MaxQuant `msms.txt` / `proteinGroups.txt` | Combined quantification and identification table | MaxQuant |
+| `report.tsv` / `report.parquet` | Precursor-level quantification (DIA) | DIA-NN |
+| `.osw` | OpenSWATH results in SQLite structure | OpenSWATH |
+| `.sky` / `.blib` | Project file / spectral library | Skyline |
+| `combined_protein.tsv` | Protein rolling summary | FragPipe |
 
 ### 5.4 同样的数据，不同的体积 / Same data, different sizes
 
@@ -603,7 +654,7 @@ ggplot(sizes, aes(gb, format, fill = format)) +
 
 Whatever the container, every scan usually carries the following information. This list can be used directly to check whether a conversion has lost information:
 
-| 类别 / Category | 字段 / Field | 为什么重要 / Why it matters |
+| 类别 | 字段 | 为什么重要 |
 |------------------------|------------------------|------------------------|
 | 定位 | scan number / native ID、index | 把 MS2 和触发它的 MS1 关联起来 |
 | 层级 | MS level（1 / 2 / 3） | 决定后续处理方式 |
@@ -617,6 +668,23 @@ Whatever the container, every scan usually carries the following information. Th
 | 仪器 | 型号、source、detector、polarity | 批次效应排查 |
 | 汇总 | TIC、base peak intensity、injection time、AGC | 质控与归一化 |
 | 色谱 | chromatogram list（TIC、BPC、SRM） | 快速质控，不必解析全部谱图 |
+
+*English*
+
+| Category | Field | Why it matters |
+|------------------------|------------------------|------------------------|
+| Localization | scan number / native ID, index | links an MS2 to the MS1 that triggered it |
+| Hierarchy | MS level (1 / 2 / 3) | determines how it is processed downstream |
+| Time | retention time | chromatographic alignment, extracted ion current |
+| Intensity | m/z array, intensity array | the spectrum itself |
+| Precursor | precursor m/z, charge, monoisotopic mass | the core input for database search |
+| Isolation | isolation window lower/upper bounds, offset | required for parsing DIA windows |
+| Fragmentation | activation type (HCD/CID/ETD), collision energy | affects spectrum comparability |
+| Mass | resolution, mass accuracy, centroid / profile | determines whether centroiding is needed |
+| Mobility | 1/K0, CCS, FAIMS CV | the fourth dimension of 4D data |
+| Instrument | model, source, detector, polarity | troubleshooting batch effects |
+| Summary | TIC, base peak intensity, injection time, AGC | quality control and normalization |
+| Chromatogram | chromatogram list (TIC, BPC, SRM) | fast quality control without parsing every spectrum |
 
 一个常见的坑：**profile 与 centroid**。高分辨仪器原始数据常是 profile（连续采样的峰形），而搜库需要 centroid（峰顶一个 m/z 值）。`msconvert` 的 `--filter "peakPicking true 1-"` 就是在做这件事。如果 centroid 参数不合适，同位素峰会被合并或漏掉，直接影响电荷判断。
 
@@ -878,12 +946,21 @@ A few details to note:
 
 ### 9.2 四条定量路线 / Four quantification routes
 
-| 策略 / Strategy | 原理 / Principle | 优点 / Advantage | 局限 / Limitation |
+| 策略 | 原理 | 优点 | 局限 |
 |------------------|------------------|------------------|------------------|
 | Label-free（LFQ） | 比较同一肽段在不同运行中的 MS1 峰面积 | 成本低、样本数不受限 | 运行间波动大，缺失值多 |
 | 同重标（TMT / iTRAQ） | 不同样本标记后混样，MS2 里读报告离子 | 多重、通量高、缺失少 | 比值压缩（ratio compression） |
 | 代谢标（SILAC） | 轻重同位素培养，混样后成对出现 | 定量最准 | 只能用于可培养细胞 |
 | DIA 定量 | 从混合 MS2 中提取前体色谱 | 覆盖稳定、重复性好 | 依赖谱图库质量 |
+
+*English*
+
+| Strategy | Principle | Advantage | Limitation |
+|------------------|------------------|------------------|------------------|
+| Label-free (LFQ) | Compare the MS1 peak areas of the same peptide across runs | Low cost, no limit on sample number | High run-to-run variability, many missing values |
+| Isobaric labeling (TMT / iTRAQ) | Label different samples, mix them, and read reporter ions in MS2 | Multiplexed, high throughput, few missing values | Ratio compression |
+| Metabolic labeling (SILAC) | Culture with light and heavy isotopes; pairs appear after mixing | The most accurate quantification | Only applicable to culturable cells |
+| DIA quantification | Extract precursor chromatograms from mixed MS2 | Stable coverage, good reproducibility | Depends on spectral library quality |
 
 ```{r}
 #| label: fig-quant
@@ -1056,7 +1133,7 @@ What these methods have in common is that they **use a known binding reagent to 
 
 ### 10.5 一张对照表 / A comparison table
 
-| 方法 / Method | 一次测多少 / Throughput | 定量能力 / Quantification | 是否需要抗体/适配体 / Needs antibody or aptamer | 典型场景 / Typical use |
+| 方法 | 一次测多少 | 定量能力 | 是否需要抗体/适配体 | 典型场景 |
 |---------------|---------------|---------------|---------------|---------------|
 | LC-MS/MS（DDA / DIA） | 数千到上万蛋白 | 中—高 | 否 | 发现型研究、修饰组学 |
 | TMT / iTRAQ | 同一批 10–18 个样本 | 高（多重） | 否 | 大队列、临床样本 |
@@ -1069,6 +1146,22 @@ What these methods have in common is that they **use a known binding reagent to 
 | CITE-seq | 单细胞、蛋白 + mRNA | 中 | 是 | 多组学单细胞 |
 | cryo-EM / NMR | 一个复合物 | 不适用 | 否 | 结构解析 |
 | AlphaFold | 全蛋白组 | 不适用 | 否 | 结构预测 |
+
+*English*
+
+| Method | Throughput | Quantification | Needs antibody or aptamer | Typical use |
+|---------------|---------------|---------------|---------------|---------------|
+| LC-MS/MS (DDA / DIA) | Thousands to tens of thousands of proteins | Medium–high | No | Discovery research, modification proteomics |
+| TMT / iTRAQ | 10–18 samples in the same batch | High (multiplexed) | No | Large cohorts, clinical samples |
+| PRM / MRM | Tens to hundreds of target peptides | Very high | No | Targeted validation |
+| Olink / SomaScan | One thousand to seven thousand proteins | High | Yes | Plasma large-cohort biomarkers |
+| RPPA | Hundreds of proteins/sites | Medium | Yes | Pathways and phosphorylation |
+| ELISA / Luminex | 1 to a few dozen | Very high | Yes | Clinical testing |
+| Western blot | 1 to a few | Low–medium | Yes | Validation |
+| CyTOF | Single cell, 40+ parameters | Medium | Yes | Immune phenotyping |
+| CITE-seq | Single cell, protein + mRNA | Medium | Yes | Multi-omics single cell |
+| cryo-EM / NMR | One complex | Not applicable | No | Structural analysis |
+| AlphaFold | Whole proteome | Not applicable | No | Structure prediction |
 
 ## 11. 落地：一条可复现的处理链路 / In practice: a reproducible processing pipeline
 
@@ -1093,21 +1186,21 @@ figures/                 图表
 Suggested practices:
 
 1.  **原始文件只读**，所有转换产物单独目录，转换参数写进脚本或 README；
-1.  **Keep raw files read-only**; put all conversion products in separate directories, and record conversion parameters in scripts or a README;
-2.  **保留 mzML**，不要只留 MGF——后面要复查 MS1、同位素或电荷时会用到；
-2.  **Keep the mzML**, do not keep only the MGF—you will need it later when re-examining MS1, isotopes, or charge;
-3.  **先用质控指标筛运行**：TIC 形状、前体质量误差（ppm）、漏切比例、MS2 数量、iRT 稳定性、carryover；
-3.  **Screen runs with quality-control metrics first**: TIC shape, precursor mass error (ppm), missed-cleavage rate, number of MS2 spectra, iRT stability, and carryover;
-4.  **记录软件与版本**：搜库引擎、FDR 阈值、定量方法、数据库版本（含 isoform 与 contaminant）；
-4.  **Record software and versions**: search engine, FDR threshold, quantification method, and database version (including isoforms and contaminants);
-5.  **统计分析前先看缺失模式**，再决定过滤与填补策略；
-5.  **Look at the missingness pattern before statistical analysis**, then decide on filtering and imputation strategies;
-6.  **差异分析用能处理缺失与批次的模型**：`limma` + `DEqMS` / `MSstats`，而不是简单的 t 检验。
-6.  **Use models that can handle missingness and batch for differential analysis**: `limma` + `DEqMS` / `MSstats`, rather than a simple t-test.
+2.  **Keep raw files read-only**; put all conversion products in separate directories, and record conversion parameters in scripts or a README;
+3.  **保留 mzML**，不要只留 MGF——后面要复查 MS1、同位素或电荷时会用到；
+4.  **Keep the mzML**, do not keep only the MGF—you will need it later when re-examining MS1, isotopes, or charge;
+5.  **先用质控指标筛运行**：TIC 形状、前体质量误差（ppm）、漏切比例、MS2 数量、iRT 稳定性、carryover；
+6.  **Screen runs with quality-control metrics first**: TIC shape, precursor mass error (ppm), missed-cleavage rate, number of MS2 spectra, iRT stability, and carryover;
+7.  **记录软件与版本**：搜库引擎、FDR 阈值、定量方法、数据库版本（含 isoform 与 contaminant）；
+8.  **Record software and versions**: search engine, FDR threshold, quantification method, and database version (including isoforms and contaminants);
+9.  **统计分析前先看缺失模式**，再决定过滤与填补策略；
+10. **Look at the missingness pattern before statistical analysis**, then decide on filtering and imputation strategies;
+11. **差异分析用能处理缺失与批次的模型**：`limma` + `DEqMS` / `MSstats`，而不是简单的 t 检验。
+12. **Use models that can handle missingness and batch for differential analysis**: `limma` + `DEqMS` / `MSstats`, rather than a simple t-test.
 
 ## 12. 术语表 / Glossary
 
-| 术语 / Term        | 含义 / Meaning                                   |
+| 术语               | 含义                                             |
 |--------------------|--------------------------------------------------|
 | PSM                | peptide-spectrum match，一张谱图与一条肽段的匹配 |
 | FDR                | false discovery rate，假发现率                   |
@@ -1122,6 +1215,24 @@ Suggested practices:
 | DDA / DIA / PRM    | 数据依赖 / 数据独立 / 平行反应监测               |
 | MNAR               | missing not at random，缺失与数值本身相关        |
 | mzML               | HUPO-PSI 维护的开放质谱数据格式                  |
+
+*English*
+
+| Term | Meaning |
+|---------------------|---------------------------------------------------|
+| PSM | peptide-spectrum match, the match between one spectrum and one peptide |
+| FDR | false discovery rate |
+| precursor | the selected precursor ion (peptide ion) |
+| fragment ion | ions produced after fragmentation, mainly the b / y series |
+| TIC / BPC | total ion current / base peak chromatogram |
+| centroid / profile | take a single value at the peak apex / keep the full peak shape |
+| CCS / 1/K0 | collision cross section / ion mobility |
+| LFQ | label-free quantification |
+| TMT / iTRAQ | isobaric isotope labeling reagents |
+| SILAC | stable isotope labeling by amino acids in cell culture |
+| DDA / DIA / PRM | data-dependent / data-independent / parallel reaction monitoring |
+| MNAR | missing not at random, missingness related to the value itself |
+| mzML | open mass spectrometry data format maintained by HUPO-PSI |
 
 ## 13. 参考 / References
 

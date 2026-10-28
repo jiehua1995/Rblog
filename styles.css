@@ -1523,23 +1523,17 @@ body:has(.quarto-listing-container-table) main.content {
   letter-spacing: 0.02em;
 }
 
-/* first column = date, shown as a soft liquid pill */
+/* first column = date: plain text, no background */
 .quarto-listing-container-table tbody td:first-child {
   width: 8.4rem;
-  padding: 0.38rem 0.7rem;
-  border-bottom-color: transparent;
-  border-radius: 999px;
+  padding: 0.38rem 0;
   color: var(--ink);
   font-family: var(--font-display);
   font-size: 0.94rem;
   font-weight: 500;
   letter-spacing: -0.01em;
-  text-align: center;
+  text-align: left;
   white-space: nowrap;
-  background:
-    radial-gradient(120% 180% at 12% 8%, rgba(86, 180, 233, 0.30), transparent 62%),
-    radial-gradient(120% 180% at 88% 92%, rgba(204, 121, 167, 0.22), transparent 64%),
-    var(--surface);
 }
 
 .quarto-listing-container-table tbody tr {
@@ -1547,7 +1541,7 @@ body:has(.quarto-listing-container-table) main.content {
 }
 
 .quarto-listing-container-table tbody tr:hover {
-  background: var(--accent-soft);
+  background: transparent;
 }
 
 .quarto-listing-container-table tbody tr:last-child td {
@@ -3385,6 +3379,8 @@ body.quarto-dark .about-name {
    Archive: compact list with a fluid date pill
    ========================================================================== */
 
+#quarto-document-content .quarto-listing-container-table table,
+#quarto-document-content .quarto-listing-container-table tbody,
 .quarto-listing-container-table table,
 .quarto-listing-container-table tbody {
   display: block;
@@ -3393,6 +3389,8 @@ body.quarto-dark .about-name {
   border-radius: 0;
   background: transparent;
   box-shadow: none;
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
 }
 
 .quarto-listing-container-table thead {
@@ -3414,7 +3412,7 @@ body.quarto-dark .about-name {
 }
 
 .quarto-listing-container-table tbody tr:hover {
-  background: var(--accent-soft);
+  background: transparent;
 }
 
 .quarto-listing-container-table tbody td {
@@ -3425,23 +3423,18 @@ body.quarto-dark .about-name {
   font-size: 0.68rem;
 }
 
-/* date: uniform pill, wide enough to keep the title column aligned */
+/* date: plain, larger, no background */
 .quarto-listing-container-table tbody td:first-child {
   flex: 0 0 7.6rem;
   width: 7.6rem;
-  padding: 0.3rem 0.5rem;
-  border-radius: 999px;
+  padding: 0.3rem 0;
   color: var(--ink);
   font-family: var(--font-display);
-  font-size: 0.92rem;
+  font-size: 0.98rem;
   font-weight: 500;
   letter-spacing: -0.01em;
-  text-align: center;
+  text-align: left;
   white-space: nowrap;
-  background:
-    radial-gradient(120% 180% at 12% 8%, rgba(86, 180, 233, 0.32), transparent 62%),
-    radial-gradient(120% 180% at 88% 92%, rgba(204, 121, 167, 0.24), transparent 64%),
-    var(--surface);
 }
 
 .quarto-listing-container-table tbody td:nth-child(2) {
@@ -3487,4 +3480,42 @@ body.quarto-dark .about-name {
 /* long URLs should wrap instead of running under the table of contents */
 #quarto-document-content a {
   overflow-wrap: anywhere;
+}
+
+/* keep wide article tables inside the text column */
+#quarto-document-content table {
+  width: 100%;
+  max-width: 100%;
+  table-layout: auto;
+}
+
+#quarto-document-content table th,
+#quarto-document-content table td {
+  overflow-wrap: break-word;
+  word-break: normal;
+}
+
+/* headers should wrap at spaces, never inside a word */
+#quarto-document-content table th {
+  overflow-wrap: normal;
+  word-break: keep-all;
+}
+
+/* let browser balance column widths from content instead of equal columns */
+#quarto-document-content table colgroup col {
+  width: auto !important;
+}
+
+/* very wide tables scroll inside their own box instead of breaking words */
+.table-scroll {
+  width: 100%;
+  max-width: 100%;
+  margin: 1rem 0;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.table-scroll table {
+  min-width: 680px;
+  margin: 0;
 }
