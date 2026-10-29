@@ -1,0 +1,81 @@
+---
+title: "English Title Only"
+subtitle: "中文副标题"
+description: "一句话中文摘要，出现在列表页与 meta 标签里。"
+author: "Jie Hua"
+date: "2026-01-01"
+categories: [Tooling]
+engine: knitr
+---
+
+::: callout-important
+## 写作说明 / Note
+
+本文由 **AI（模型名）** 检索、整理并撰写，**尚未经过人工逐条校对**。文中数字来自代码的实际运行结果，具体实现请以对应版本的官方文档为准。
+
+This article was researched and written by an **AI system (model)** and has **not been proofread line by line by a human**. Numbers come from actual runs of the code below; check the official documentation for the exact version you use.
+:::
+
+::: {.callout-note collapse="true"}
+## 生成本文所用的提示词（压缩后） / Prompt used to generate this article (condensed)
+
+> 中文提示词：目标、结构、字数、必须覆盖的点、明确禁止的做法。
+
+> English prompt with the same content, slightly tighter is fine.
+:::
+
+```{r}
+#| label: setup
+#| include: false
+source(file.path(dirname(knitr::current_input()), "..", "..", "theme-blog.R"))
+
+suppressPackageStartupMessages({
+  library(dplyr)
+  library(tidyr)
+  library(knitr)
+})
+```
+
+## 1. 中文标题 / English title
+
+中文段落，一段只说一件事。
+
+The English paragraph mirroring it, one idea per paragraph.
+
+-   **中文条目。**\
+    *English item.*
+-   **中文条目。**\
+    *English item.*
+
+```{r}
+#| label: fig-example
+#| fig-cap: "中文图注。 | English caption."
+ggplot(mtcars, aes(wt, mpg, colour = factor(cyl))) +
+  geom_point(size = 1.8) +
+  scale_colour_manual(values = c(blog_pal[["blue"]], blog_pal[["vermillion"]],
+                                 blog_pal[["green"]])) +
+  labs(x = "weight", y = "mpg", colour = NULL,
+       title = "Title in English",
+       subtitle = "short subtitle")
+```
+
+## 2. 中文标题 / English title
+
+| 列 / Column | 列 / Column |
+|-------------|-------------|
+| 值          | 值          |
+
+*English*
+
+| Column | Column |
+|--------|--------|
+| value  | value  |
+
+## 参考文献 / References
+
+1.  Author, A., et al. (2024). Title of the paper. *Journal* 1, 1–10. doi:10.0000/example
+2.  Official repository: <https://github.com/example/project>
+
+> 引用说明：标 DOI 的条目为已发表论文，其余为官方仓库。
+>
+> Citation note: entries with DOIs are published papers; the rest are official repositories.
