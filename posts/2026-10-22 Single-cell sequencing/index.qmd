@@ -4,6 +4,7 @@ subtitle: "单细胞测序：从一个细胞到一种细胞状态"
 description: "A technical walkthrough of single-cell RNA-seq: molecular chemistry, platforms, raw file formats, barcode and UMI processing, count matrices, QC, clustering, annotation and cell states."
 author: "Jie Hua"
 date: "2026-10-22"
+image: /images/social/2026-10-22-single-cell-sequencing-from-a-cell-to-a-cell-state.png
 date-modified: "2026-10-22"
 categories: [Single-cell]
 engine: knitr

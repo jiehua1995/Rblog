@@ -445,19 +445,97 @@ ul.task-list li input[type="checkbox"] {
     var meta = document.querySelector(".quarto-title-meta");
     if (!meta || meta.querySelector(".quarto-title-meta-share")) return;
 
-    var url = encodeURIComponent(window.location.href);
+    var pageUrl = window.location.href;
+    var url = encodeURIComponent(pageUrl);
     var title = encodeURIComponent(document.title);
+
+    /* Chinese platforms first, then the international ones, then copy-link.
+       WeChat is special: it has no share URL and needs a QR code. */
+    var targets = [
+      ["微博 Weibo", "fa-brands fa-weibo",
+        "https://service.weibo.com/share/share.php?url=" + url + "&title=" + title],
+      ["QQ空间 Qzone", "fa-brands fa-qq",
+        "https://sns.qzone.qq.com/cgi-bin/qzshare/cgi_qzshare_onekey?url=" + url + "&title=" + title],
+      ["豆瓣 Douban", null,
+        "https://www.douban.com/share/service?href=" + url + "&name=" + title],
+      ["X", "fa-brands fa-x-twitter",
+        "https://twitter.com/intent/tweet?url=" + url + "&text=" + title],
+      ["WhatsApp", "fa-brands fa-whatsapp",
+        "https://wa.me/?text=" + title + "%20" + url],
+      ["Telegram", "fa-brands fa-telegram",
+        "https://t.me/share/url?url=" + url + "&text=" + title],
+      ["Facebook", "fa-brands fa-facebook-f",
+        "https://www.facebook.com/sharer/sharer.php?u=" + url],
+      ["Reddit", "fa-brands fa-reddit-alien",
+        "https://www.reddit.com/submit?url=" + url + "&title=" + title],
+      ["LinkedIn", "fa-brands fa-linkedin-in",
+        "https://www.linkedin.com/sharing/share-offsite/?url=" + url]
+    ];
+
+    var html = targets.map(function (t) {
+      var icon = t[1]
+        ? '<i class="' + t[1] + '" aria-hidden="true"></i>'
+        : '<span class="share-glyph" aria-hidden="true">豆</span>';
+      return '<a class="share-btn" href="' + t[2] + '" target="_blank" rel="noopener"' +
+        ' aria-label="分享到' + t[0] + '" title="' + t[0] + '">' + icon + "</a>";
+    }).join("");
+
+    html =
+      '<span class="share-label">分享</span>' +
+      html.slice(0, html.indexOf("</a>") + 4) +          /* 微博 */
+      '<span class="share-qr">' +
+        '<button type="button" class="share-btn share-wechat" aria-label="分享到微信 WeChat" title="微信 WeChat">' +
+          '<i class="fa-brands fa-weixin" aria-hidden="true"></i>' +
+        "</button>" +
+        '<span class="share-qr-panel" hidden>' +
+          '<img alt="WeChat QR code" src="https://api.qrserver.com/v1/create-qr-code/?size=352x352&margin=0&data=' + url + '">' +
+          '<p class="share-qr-note">扫码在微信中打开<br>Scan to open in WeChat</p>' +
+        "</span>" +
+      "</span>" +
+      html.slice(html.indexOf("</a>") + 4) +
+      '<button type="button" class="share-btn share-copy" aria-label="复制链接 Copy link" title="复制链接">' +
+        '<i class="fa-solid fa-link" aria-hidden="true"></i>' +
+      "</button>";
+
     var wrap = document.createElement("div");
     wrap.className = "quarto-title-meta-share";
-    wrap.innerHTML =
-      '<span class="share-label">Share</span>' +
-      '<a class="share-btn" href="https://twitter.com/intent/tweet?url=' + url + "&text=" + title +
-      '" target="_blank" rel="noopener" aria-label="Share on X"><i class="fa-brands fa-x-twitter" aria-hidden="true"></i></a>' +
-      '<a class="share-btn" href="https://www.linkedin.com/sharing/share-offsite/?url=' + url +
-      '" target="_blank" rel="noopener" aria-label="Share on LinkedIn"><i class="fa-brands fa-linkedin-in" aria-hidden="true"></i></a>' +
-      '<button type="button" class="share-btn share-copy" aria-label="Copy link"><i class="fa-solid fa-link" aria-hidden="true"></i></button>';
+    wrap.innerHTML = html;
     meta.appendChild(wrap);
 
+    /* WeChat QR popover */
+    var qrBtn = wrap.querySelector(".share-wechat");
+    var qrPanel = wrap.querySelector(".share-qr-panel");
+    var qrImg = qrPanel.querySelector("img");
+    qrBtn.addEventListener("click", function (e) {
+      e.stopPropagation();
+      if (qrPanel.hidden) {
+        /* the title banner clips overflow, so the panel is positioned
+           against the viewport instead of the button */
+        var r = qrBtn.getBoundingClientRect();
+        var width = 208;
+        var height = 268;
+        var left = Math.min(Math.max(12, r.right - width), window.innerWidth - width - 12);
+        var top = r.bottom + 10;
+        if (top + height > window.innerHeight - 12) top = Math.max(12, r.top - height - 10);
+        qrPanel.style.left = left + "px";
+        qrPanel.style.top = top + "px";
+        qrPanel.hidden = false;
+      } else {
+        qrPanel.hidden = true;
+      }
+    });
+    qrImg.addEventListener("error", function () {
+      qrPanel.classList.add("is-empty");
+      qrPanel.querySelector(".share-qr-note").innerHTML =
+        "二维码加载失败，请复制链接<br>Copy the link instead";
+    });
+    document.addEventListener("click", function (e) {
+      if (!qrPanel.hidden && !qrPanel.contains(e.target) && e.target !== qrBtn) {
+        qrPanel.hidden = true;
+      }
+    });
+
+    /* copy link */
     var copy = wrap.querySelector(".share-copy");
     copy.addEventListener("click", function () {
       var button = this;
@@ -470,7 +548,7 @@ ul.task-list li input[type="checkbox"] {
         }, 1600);
       };
       if (navigator.clipboard && window.isSecureContext) {
-        navigator.clipboard.writeText(window.location.href).then(done).catch(function () {});
+        navigator.clipboard.writeText(pageUrl).then(done).catch(function () {});
       } else {
         done();
       }

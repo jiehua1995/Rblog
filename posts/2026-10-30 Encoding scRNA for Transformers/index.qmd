@@ -4,6 +4,7 @@ subtitle: "单细胞 RNA 表达数据在 Transformer 中的编码方法"
 description: "逐段中英对照的技术综述：以 Geneformer、scGPT、scFoundation、scPRINT 与 UCE 为例，还原从 raw counts 到 token 与 embedding 的完整计算过程，比较信息保留、计算成本与适用场景，并给出可验证的实验设计。"
 author: "Jie Hua"
 date: "2026-10-30"
+image: /images/social/2026-10-30-encoding-single-cell-rna-expression-data-for-transformer-m.png
 date-modified: "2026-10-30"
 categories: [Single-cell]
 engine: knitr

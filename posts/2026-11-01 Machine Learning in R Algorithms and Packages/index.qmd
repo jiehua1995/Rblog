@@ -4,6 +4,7 @@ subtitle: "R 里的机器学习：算法、数学与包"
 description: "从最小二乘到随机森林、从 PCA 到 UMAP、从 glmnet 到 torch：用统一的损失-正则-优化视角讲清十种常用算法的数学，全部配 R 代码与可复现的图，并对照 tidymodels、mlr3、caret 三种工作流。"
 author: "Jie Hua"
 date: "2026-11-01"
+image: /images/social/2026-11-01-machine-learning-in-r-algorithms-mathematics-and-packages.png
 categories: [Tooling]
 engine: knitr
 ---

@@ -48,6 +48,11 @@ body.quarto-light {
   --code-btn-hover-bg: rgba(18, 24, 32, 0.11);
   --code-btn-hover-ink: #121820;
   --content-max: 1240px;
+  /* width of a single article body. Quarto's own template caps the text column
+     at calc(850px - 3em) ≈ 799px; the grid override below lifts it to this value
+     so long bilingual posts use more of a large screen. */
+  --article-max: 940px;
+  --prose-max: 760px;
   --banner: linear-gradient(115deg, #05090d 0%, #0b3b38 48%, #172554 100%);
   --banner-glow: rgba(94, 234, 212, 0.2);
   --font-display: "Fraunces", "Iowan Old Style", "Palatino Linotype", Georgia, serif;
@@ -1791,7 +1796,7 @@ body:has(.about-layout) main.content {
 }
 
 .about-copy {
-  max-width: 640px;
+  max-width: var(--prose-max);
 }
 
 .about-name {
@@ -2054,6 +2059,29 @@ body:has(.error-page) main.content {
 }
 
 /* ---------- post pages ---------- */
+/* Quarto fixes the text column at minmax(500px, calc(850px - 3em)) inside its
+   page grid; on wide screens that leaves a lot of dead space. Re-declare the
+   grid for pages with a title banner so the article column can reach
+   --article-max and the table of contents keeps its own 240px lane. The two
+   outer 1fr tracks stay symmetric, so the banner title, the body text and the
+   centred container all share one left edge. */
+@media (min-width: 992px) {
+  body:has(.quarto-title-banner) .page-columns {
+    grid-template-columns:
+      [screen-start screen-start-inset page-start page-start-inset body-start-outset body-start] minmax(0, 1fr)
+      [body-content-start] minmax(500px, min(var(--article-max), calc(100% - 300px)))
+      [body-content-end] 2.5rem
+      [body-end body-end-outset] 240px
+      [page-end-inset page-end screen-end-inset screen-end] minmax(0, 1fr);
+  }
+  /* Quarto places .page-full with `grid-column: screen-start/screen-end !important`,
+     which under the template above stops one track short of the right edge and
+     leaves an untinted strip; pin the banner to the whole grid instead */
+  body:has(.quarto-title-banner) #title-block-header > .quarto-title-banner {
+    grid-column: 1 / -1 !important;
+  }
+}
+
 body:has(.quarto-title-banner) #quarto-content {
   max-width: var(--content-max);
   margin-left: auto;
@@ -2061,7 +2089,7 @@ body:has(.quarto-title-banner) #quarto-content {
 }
 
 body:has(.quarto-title-banner) #quarto-document-content {
-  max-width: 880px;
+  max-width: var(--article-max);
 }
 
 body:has(.quarto-title-banner) #quarto-margin-sidebar {
@@ -2106,7 +2134,7 @@ body.quarto-dark .quarto-title-banner {
 
 #title-block-header .quarto-title-banner .quarto-title {
   width: 100%;
-  max-width: 880px;
+  max-width: var(--article-max);
   margin-left: auto;
   margin-right: auto;
 }
@@ -2170,16 +2198,15 @@ body.quarto-dark .quarto-title-banner {
 #title-block-header.quarto-title-block.default .quarto-title-meta,
 .quarto-title-block .quarto-title-meta {
   display: flex;
-  flex-wrap: nowrap;
+  flex-wrap: wrap;
   align-items: center;
   gap: 0.4rem 0.9rem;
   width: 100%;
-  max-width: 880px;
+  max-width: var(--article-max);
   margin: 0 auto;
   padding: 0.62rem 0 0.7rem;
   border-bottom: 1px solid var(--rule);
-  overflow-x: auto;
-  scrollbar-width: none;
+  overflow: visible;
 }
 
 .quarto-title-block .quarto-title-meta::-webkit-scrollbar {
@@ -2222,8 +2249,10 @@ body.quarto-dark .quarto-title-banner {
 
 .quarto-title-meta-share {
   margin-left: auto;
-  flex: 0 0 auto;
+  flex: 0 1 auto;
   display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
   align-items: center;
   gap: 0.35rem;
 }
@@ -2265,6 +2294,57 @@ body.quarto-dark .quarto-title-banner {
 .share-btn.is-copied {
   color: var(--accent);
   border-color: var(--accent);
+}
+
+/* 豆瓣 has no brand icon in Font Awesome; use a matching text glyph */
+.share-glyph {
+  font-family: var(--font-sans);
+  font-size: 0.62rem;
+  font-weight: 600;
+  line-height: 1;
+}
+
+/* WeChat needs a QR code: small popover anchored to the button */
+.share-qr {
+  position: relative;
+  display: inline-flex;
+}
+
+.share-qr-panel {
+  position: fixed;
+  z-index: 60;
+  width: 208px;
+  padding: 0.7rem 0.7rem 0.55rem;
+  border: 1px solid var(--rule);
+  border-radius: 12px;
+  background: var(--surface);
+  box-shadow: 0 18px 40px -18px rgba(15, 23, 42, 0.45);
+  text-align: center;
+}
+
+.share-qr-panel[hidden] {
+  display: none;
+}
+
+.share-qr-panel img {
+  width: 176px;
+  height: 176px;
+  display: block;
+  margin: 0 auto;
+  border-radius: 6px;
+}
+
+.share-qr-note {
+  margin: 0.45rem 0 0;
+  color: var(--faint);
+  font-family: var(--font-mono);
+  font-size: 0.58rem;
+  line-height: 1.5;
+  letter-spacing: 0.02em;
+}
+
+.share-qr-panel.is-empty img {
+  display: none;
 }
 
 /* article prose */

@@ -4,6 +4,7 @@ subtitle: "从一个乘法到整个神经网络：AI 中的算子"
 description: "算子到底是什么：从 2 × 3 开始，经过矩阵乘法、激活函数、卷积与注意力，一直讲到 GPU kernel、FlashAttention 与虚拟细胞；同时区分数学定义、框架实现与硬件实现这三层，并给出判断“新算子”是否真的新的问题清单。"
 author: "Jie Hua"
 date: "2026-10-29"
+image: /images/social/2026-10-29-from-one-multiplication-to-a-whole-network-operators-in-ai.png
 categories: [Tooling]
 engine: knitr
 ---

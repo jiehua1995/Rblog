@@ -3,6 +3,7 @@ title: "plotthis for R plotting"
 subtitle: "用 plotthis 进行 R 绘图"
 author: "Jie Hua"
 date: "2025-08-25"
+image: /images/social/2025-08-25-plotthis-for-r-plotting.png
 date-modified: "2025-08-25"
 categories: [Plot]
 ---

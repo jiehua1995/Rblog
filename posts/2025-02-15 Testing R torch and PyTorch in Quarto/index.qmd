@@ -4,6 +4,7 @@ subtitle: "在同一个 Quarto 文档里测试 R torch、PyTorch 与多语言 ch
 description: "一次环境审计：在同一份 Quarto 文档里用 R 的 torch 包和 Python 的 PyTorch 训练同一个两层 MLP，比较收敛、耗时与数值一致性，同时逐个检查 R、Python、Bash、OJS、Julia 的 chunk 引擎是否真的会在渲染时执行。"
 author: "Jie Hua"
 date: "2025-02-15"
+image: /images/social/2025-02-15-testing-r-torch-and-pytorch-in-one-quarto-document.png
 categories: [Tooling]
 engine: knitr
 ---

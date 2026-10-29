@@ -4,8 +4,8 @@ project:
 website:
   title: "Jie Hua's Bioinformatics Notes"
   description: "A working notebook of reproducible bioinformatics — genomes, structures, and data visualization."
-  site-url: https://bioinfor.jiehua1995.xyz/
-  image: favicon.png
+  site-url: https://bioinfor.jiehua1995.xyz
+  image: images/social-card.png
   image-alt: "Jie Hua — Bioinformatics Notes"
   reader-mode: false
   sidebar: false

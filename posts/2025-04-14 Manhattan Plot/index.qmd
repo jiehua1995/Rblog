@@ -3,6 +3,7 @@ title: "Manhattan Plot for GWAS Results"
 subtitle: "GWAS 结果的曼哈顿图"
 author: "Jie Hua"
 date: "2025-04-14"
+image: /images/social/2025-04-14-manhattan-plot-for-gwas-results.png
 date-modified: "2025-04-14"
 categories: [Plot]
 ---

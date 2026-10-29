@@ -4,6 +4,7 @@ subtitle: "从无生命到生命：物质、信息、自组织与涌现"
 description: "一篇关于生命起源的深度综述：从亚里士多德与康德，到耗散结构、自催化闭合、RNA 复制、原始细胞与人工生命，梳理 2020–2026 年的实验与理论进展，并给出可检验的生命性评价框架。"
 author: "Jie Hua"
 date: "2026-10-28"
+image: /images/social/2026-10-28-from-non-life-to-life-philosophy-self-organization-informa.png
 date-modified: "2026-10-28"
 categories: [Origins of Life]
 engine: knitr
