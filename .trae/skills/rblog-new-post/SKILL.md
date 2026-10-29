@@ -121,27 +121,23 @@ suppressPackageStartupMessages({
 Rscript --no-init-file .trae/skills/rblog-new-post/scripts/probe-env.R
 ```
 
-`--no-init-file` 让它跳过 `.Rprofile`，否则新克隆的机器会因为缺 `renv/activate.R` 直接报错。输出包含 R 与 Rscript 路径、Quarto 版本、git、bash、`RETICULATE_PYTHON`、关键 R 包版本，以及当前 Python 能否 `import torch`。缺 Quarto 先装 Quarto CLI；缺 R 包用 `install.packages()`；纯 R 的文章不需要 Python。
+`--no-init-file` 让探测不受 `.Rprofile` 影响（旧克隆里它可能还引用缺失的 `renv/activate.R`）。输出包含 R 与 Rscript 路径、Quarto 版本、git、bash、`RETICULATE_PYTHON`、关键 R 包版本，以及当前 Python 能否 `import torch`。缺 Quarto 先装 Quarto CLI；缺 R 包用 `install.packages()`；纯 R 的文章不需要 Python。
 
-渲染单篇（macOS/Linux 的 bash/zsh 版本）：
+渲染单篇（脚本会自己找仓库根目录，并处理路径引号）：
 
 ```bash
-# 仓库里的 .Rprofile 引用 renv/activate.R，在没初始化 renv 的机器上会报错
-[ -f .Rprofile ] && mv .Rprofile .Rprofile.bak
-quarto render "posts/YYYY-MM-DD Title/index.qmd"
-[ -f .Rprofile.bak ] && mv .Rprofile.bak .Rprofile
+.trae/skills/rblog-new-post/scripts/render-post.sh "posts/YYYY-MM-DD Title"
+.trae/skills/rblog-new-post/scripts/render-post.sh "posts/YYYY-MM-DD Title" --fresh
 ```
-
-Windows PowerShell 版本：
 
 ```powershell
-if (Test-Path .Rprofile) { Rename-Item .Rprofile .Rprofile.bak -Force }
-try { quarto render "posts/YYYY-MM-DD Title/index.qmd" 2>&1 | Out-String }
-finally { if (Test-Path .Rprofile.bak) { Rename-Item .Rprofile.bak .Rprofile -Force } }
+powershell -File .trae\skills\rblog-new-post\scripts\render-post.ps1 -Post "posts\YYYY-MM-DD Title"
+powershell -File .trae\skills\rblog-new-post\scripts\render-post.ps1 -Post "posts\YYYY-MM-DD Title" -Fresh
 ```
 
-- 路径含空格，必须整体加引号；不要一次传多个文件（pandoc 会报错）。
-- `freeze: true` 是最大的坑：改正文会重渲染，但**改了外部脚本、数据或 `theme-blog.R` 后必须删该文章的缓存目录**再渲染，否则页面还是旧图。缓存目录是 `_freeze/posts/<文章目录名>/`。
+- `--fresh` / `-Fresh` 会先删该文章的 `_freeze/posts/<文章目录名>/`。**改了外部脚本、数据或 `theme-blog.R` 时必须用它**，否则页面还是旧图。
+- 仓库的 `.Rprofile` 现在写成 `if (file.exists("renv/activate.R")) source(...)`，没初始化 renv 的机器也能直接渲染；如果你在旧克隆上还遇到 `renv/activate.R` 报错，先 `git pull`，或临时把 `.Rprofile` 改名。
+- 路径含空格，传参时整体加引号；不要一次传多个文件（pandoc 会报错）。
 - 渲染完成看三处：`_site/posts/.../index.html` 里的数字与正文是否一致、`index_files/figure-html/*.png` 是否正常、`_site/articles.html` 是否收录（首页只显示最新 7 篇，补写的旧文只在归档页出现）。
 - 需要看整页版式时，用 `python -m http.server --directory _site`（或 `quarto preview`）起本地服务，再在浏览器里检查窄窗口下的表格与目录。
 
@@ -163,8 +159,9 @@ quarto publish netlify --no-prompt     # 先整站渲染，再上传
 | 文章与图 | `posts/**` | 是 |
 | 计算缓存 | `_freeze/posts/**` | 是（所以别的机器不必重跑） |
 | 构建产物 | `_site/**` | 部分被跟踪，其余忽略 |
-| `.Rprofile`、`.Renviron` | 仓库根目录 | 否（每台机器各自一份） |
-| Netlify 授权、Python 路径 | 机器本地 | 否 |
+| `.Rprofile` | 仓库根目录 | 是（只含 renv 守卫） |
+| `.Renviron`、Python 路径 | 仓库根目录 / 机器本地 | 否（每台机器各自一份） |
+| Netlify 授权 | 机器本地 | 否 |
 
 因此：
 
