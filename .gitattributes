@@ -1,0 +1,12 @@
+# Keep text files LF in the repository so Windows and macOS clones agree.
+# Generated site output is the main source of CRLF noise.
+* text=auto eol=lf
+
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.webp binary
+*.gif binary
+*.pdf binary
+*.rds binary
+*.ico binary
