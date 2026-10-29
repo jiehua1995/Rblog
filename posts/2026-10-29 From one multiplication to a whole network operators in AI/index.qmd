@@ -1038,6 +1038,50 @@ Four graphs, four geometries. 把上面的讨论压成一张表：
 
 The most important column is "where adjacency comes from". It determines what the operator can express, how much data it needs, and where it fails. **Changing the architecture is mostly changing the adjacency assumption**; changing the operator is changing how you aggregate on that adjacency. The two are related, but they are not the same thing.
 
+### 4.7 每种架构现在到底在做什么 / What each architecture actually does today
+
+抽象地谈"归纳偏置"容易空。下面这张表把四种架构落到具体的任务、具体的系统和具体的输入输出上。选它的理由不是"这些系统最有名"，而是它们能说明：**同一类任务被不同架构做过，差别就出在数据形状上。**
+
+Talking about inductive bias in the abstract goes empty quickly. The table below grounds each architecture in concrete tasks, concrete systems and concrete inputs and outputs. They are chosen not because they are the most famous, but because together they show that **the same task family has been solved by different architectures, and the difference comes down to the shape of the data.**
+
+| 架构 | 具体任务 | 代表系统 | 为什么是这种算子 |
+|---|---|---|---|
+| CNN | 医学影像分割：CT/MRI 中的器官、病灶、细胞核 | nnU-Net | 组织纹理是局部模式，同一套卷积核可以滑过整幅图；平移等变省参数 |
+| CNN | DNA 序列上的调控信号：转录因子结合位点、ChIP-seq 覆盖度 | BPNet | motif 只有十几 bp，出现位置不固定，正是"局部 + 共享权重"擅长的事 |
+| Transformer | 蛋白序列语言模型，输出用于变体效应预测、结构建模 | ESM-2；AlphaFold2 的 Evoformer | 残基之间的共变是长程的，任意两位需要直接交互，而不是叠 50 层卷积 |
+| Transformer | 单细胞表达谱：细胞类型注释、扰动响应预测 | scGPT、Geneformer | 基因没有天然顺序和固定邻接，"看哪些基因"必须由内容决定 |
+| Transformer | 语音识别、图像分类 | Whisper、ViT | 同一套"全对全 + 内容寻址"可以跨模态复用，代价是数据和算力 |
+| GNN | 分子性质与生物活性预测 | GIN、GINE（OGB 的 molhiv、molpcba 基准） | 原子和化学键本来就是图；预测结果必须与原子编号无关 |
+| GNN | 蛋白–配体结合构象；空间转录组的区域划分 | EquiBind、DiffDock；GraphST | 3D 邻接或空间邻接直接就是边，不需要"学"出来 |
+| RGAT | 知识图谱补全、药物重定位、逆合成 | R-GCN、RGAT（FB15k-237、WN18RR）；Hetionet | 边的类型带语义："治疗""导致""结合"不是同一件事，压成一种边就丢了信息 |
+| JEPA | 自监督预训练目标（图像、视频） | I-JEPA、V-JEPA | 不是算子：它规定"在表示空间预测什么、在哪里算损失"，内部仍是 attention 与 MLP |
+
+*English*
+
+| Model | Concrete task | Representative system | Why this operator |
+|---|---|---|---|
+| CNN | Medical image segmentation: organs, lesions, nuclei in CT/MRI | nnU-Net | Tissue texture is a local pattern, so one kernel can slide over the whole image; translation equivariance saves parameters |
+| CNN | Regulatory signal from DNA: transcription-factor binding, ChIP-seq coverage | BPNet | A motif spans ~10 bp and can appear anywhere — exactly the "local + shared weights" case |
+| Transformer | Protein language models, used downstream for variant effects and structure | ESM-2; the Evoformer in AlphaFold2 | Co-variation between residues is long-range; any two positions need direct interaction instead of 50 stacked convolutions |
+| Transformer | Single-cell expression: cell-type annotation, perturbation response | scGPT, Geneformer | Genes have no natural order or fixed adjacency; "which genes to read" must be decided from content |
+| Transformer | Speech recognition, image classification | Whisper, ViT | One "all-pairs + content addressing" recipe transfers across modalities, at the cost of data and compute |
+| GNN | Molecular property and bioactivity prediction | GIN, GINE (OGB molhiv, molpcba) | Atoms and bonds already form a graph; predictions must not depend on atom numbering |
+| GNN | Protein–ligand binding pose; spatial domain calling in spatial transcriptomics | EquiBind, DiffDock; GraphST | 3D adjacency or spatial adjacency is the edge set — nothing to learn |
+| RGAT | Knowledge-graph completion, drug repurposing, retrosynthesis | R-GCN, RGAT (FB15k-237, WN18RR); Hetionet | Edge types carry meaning: "treats", "causes" and "binds" are not the same edge |
+| JEPA | A self-supervised training objective (images, video) | I-JEPA, V-JEPA | Not an operator: it fixes what is predicted and where the loss lives; inside, it is still attention and MLPs |
+
+表里最值得注意的一点是：**很多任务是"谁都能做"的**。图像分类既被 ResNet 做过，也被 ViT 做过；分子性质预测既可以用 GNN，也可以把 SMILES 当句子喂给 Transformer。所以"某架构能做某任务"从来不是论据，真正的论据是**在什么数据量下、用多少参数、泛化到哪里**。ViT 原论文给出的就是这个结论：小数据上不如 CNN，大规模预训练之后反超——变的是数据，不是算子突然变强了。
+
+The thing worth noticing is that **many of these tasks are done by everyone**. Image classification was done by ResNet and by ViT; molecular property prediction can use a GNN or feed SMILES to a Transformer as if it were a sentence. So "architecture X can do task Y" is never the argument; the argument is **at what data scale, with how many parameters, and how far does it generalise**. The original ViT paper makes exactly this point: it loses to a CNN on small data and overtakes it after large-scale pretraining — what changed was the data, not a sudden jump in the operator.
+
+生物学里的例子能把这件事说得更具体。同样是"预测基因表达"，Enformer 吃的是约 200 kb 的 DNA 序列，用卷积提取局部 motif、再用注意力连接远端增强子，于是它天然适合问"这个变异会不会改变表达"；scGPT 与 Geneformer 吃的是几千维的表达向量，关注的不是碱基序列而是细胞状态，于是注意力被用来连接基因而不是连接碱基；GEARS 吃的是基因本体图加扰动标签，用它来外推到没做过的组合扰动。**三个模型都在"预测表达"，但输入的形状决定了邻接的定义，邻接又决定了算子的形态。**
+
+Biological examples make this concrete. For "predict gene expression", Enformer takes roughly 200 kb of DNA, uses convolution for local motifs and attention to link distal enhancers, which makes it a natural fit for asking whether a variant changes expression. scGPT and Geneformer take a few thousand expression values and care about cell state rather than bases, so attention links genes instead of nucleotides. GEARS takes a gene-ontology graph plus perturbation labels and extrapolates to combinations never measured. **All three "predict expression", but the shape of the input fixes what adjacency means, and adjacency fixes the form of the operator.**
+
+最后一层提醒：任务的**名字**一样，难度可以差很远。同样是"预测扰动后的表达"，同分布留出测试集与跨细胞系、跨物种的分布外测试，是两个难度；同样是"知识图谱补全"，随机划分和按时间划分，是两个难度。读一篇架构论文时，看到任务名之后应该立刻问：划分方式是什么，baseline 是谁，有没有信息泄漏。这三个问题比"用的什么架构"更能决定结论是否可信。
+
+A final caveat: the **name** of a task says little about its difficulty. "Predict expression after perturbation" is one problem on an in-distribution holdout and a much harder one across cell lines or species; "knowledge-graph completion" is one problem under a random split and another under a temporal split. On reading an architecture paper, the questions to ask right after the task name are: how was the split made, who is the baseline, and is there leakage. Those three decide whether the conclusion holds far more than the choice of architecture does.
+
 ## 5. 为什么大家都说自己的算子更好？ / Why everyone claims their operator is better
 
 "我们提出了一个新的算子，效果更好。"这句话在论文摘要里出现频率极高，但它可能指三件完全不同的事。分不清这三件事，就没法判断一项工作到底先进在哪里，也没法复现它的结论。
@@ -1747,7 +1791,12 @@ These eight questions need no code to ask, yet they turn most marketing into tes
 17. Roohani, Y., et al. (2024). Predicting transcriptional outcomes of novel multigene perturbations with GEARS. *Nature Biotechnology* 42, 927–936. arXiv:2304.12783
 18. Replogle, J. M., et al. (2022). Mapping information-rich genotype–phenotype landscapes with genome-scale Perturb-seq. *Cell* 185(14), 2559–2575.
 19. PyTorch documentation. *torch.matmul*, *torch.nn.functional*, and the ATen operator registry. https://pytorch.org/docs/stable/
+20. Dosovitskiy, A., et al. (2021). An image is worth 16x16 words: transformers for image recognition at scale. *ICLR*. arXiv:2010.11929
+21. Isensee, F., et al. (2021). nnU-Net: a self-configuring method for deep learning-based biomedical image segmentation. *Nature Methods* 18, 203–211.
+22. Avsec, Ž., et al. (2021). Effective gene expression prediction from sequence by integrating long-range interactions. *Nature Methods* 18, 1196–1203.
+23. Lin, Z., et al. (2023). Evolutionary-scale prediction of atomic-level protein structure with a language model. *Science* 379, 1123–1130.
+24. Himmelstein, D. S., et al. (2017). Systematic integration of biomedical knowledge prioritizes drugs for repurposing. *eLife* 6, e26726.
 
-引用说明：第 1–13、17 条给出 arXiv 编号，正式发表信息以期刊页面为准；第 14–16、18 条给出卷页，未标 DOI 的条目建议在引用前核对期刊记录；第 19 条为官方文档。
+引用说明：第 1–13、17、20 条给出 arXiv 编号，正式发表信息以期刊页面为准；第 14–16、18、21–24 条给出卷页，未标 DOI 的条目建议在引用前核对期刊记录；第 19 条为官方文档。
 
-Citation note: entries 1–13 and 17 give arXiv identifiers; check the journal record for the version of record. Entries 14–16 and 18 give volume and pages; verify against the journal before citing where no DOI is given. Entry 19 is official documentation.
+Citation note: entries 1–13, 17 and 20 give arXiv identifiers; check the journal record for the version of record. Entries 14–16, 18 and 21–24 give volume and pages; verify against the journal before citing where no DOI is given. Entry 19 is official documentation.
