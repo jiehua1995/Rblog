@@ -54,3 +54,7 @@ rsconnect/
 
 # Renv
 renv/
+
+# Post-level inputs and experiment outputs (downloadable / regenerable)
+posts/*/data/
+posts/*/results/
