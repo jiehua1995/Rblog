@@ -303,17 +303,49 @@
     ]
   },
   "cost": {
+    "anchors": {
+      "dinosaur_extinction": 66000000.0,
+      "earth_age": 4540000000.0,
+      "homo_sapiens": 300000.0,
+      "recorded_history": 5000.0,
+      "universe_age": 13800000000.0
+    },
     "bytes_per_atom": 150.0,
     "cg_speedups": {
       "1": 1.0,
-      "10": 39.8,
-      "100": 1584.9,
       "2": 3.0,
+      "4": 9.2,
+      "10": 39.8,
       "25": 172.5,
-      "4": 9.2
+      "100": 1584.9
     },
     "dt_fs": 2.0,
+    "gpu_watt": 300.0,
+    "gpus_for_one_year_syn3a_cycle": 29945242984257.355,
     "human_state_PB": 15.0,
+    "intuition": {
+      "E. coli, 1 h": {
+        "TWh": 224999999.99999997,
+        "world_years": 7758.620689655171,
+        "years": 4277891854.8939075
+      },
+      "human cell, 1 h": {
+        "TWh": 749999999999.9999,
+        "world_years": 25862068.965517238,
+        "years": 14259639516313.025
+      },
+      "syn3A, 1 s": {
+        "TWh": 12500.0,
+        "world_years": 0.43103448275862066,
+        "years": 237660.65860521706
+      },
+      "syn3A, one cycle": {
+        "TWh": 78749999.99999999,
+        "world_years": 2715.51724137931,
+        "years": 1497262149.212868
+      }
+    },
+    "power_for_one_year_TW": 8983.572895277208,
     "scenarios_atom_steps_per_s": {
       "1,000 H100, ideal": 40000000000.0,
       "10,000 H100, 25%": 100000000000.0,
@@ -331,6 +363,7 @@
       "syn3A (all-atom)": 6000000000.0,
       "yeast cell": 1600000000000.0
     },
+    "world_twh": 29000.0,
     "years_table": {
       "E. coli|1 h": 4277891854.8939075,
       "E. coli|1 ms": 1188.3032930260856,

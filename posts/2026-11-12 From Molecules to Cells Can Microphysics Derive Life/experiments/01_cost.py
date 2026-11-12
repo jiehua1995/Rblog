@@ -35,6 +35,9 @@ import matplotlib.pyplot as plt
 DT = 2e-15                       # s, 2 fs integration step
 BYTES_PER_ATOM = 150.0           # positions, velocities, forces, neighbour list
 TRAJ_BYTES_PER_ATOM = 12.0       # float32 xyz
+GPU_WATT = 300.0                 # A100-class board power
+WORLD_TWH = 29_000.0             # world electricity, 2023, TWh/year
+J_PER_TWH = 3.6e15
 
 # atom-steps per second, calibrated or assumed (see module docstring)
 SCENARIOS = {
@@ -88,12 +91,12 @@ def main() -> None:
     # ---- table for one scenario -------------------------------------------
     scen = "10,000 H100, ideal"
     P = SCENARIOS[scen]
-    rows = {}
+    year_table = {}
     print(f"scenario: {scen}  ({P:.1e} atom-steps/s)")
     for name, n in SYSTEMS.items():
         for t, lab in zip([1e-3, 1.0, 3600.0], ["1 ms", "1 s", "1 h"]):
             sec = wall_seconds(n, t, P)
-            rows[f"{name}|{lab}"] = years(sec)
+            year_table[f"{name}|{lab}"] = years(sec)
             print(f"  {name:20s} {lab:6s} {years(sec):10.2e} yr"
                   f"   memory {n * BYTES_PER_ATOM / 1e12:8.2f} TB")
 
@@ -214,7 +217,7 @@ def main() -> None:
     ax.axhline(1 / 365, color=PAL["grey"], lw=0.7, ls="--")
     ax.text(1.2, 1 / 365 * 1.4, "one day", fontsize=6.5, color=PAL["grey"])
     ax.text(1.2, wall_syn * 2.5,
-            f"all-atom: {wall_syn:.1e} yr on {scen}", fontsize=7,
+            f"all-atom: {wall_syn / 1e9:.1f} billion yr on {scen}", fontsize=7,
             color=PAL["dark"])
     for mi, si in zip(m, speedup):
         if mi in (4, 25):
@@ -224,16 +227,102 @@ def main() -> None:
     fig.tight_layout()
     save(fig, "fig-cost-coarsegrain")
 
+    # ---- the same cost in human terms -------------------------------------
+    gpu_rate = SCENARIOS["one A100"]
+    cases = [
+        ("syn3A, 1 s", 6e9, 1.0, PAL["sky"]),
+        ("syn3A, one cycle", 6e9, 6300.0, PAL["blue"]),
+        ("E. coli, 1 h", 3e10, 3600.0, PAL["green"]),
+        ("human cell, 1 h", 1e14, 3600.0, PAL["vermillion"]),
+    ]
+    rows = []
+    for name, n, t, c in cases:
+        yrs = years(wall_seconds(n, t, P))
+        steps = n * t / DT
+        twh = steps * (GPU_WATT / gpu_rate) / J_PER_TWH
+        rows.append({"name": name, "years": yrs, "TWh": twh,
+                     "world_years": twh / WORLD_TWH, "color": c})
+
+    fig, axes = plt.subplots(1, 2, figsize=(9.6, 4.2),
+                             gridspec_kw={"width_ratios": [1.35, 1]})
+    ax = axes[0]
+    refs = [("recorded history", 5e3), ("Homo sapiens", 3e5),
+            ("dinosaurs extinct", 6.6e7), ("age of Earth", 4.54e9),
+            ("age of the universe", 1.38e10)]
+    def human_years(y: float) -> str:
+        if y >= 1e12:
+            return f"{y / 1e12:.0f} trillion yr"
+        if y >= 1e9:
+            return f"{y / 1e9:.1f} billion yr"
+        if y >= 1e6:
+            return f"{y / 1e6:.0f} million yr"
+        return f"{y / 1e3:.0f},000 yr"
+
+    for i, r in enumerate(rows):
+        ax.plot([1.0, r["years"]], [i, i], color=r["color"], lw=2.2)
+        ax.plot([r["years"]], [i], "o", color=r["color"], ms=5)
+        ax.text(r["years"] * 1.5, i, human_years(r["years"]), fontsize=6.6,
+                color=r["color"], va="center")
+    labels = [r["name"] for r in rows]
+    for j, (name, yrs) in enumerate(refs):
+        i = len(rows) + j
+        ax.plot([1.0, yrs], [i, i], color=PAL["grey"], lw=1.2, ls=":")
+        ax.plot([yrs], [i], "|", color=PAL["grey"], ms=7)
+        labels.append(name)
+    ax.set_yticks(range(len(labels)), labels, fontsize=7)
+    ax.axhline(len(rows) - 0.5, color=PAL["grey"], lw=0.5, alpha=0.5)
+    ax.set_xscale("log")
+    ax.set_xlim(1.0, 2e14)
+    ax.set_ylim(-0.6, len(labels) - 0.2)
+    ax.set_xlabel("wall-clock years on 10,000 ideal GPUs (log scale)")
+    ax.set_title("(a) one cell's simulation against natural timescales")
+
+    ax = axes[1]
+    vals = [r["world_years"] for r in rows]
+    ax.barh(range(len(rows)), vals, color=[r["color"] for r in rows], height=0.55)
+    ax.axvline(1.0, color=PAL["grey"], lw=0.8, ls="--")
+    ax.text(1.2, -0.5, "one year of world electricity (29,000 TWh)",
+            fontsize=6.2, color=PAL["grey"], va="top")
+    for i, r in enumerate(rows):
+        lab = (f"{r['world_years']:.2f}x" if r["world_years"] < 10
+               else f"{r['world_years']:.0f}x")
+        if r["world_years"] < 1:
+            ax.text(r["world_years"] * 0.62, i, lab, fontsize=6.6,
+                    color=r["color"], va="center", ha="right")
+        else:
+            ax.text(r["world_years"] * 1.35, i, lab, fontsize=6.6,
+                    color=r["color"], va="center")
+    ax.set_yticks(range(len(rows)), ["" for _ in rows])
+    ax.set_xscale("log")
+    ax.set_xlim(0.05, 2e9)
+    ax.set_ylim(-0.9, 3.5)
+    ax.set_xlabel("electricity, in years of current world consumption (log)")
+    ax.set_title("(b) and how much electricity?")
+    fig.tight_layout()
+    save(fig, "fig-cost-intuition")
+
+    gpus_one_year = (6e9 * 6300.0 / DT) / (365.25 * 24 * 3600 * gpu_rate)
+    power_one_year_tw = gpus_one_year * GPU_WATT / 1e12
+
     save_metrics("cost", {
         "dt_fs": 2.0,
         "bytes_per_atom": BYTES_PER_ATOM,
         "scenarios_atom_steps_per_s": SCENARIOS,
         "systems_atoms": SYSTEMS,
-        "years_table": rows,
+        "years_table": year_table,
         "syn3a_cycle_years_10k_gpu": wall_syn,
         "syn3a_state_TB": 6e9 * BYTES_PER_ATOM / 1e12,
         "human_state_PB": 1e14 * BYTES_PER_ATOM / 1e15,
         "cg_speedups": dict(zip([int(v) for v in m], speedup.round(1).tolist())),
+        "gpu_watt": GPU_WATT,
+        "world_twh": WORLD_TWH,
+        "intuition": {r["name"]: {"years": r["years"], "TWh": r["TWh"],
+                                  "world_years": r["world_years"]} for r in rows},
+        "gpus_for_one_year_syn3a_cycle": gpus_one_year,
+        "power_for_one_year_TW": power_one_year_tw,
+        "anchors": {"recorded_history": 5e3, "homo_sapiens": 3e5,
+                    "dinosaur_extinction": 6.6e7, "earth_age": 4.54e9,
+                    "universe_age": 1.38e10},
     })
 
 

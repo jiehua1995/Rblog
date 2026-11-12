@@ -74,22 +74,23 @@ optimistic: real runs will be slower.
 | # | file | source |
 |---|---|---|
 | 1 | `fig-cost-landscape.png` | `01` |
-| 2 | `fig-cost-memory.png` | `01` |
-| 3 | `fig-cost-coarsegrain.png` | `01` |
-| 4 | `fig-identifiability.png` | `02` |
-| 5 | `fig-information.png` | `02` |
-| 6 | `fig-projection.png` | `03` |
-| 7 | `fig-thermo.png` | `04` |
-| 8 | `fig-thermo-stochastic.png` | `04` |
-| 9 | `fig-bifurcation.png` | `05` |
-| 10 | `fig-noise.png` | `05` |
-| 11 | `fig-error.png` | `06` |
-| 12 | `fig-rd.png` + `fig-rd.gif` | `07` |
-| 13 | `fig-spatial.png` | `07` |
-| 14 | `fig-ladder.png` | `08` |
-| 15 | `fig-quantum.png` | `10` |
-| 16 | `fig-layers.png` | `09` |
-| 17 | `fig-gates.png` | `09` |
+| 2 | `fig-cost-intuition.png` | `01` |
+| 3 | `fig-cost-memory.png` | `01` |
+| 4 | `fig-cost-coarsegrain.png` | `01` |
+| 5 | `fig-identifiability.png` | `02` |
+| 6 | `fig-information.png` | `02` |
+| 7 | `fig-projection.png` | `03` |
+| 8 | `fig-thermo.png` | `04` |
+| 9 | `fig-thermo-stochastic.png` | `04` |
+| 10 | `fig-bifurcation.png` | `05` |
+| 11 | `fig-noise.png` | `05` |
+| 12 | `fig-error.png` | `06` |
+| 13 | `fig-rd.png` + `fig-rd.gif` | `07` |
+| 14 | `fig-spatial.png` | `07` |
+| 15 | `fig-ladder.png` | `08` |
+| 16 | `fig-quantum.png` | `10` |
+| 17 | `fig-layers.png` | `09` |
+| 18 | `fig-gates.png` | `09` |
 
 `common/style.py` sets the palette and writes PNG (300 dpi) plus SVG;
 `common/utils.py` holds paths, seeds and the JSON writer.
