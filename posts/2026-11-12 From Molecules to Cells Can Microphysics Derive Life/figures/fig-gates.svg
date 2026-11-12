@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+  "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg xmlns:xlink="http://www.w3.org/1999/xlink" width="615.24pt" height="226.44pt" viewBox="0 0 615.24 226.44" xmlns="http://www.w3.org/2000/svg" version="1.1">
+ <metadata>
+  <rdf:RDF xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+   <cc:Work>
+    <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage"/>
+    <dc:date>2026-11-12T14:00:51.749068</dc:date>
+    <dc:format>image/svg+xml</dc:format>
+    <dc:creator>
+     <cc:Agent>
+      <dc:title>Matplotlib v3.11.0, https://matplotlib.org/</dc:title>
+     </cc:Agent>
+    </dc:creator>
+   </cc:Work>
+  </rdf:RDF>
+ </metadata>
+ <defs>
+  <style type="text/css">*{stroke-linejoin: round; stroke-linecap: butt}</style>
+ </defs>
+ <g id="figure_1">
+  <g id="patch_1">
+   <path d="M 0 226.44 
+L 615.24 226.44 
+L 615.24 0 
+L 0 0 
+L 0 226.44 
+z
+" style="fill: none"/>
+  </g>
+  <g id="axes_1">
+   <g id="patch_2">
+    <path d="M 31.2336 138.888 
+L 187.452 138.888 
+L 187.452 71.928 
+L 31.2336 71.928 
+z
+" clip-path="url(#pff05c5e275)" style="fill: #0072b2; opacity: 0.14"/>
+   </g>
+   <g id="patch_3">
+    <path d="M 192.45411 105.408 
+Q 202.472656 105.408 211.373168 105.408 
+" clip-path="url(#pff05c5e275)" style="fill: none; stroke: #8a8a8a; stroke-linecap: round"/>
+    <path d="M 207.373168 103.408 
+L 211.373168 105.408 
+L 207.373168 107.408 
+z
+" clip-path="url(#pff05c5e275)" style="fill: #8a8a8a; stroke: #8a8a8a; stroke-linecap: round"/>
+   </g>
+   <g id="patch_4">
+    <path d="M 223.5024 138.888 
+L 379.7208 138.888 
+L 379.7208 71.928 
+L 223.5024 71.928 
+z
+" clip-path="url(#pff05c5e275)" style="fill: #009e73; opacity: 0.14"/>
+   </g>
+   <g id="patch_5">
+    <path d="M 384.72291 105.408 
+Q 394.741456 105.408 403.641968 105.408 
+" clip-path="url(#pff05c5e275)" style="fill: none; stroke: #8a8a8a; stroke-linecap: round"/>
+    <path d="M 399.641968 103.408 
+L 403.641968 105.408 
+L 399.641968 107.408 
+z
+" clip-path="url(#pff05c5e275)" style="fill: #8a8a8a; stroke: #8a8a8a; stroke-linecap: round"/>
+   </g>
+   <g id="patch_6">
+    <path d="M 415.7712 138.888 
+L 571.9896 138.888 
+L 571.9896 71.928 
+L 415.7712 71.928 
+z
+" clip-path="url(#pff05c5e275)" style="fill: #d55e00; opacity: 0.14"/>
+   </g>
+   <g id="text_1">
+    <text style="font-weight: 700; font-size: 8px; font-family: 'DejaVu Sans'; text-anchor: middle; fill: #0072b2" x="109.3428" y="98.558437" transform="rotate(-0 109.3428 98.558437)">identifiability</text>
+   </g>
+   <g id="text_2">
+    <text style="font-size: 6.6px; font-family: 'DejaVu Sans'; fill: #2b2b2b" transform="translate(69.334425 118.785809)">is the state that decides</text>
+    <text style="font-size: 6.6px; font-family: 'DejaVu Sans'; fill: #2b2b2b" transform="translate(71.887284 126.707613)">the future observable?</text>
+   </g>
+   <g id="text_3">
+    <text style="font-weight: 700; font-size: 8px; font-family: 'DejaVu Sans'; text-anchor: middle; fill: #009e73" x="301.6116" y="98.558437" transform="rotate(-0 301.6116 98.558437)">dynamical closure</text>
+   </g>
+   <g id="text_4">
+    <text style="font-size: 6.6px; font-family: 'DejaVu Sans'; fill: #2b2b2b" transform="translate(254.519569 118.785809)">does a closed equation exist</text>
+    <text style="font-size: 6.6px; font-family: 'DejaVu Sans'; fill: #2b2b2b" transform="translate(262.687584 126.707613)">at this coarse-graining?</text>
+   </g>
+   <g id="text_5">
+    <text style="font-weight: 700; font-size: 8px; font-family: 'DejaVu Sans'; fill: #d55e00" transform="translate(461.32165 93.757344)">computational</text>
+    <text style="font-weight: 700; font-size: 8px; font-family: 'DejaVu Sans'; fill: #d55e00" transform="translate(468.8179 103.359531)">tractability</text>
+   </g>
+   <g id="text_6">
+    <text style="font-size: 6.6px; font-family: 'DejaVu Sans'; fill: #2b2b2b" transform="translate(462.014259 118.785809)">can it be evaluated</text>
+    <text style="font-size: 6.6px; font-family: 'DejaVu Sans'; fill: #2b2b2b" transform="translate(469.370681 126.707613)">within budget?</text>
+   </g>
+   <g id="text_7">
+    <!-- correct microphysics $\Rightarrow$ none of the three gates -->
+    <g style="fill: #2b2b2b" transform="translate(31.2336 40.68)">
+     <text>
+      <tspan x="0" y="-0.78125" style="font-size: 8.2px; font-family: 'DejaVu Sans'; fill: #2b2b2b">c</tspan>
+      <tspan x="4.501526" y="-0.78125" style="font-size: 8.2px; font-family: 'DejaVu Sans'; fill: #2b2b2b">o</tspan>
+      <tspan x="9.510773" y="-0.78125" style="font-size: 8.2px; font-family: 'DejaVu Sans'; fill: #2b2b2b">r</tspan>
+      <tspan x="12.876923" y="-0.78125" style="font-size: 8.2px; font-family: 'DejaVu Sans'; fill: #2b2b2b">r</tspan>
+      <tspan x="16.243073" y="-0.78125" style="font-size: 8.2px; font-family: 'DejaVu Sans'; fill: #2b2b2b">e</tspan>
+      <tspan x="21.280304" y="-0.78125" style="font-size: 8.2px; font-family: 'DejaVu Sans'; fill: #2b2b2b">c</tspan>
+      <tspan x="25.78183" y="-0.78125" style="font-size: 8.2px; font-family: 'DejaVu Sans'; fill: #2b2b2b">t</tspan>
+      <tspan x="28.992065" y="-0.78125" style="font-size: 8.2px; font-family: 'DejaVu Sans'; fill: #2b2b2b"> </tspan>
+      <tspan x="31.594635" y="-0.78125" style="font-size: 8.2px; font-family: 'DejaVu Sans'; fill: #2b2b2b">m</tspan>
+      <tspan x="39.570251" y="-0.78125" style="font-size: 8.2px; font-family: 'DejaVu Sans'; fill: #2b2b2b">i</tspan>
+      <tspan x="41.845001" y="-0.78125" style="font-size: 8.2px; font-family: 'DejaVu Sans'; fill: #2b2b2b">c</tspan>
+      <tspan x="46.346527" y="-0.78125" style="font-size: 8.2px; font-family: 'DejaVu Sans'; fill: #2b2b2b">r</tspan>
+      <tspan x="49.712677" y="-0.78125" style="font-size: 8.2px; font-family: 'DejaVu Sans'; fill: #2b2b2b">o</tspan>
+      <tspan x="54.721924" y="-0.78125" style="font-size: 8.2px; font-family: 'DejaVu Sans'; fill: #2b2b2b">p</tspan>
+      <tspan x="59.919067" y="-0.78125" style="font-size: 8.2px; font-family: 'DejaVu Sans'; fill: #2b2b2b">h</tspan>
+      <tspan x="65.108215" y="-0.78125" style="font-size: 8.2px; font-family: 'DejaVu Sans'; fill: #2b2b2b">y</tspan>
+      <tspan x="69.953552" y="-0.78125" style="font-size: 8.2px; font-family: 'DejaVu Sans'; fill: #2b2b2b">s</tspan>
+      <tspan x="74.219208" y="-0.78125" style="font-size: 8.2px; font-family: 'DejaVu Sans'; fill: #2b2b2b">i</tspan>
+      <tspan x="76.493958" y="-0.78125" style="font-size: 8.2px; font-family: 'DejaVu Sans'; fill: #2b2b2b">c</tspan>
+      <tspan x="80.995483" y="-0.78125" style="font-size: 8.2px; font-family: 'DejaVu Sans'; fill: #2b2b2b">s</tspan>
+      <tspan x="85.261139" y="-0.78125" style="font-size: 8.2px; font-family: 'DejaVu Sans'; fill: #2b2b2b"> </tspan>
+      <tspan x="89.458832" y="-0.78125" style="font-size: 8.2px; font-family: 'DejaVu Sans'; fill: #2b2b2b">⇒</tspan>
+      <tspan x="97.914185" y="-0.78125" style="font-size: 8.2px; font-family: 'DejaVu Sans'; fill: #2b2b2b"> </tspan>
+      <tspan x="100.516754" y="-0.78125" style="font-size: 8.2px; font-family: 'DejaVu Sans'; fill: #2b2b2b">n</tspan>
+      <tspan x="105.705902" y="-0.78125" style="font-size: 8.2px; font-family: 'DejaVu Sans'; fill: #2b2b2b">o</tspan>
+      <tspan x="110.715149" y="-0.78125" style="font-size: 8.2px; font-family: 'DejaVu Sans'; fill: #2b2b2b">n</tspan>
+      <tspan x="115.904297" y="-0.78125" style="font-size: 8.2px; font-family: 'DejaVu Sans'; fill: #2b2b2b">e</tspan>
+      <tspan x="120.941528" y="-0.78125" style="font-size: 8.2px; font-family: 'DejaVu Sans'; fill: #2b2b2b"> </tspan>
+      <tspan x="123.544098" y="-0.78125" style="font-size: 8.2px; font-family: 'DejaVu Sans'; fill: #2b2b2b">o</tspan>
+      <tspan x="128.553345" y="-0.78125" style="font-size: 8.2px; font-family: 'DejaVu Sans'; fill: #2b2b2b">f</tspan>
+      <tspan x="131.43576" y="-0.78125" style="font-size: 8.2px; font-family: 'DejaVu Sans'; fill: #2b2b2b"> </tspan>
+      <tspan x="134.03833" y="-0.78125" style="font-size: 8.2px; font-family: 'DejaVu Sans'; fill: #2b2b2b">t</tspan>
+      <tspan x="137.248566" y="-0.78125" style="font-size: 8.2px; font-family: 'DejaVu Sans'; fill: #2b2b2b">h</tspan>
+      <tspan x="142.437714" y="-0.78125" style="font-size: 8.2px; font-family: 'DejaVu Sans'; fill: #2b2b2b">e</tspan>
+      <tspan x="147.474945" y="-0.78125" style="font-size: 8.2px; font-family: 'DejaVu Sans'; fill: #2b2b2b"> </tspan>
+      <tspan x="150.077515" y="-0.78125" style="font-size: 8.2px; font-family: 'DejaVu Sans'; fill: #2b2b2b">t</tspan>
+      <tspan x="153.28775" y="-0.78125" style="font-size: 8.2px; font-family: 'DejaVu Sans'; fill: #2b2b2b">h</tspan>
+      <tspan x="158.476898" y="-0.78125" style="font-size: 8.2px; font-family: 'DejaVu Sans'; fill: #2b2b2b">r</tspan>
+      <tspan x="161.843048" y="-0.78125" style="font-size: 8.2px; font-family: 'DejaVu Sans'; fill: #2b2b2b">e</tspan>
+      <tspan x="166.88028" y="-0.78125" style="font-size: 8.2px; font-family: 'DejaVu Sans'; fill: #2b2b2b">e</tspan>
+      <tspan x="171.917511" y="-0.78125" style="font-size: 8.2px; font-family: 'DejaVu Sans'; fill: #2b2b2b"> </tspan>
+      <tspan x="174.520081" y="-0.78125" style="font-size: 8.2px; font-family: 'DejaVu Sans'; fill: #2b2b2b">g</tspan>
+      <tspan x="179.717224" y="-0.78125" style="font-size: 8.2px; font-family: 'DejaVu Sans'; fill: #2b2b2b">a</tspan>
+      <tspan x="184.734467" y="-0.78125" style="font-size: 8.2px; font-family: 'DejaVu Sans'; fill: #2b2b2b">t</tspan>
+      <tspan x="187.944702" y="-0.78125" style="font-size: 8.2px; font-family: 'DejaVu Sans'; fill: #2b2b2b">e</tspan>
+      <tspan x="192.981934" y="-0.78125" style="font-size: 8.2px; font-family: 'DejaVu Sans'; fill: #2b2b2b">s</tspan>
+     </text>
+    </g>
+   </g>
+   <g id="text_8">
+    <text style="font-size: 6.6px; font-family: 'DejaVu Sans'; fill: #8a8a8a" transform="translate(31.2336 181.076391)">the gates are independent: a model can be identifiable but intractable,</text>
+    <text style="font-size: 6.6px; font-family: 'DejaVu Sans'; fill: #8a8a8a" transform="translate(31.2336 188.998195)">or tractable but not identifiable. Passing all three is what 'predictive</text>
+    <text style="font-size: 6.6px; font-family: 'DejaVu Sans'; fill: #8a8a8a" transform="translate(31.2336 196.92)">sufficiency' means here, and it is a property of the question, not of the model.</text>
+   </g>
+  </g>
+ </g>
+ <defs>
+  <clipPath id="pff05c5e275">
+   <rect x="7.2" y="7.2" width="600.84" height="212.04"/>
+  </clipPath>
+ </defs>
+</svg>

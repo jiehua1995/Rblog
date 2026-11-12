@@ -1,0 +1,7 @@
+# CPU only; no GPU, no network at run time except the first Fashion-MNIST-like
+# downloads (none here — every experiment generates its own data).
+numpy>=1.26
+scipy>=1.11
+matplotlib>=3.8
+scikit-learn>=1.3
+pillow>=10.0
