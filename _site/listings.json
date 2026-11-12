@@ -1,6 +1,6 @@
 [
   {
-    "listing": "/index.html",
+    "listing": "/articles.html",
     "items": [
       "/posts/2026-11-12 From Molecules to Cells Can Microphysics Derive Life/index.html",
       "/posts/2026-11-06 Simulating Life The Final Sanctuary of Artificial Intelligence/index.html",
@@ -28,7 +28,7 @@
     ]
   },
   {
-    "listing": "/articles.html",
+    "listing": "/index.html",
     "items": [
       "/posts/2026-11-12 From Molecules to Cells Can Microphysics Derive Life/index.html",
       "/posts/2026-11-06 Simulating Life The Final Sanctuary of Artificial Intelligence/index.html",
