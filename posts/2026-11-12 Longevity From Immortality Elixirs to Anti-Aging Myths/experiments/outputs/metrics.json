@@ -1,0 +1,319 @@
+{
+  "cancer": {
+    "baseline_lifetime_risk": 0.4,
+    "benefit_at_max_safe_r": 0.15351827510938587,
+    "gompertz_A": 0.0001,
+    "gompertz_B": 0.09,
+    "k0": 8.126627811033515e-12,
+    "m_stages": 6,
+    "max_safe_r": 1.2,
+    "mc_lifetime_risk": {
+      "1.0": {
+        "cancer_death_by_100": 0.18925,
+        "incidence_to_85": 0.39955,
+        "mean_age_at_death": 66.89854780115016
+      },
+      "1.3": {
+        "cancer_death_by_100": 0.5394,
+        "incidence_to_85": 0.91535,
+        "mean_age_at_death": 60.942053182110506
+      },
+      "1.6": {
+        "cancer_death_by_100": 0.80725,
+        "incidence_to_85": 0.99995,
+        "mean_age_at_death": 52.67790002970367
+      }
+    },
+    "risk_multiplier_per_doubling": 64.0,
+    "risk_ratio_r1_3": 2.287617627775148,
+    "risk_ratio_r1_6": 2.4995258283146082
+  },
+  "clocks": {
+    "clockM_years_per_pct_median": 1.3110803372695492,
+    "clockM_years_per_pct_range": [
+      1.192050231249341,
+      2.000946103883249
+    ],
+    "clockP_years_per_pct_median": 1.3031557410118824,
+    "clockP_years_per_pct_range": [
+      0.3805215901102849,
+      2.7741561639003622
+    ],
+    "clock_mae_M": 3.5892653122380116,
+    "clock_mae_P": 3.3727054313561426,
+    "epigenetic_intervention": {
+      "clock_M": 6.503697640988051,
+      "clock_P": 6.067316270951551,
+      "function_pct": 3.250311254444227
+    },
+    "max_clock_reduction": 30.0,
+    "methylation_only_intervention": {
+      "clock_M": 30.0,
+      "function_pct": 0.0
+    },
+    "min_function_gain": -1.9640472464325653
+  },
+  "evidence": {
+    "events_needed_hr08": 630.5201711804549,
+    "interventions": [
+      "caloric restriction",
+      "rapamycin / mTOR",
+      "metformin",
+      "senolytics (D+Q)",
+      "NAD$^+$ precursors",
+      "telomerase gene therapy",
+      "partial reprogramming",
+      "stem cells / regenerative",
+      "AI-driven drug discovery"
+    ],
+    "levels": [
+      "in vitro",
+      "mouse\nlifespan",
+      "mammalian\ntissue",
+      "human\nsafety",
+      "human\nRCT",
+      "healthspan\nendpoint"
+    ],
+    "matrix": [
+      [
+        3,
+        3,
+        2,
+        2,
+        2,
+        1
+      ],
+      [
+        3,
+        3,
+        2,
+        2,
+        1,
+        0
+      ],
+      [
+        2,
+        1,
+        1,
+        2,
+        2,
+        0
+      ],
+      [
+        3,
+        2,
+        1,
+        2,
+        1,
+        0
+      ],
+      [
+        2,
+        1,
+        1,
+        2,
+        1,
+        0
+      ],
+      [
+        2,
+        2,
+        1,
+        1,
+        0,
+        0
+      ],
+      [
+        3,
+        2,
+        1,
+        1,
+        0,
+        0
+      ],
+      [
+        2,
+        2,
+        2,
+        2,
+        1,
+        0
+      ],
+      [
+        1,
+        1,
+        1,
+        0,
+        0,
+        0
+      ]
+    ],
+    "median_highest_level": 2.0,
+    "minimum_trial_years": 11.0,
+    "n_with_healthspan_endpoint": 1,
+    "n_with_human_rct": 6,
+    "participants_per_arm_hr08": 2101.73390393485
+  },
+  "evolution": {
+    "fecundity_cost": 0.95,
+    "life_expectancy_high_mu": 1.3214046684406004,
+    "life_expectancy_low_mu": 24.40863379642836,
+    "m_star_high_mu": 0.30000000000000004,
+    "m_star_low_mu": 0.6125,
+    "mu_range": [
+      0.005011872336272725,
+      0.7943282347242815
+    ],
+    "omega": 80,
+    "senescence_slope_ratio": 1.806451612903226
+  },
+  "hallmarks": {
+    "edges_by_kind": {
+      "causal": 25,
+      "correlative": 7,
+      "hypothetical": 2
+    },
+    "fraction_causal": 0.7352941176470589,
+    "hubs_are_integrative": [
+      "IN",
+      "ST",
+      "IC"
+    ],
+    "n_edges": 34,
+    "n_nodes": 12,
+    "top_hubs": [
+      {
+        "degree": 10,
+        "node": "IN"
+      },
+      {
+        "degree": 9,
+        "node": "SE"
+      },
+      {
+        "degree": 8,
+        "node": "ST"
+      },
+      {
+        "degree": 6,
+        "node": "IC"
+      }
+    ]
+  },
+  "history": {
+    "longest_gap": {
+      "name": "caloric restriction",
+      "years": 91
+    },
+    "median_years_since_mechanism": 18.5,
+    "n_events": 15,
+    "n_mechanisms": 8,
+    "n_with_completed_human_healthspan_trial": 0,
+    "shortest_gap": {
+      "name": "partial reprogramming",
+      "years": 10
+    }
+  },
+  "multidim": {
+    "baseline_score_age60": 0.20485054270086345,
+    "components": [
+      "telomere",
+      "epigenetic",
+      "proteostasis",
+      "mitochondria",
+      "senescence",
+      "stem cells",
+      "inflammation",
+      "ECM"
+    ],
+    "final_score": {
+      "A telomere": 0.08821193055845489,
+      "B epigenetic": 0.0829146896142392,
+      "C mitochondrial": 0.11628075775863789,
+      "D four-way": 0.14725427284839943,
+      "E four-way + senolytic": 0.14295070722121772,
+      "control": 0.07635921724414929
+    },
+    "max_real_eigenvalue_treated": -0.029606928868727123,
+    "relapse_after_stop_D": 0.24958581862068074,
+    "synergy_max": 0.00023825274036315403,
+    "synergy_min": 0.0,
+    "treatment_peak_score_D": 0.39684009146908017
+  },
+  "public_data": {
+    "human_e0_baseline": 80.77404151097976,
+    "human_e0_gain_at_23pct": 3.063753117362367,
+    "human_e0_gain_at_26pct": 3.5298028201930123,
+    "max_effect": 26,
+    "mean_female_effect": 15.5,
+    "mean_male_effect": 16.2,
+    "n_agents": 8,
+    "n_significant_female": 2,
+    "n_significant_male": 5
+  },
+  "repair": {
+    "best_covered_layers": [
+      "mitochondria",
+      "stem cell pool",
+      "epigenome"
+    ],
+    "coverage_by_intervention": {
+      "AI drug discovery": 0,
+      "NAD$^+$ precursors": 5,
+      "caloric restriction": 12,
+      "partial reprogramming": 5,
+      "rapamycin": 10,
+      "senolytics": 7,
+      "stem cell therapy": 4,
+      "telomerase therapy": 5
+    },
+    "max_coverage": 12,
+    "mean_coverage": 6.0,
+    "median_pct_loss": 35.0,
+    "n_layers": 10,
+    "n_with_single_pct": 6,
+    "uncovered_layers": [
+      "extracellular matrix"
+    ]
+  },
+  "reprogram": {
+    "fraction_conditions_safe": 0.6133333333333333,
+    "max_safe_age_reduction": 0.740939169934627,
+    "safe_dose": 3.75,
+    "safe_duration": 9.0,
+    "safe_identity_boundary": 0.45,
+    "unsafe_at_low_dose_short": 0.0,
+    "unsafe_at_max_dose_long": 1.0
+  },
+  "species": {
+    "fold_scatter_at_fixed_mass": 22.3119611228285,
+    "lifespan_range_y": [
+      0.05,
+      507.0
+    ],
+    "mass_range_kg": [
+      2e-08,
+      75000.0
+    ],
+    "n_species": 17,
+    "r2_allometry": 0.6731559139303764,
+    "residual_sd_dex": 0.6742688722640863,
+    "slope_log10_life_per_log10_mass": 0.27010242764206177
+  },
+  "survival": {
+    "floor_for_1pct_at_200": 0.023025850929940455,
+    "floor_grid_1pct": 0.023025850929940455,
+    "hazard_floor_policy": 0.0002,
+    "healthspan_baseline": 75.45,
+    "healthspan_four_organs": 83.5,
+    "healthspan_slower_aging": 134.55,
+    "median_all_repaired_floor": 107.0,
+    "median_baseline": 83.25,
+    "median_four_organs": 91.35000000000001,
+    "median_halted": 132.85,
+    "median_slower_aging": 150.15,
+    "p150_baseline": 9.516960744815437e-89,
+    "p150_four_organs": 9.424951518868576e-45,
+    "p200_all_repaired_floor": 0.0
+  }
+}
