@@ -28,6 +28,20 @@
     "risk_ratio_r1_3": 2.287617627775148,
     "risk_ratio_r1_6": 2.4995258283146082
   },
+  "clock_zoo": {
+    "cpg_counts": [
+      353,
+      71,
+      513,
+      1030,
+      173
+    ],
+    "discordant_sign_fraction": 0.21566666666666667,
+    "max_pairwise": 0.8027820884996335,
+    "mean_pairwise_residual_correlation": 0.5953460206975913,
+    "min_pairwise": 0.42672032246979574,
+    "n_clocks": 5
+  },
   "clocks": {
     "clockM_years_per_pct_median": 1.3110803372695492,
     "clockM_years_per_pct_range": [
@@ -52,6 +66,26 @@
       "function_pct": 0.0
     },
     "min_function_gain": -1.9640472464325653
+  },
+  "demography": {
+    "japan_1950": 61.2,
+    "japan_2023": 84.0,
+    "japan_latest_gain": -0.5999999999999943,
+    "japan_max_decadal_gain": 6.5,
+    "world_1950": 45.7,
+    "world_2023": 73.2,
+    "world_latest_gain": 0.7000000000000028,
+    "years": [
+      1950,
+      1960,
+      1970,
+      1980,
+      1990,
+      2000,
+      2010,
+      2020,
+      2023
+    ]
   },
   "evidence": {
     "events_needed_hr08": 630.5201711804549,
@@ -315,5 +349,14 @@
     "p150_baseline": 9.516960744815437e-89,
     "p150_four_organs": 9.424951518868576e-45,
     "p200_all_repaired_floor": 0.0
+  },
+  "timing": {
+    "baseline_e0": 80.77404155222972,
+    "delta": 0.2,
+    "gain_start_20_delta_0_5": 8.029648591884737,
+    "gain_start_30": 2.5286172851765656,
+    "gain_start_50": 2.254241144230434,
+    "gain_start_70": 1.466593668902945,
+    "gain_start_80_delta_0_5": 2.8532207534767764
   }
 }

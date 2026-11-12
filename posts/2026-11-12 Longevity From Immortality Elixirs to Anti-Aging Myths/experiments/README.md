@@ -1,8 +1,8 @@
 # Longevity — reproduction package
 
-Twelve CPU-only Python scripts produce every number and every figure in
-`../index.qmd`. Nothing is hand-drawn or hand-typed: `outputs/metrics.json` is
-written by the scripts and read by the article.
+Twelve main scripts plus three supplementary ones produce every number and
+every figure in `../index.qmd`. Nothing is hand-drawn or hand-typed:
+`outputs/metrics.json` is written by the scripts and read by the article.
 
 - Article: `../index.qmd`
 - Scripts: this directory
@@ -24,7 +24,7 @@ python -m pip install -r experiments/requirements.txt
 From the **post directory** (the parent of `experiments/`):
 
 ```powershell
-python experiments/run_all.py          # all twelve, in order
+python experiments/run_all.py          # all fifteen
 python experiments/run_all.py 4 9      # only 04_hallmarks.py and 09_survival.py
 ```
 
@@ -43,6 +43,9 @@ python experiments/09_survival.py      # Gompertz organs, competing risks, tails
 python experiments/10_evidence.py      # evidence matrix and trial sample size
 python experiments/11_public_data.py   # ITP effect sizes, "perfect transfer"
 python experiments/12_repair.py        # ten-system repair inventory and coverage
+python experiments/13_demography.py    # UN WPP life expectancy and decadal gains
+python experiments/14_clock_zoo.py     # five simulated clocks, disagreement
+python experiments/15_timing.py        # life-expectancy gain vs age at start
 ```
 
 Nothing is expensive: the whole set is under two minutes on a laptop. `07` is
@@ -65,6 +68,9 @@ condition).
 | `10_evidence.py` | evidence matrix + log-rank formula | scores are the author’s reading; α = 0.05, power 0.8 | 1 of 9 has weak healthspan evidence; HR 0.8 needs 631 events ≈ 2,102 people; 11 yr minimum |
 | `11_public_data.py` | published ITP summary + Gompertz translation | rounded ITP values; proportional mortality reduction | 5 of 8 agents significant in males, 2 in females; perfect transfer of 23% gives +3.1 yr |
 | `12_repair.py` | repair inventory + coverage matrix | percentages only where a single published number exists | 10 systems, 6 with a single percentage; best coverage 12/20 points |
+| `13_demography.py` | UN WPP life table | rounded UN WPP 2024 values; panel (b) uses full decades only | Japan 61.2 → 84.0 yr, world 45.7 → 73.2 yr; decadal gain falls to 1.8 then negative |
+| `14_clock_zoo.py` | five simulated clocks | different panel sizes, weights and noise; CpG counts are real, weights are analogues | mean residual correlation 0.60, minimum 0.43; 22% of people get opposite signs |
+| `15_timing.py` | Gompertz life table | permanent proportional hazard reduction from age a0 | a 20% reduction adds 2.5 yr at 30 but 1.5 yr at 70 |
 
 ## Figures
 
@@ -82,6 +88,9 @@ condition).
 | 10 | `fig-evidence.png` | `10` |
 | 11 | `fig-itp.png` | `11` |
 | 12 | `fig-repair.png` | `12` |
+| 13 | `fig-demography.png` | `13` |
+| 14 | `fig-clock-zoo.png` | `14` |
+| 15 | `fig-timing.png` | `15` |
 
 `common/style.py` sets the palette and writes PNG (300 dpi) plus SVG;
 `common/utils.py` holds paths, seeds and the JSON writer.
@@ -92,7 +101,7 @@ condition).
 python experiments/tests/test_core.py
 ```
 
-Twelve assertions: the allometric fit reproduces the stored R²; the evolution
+Fifteen assertions: the allometric fit reproduces the stored R²; the evolution
 model selects more maintenance at lower extrinsic mortality; the hallmark edge
 count matches the curated list; the methylation-only intervention is 30 years
 at zero function; the four-way ODE beats the control and relapses; the

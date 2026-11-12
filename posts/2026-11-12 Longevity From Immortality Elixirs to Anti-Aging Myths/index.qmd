@@ -1,7 +1,7 @@
 ---
 title: "Longevity: From Immortality Elixirs to Anti-Aging Myths"
 subtitle: "长生不老：从秦始皇的仙丹到21世纪的逆龄神话"
-description: "十二组可复现计算，从求仙史、进化衰老理论、十二项衰老标志，到表观遗传时钟、重编程安全窗、癌症权衡与死亡风险的数学边界。"
+description: "十五组可复现计算，从求仙史、进化衰老理论、十二项衰老标志，到表观遗传时钟、重编程安全窗、癌症权衡与死亡风险的数学边界。"
 author: "Jie Hua"
 date: "2026-11-12"
 categories: [Origins of Life]
@@ -11,9 +11,9 @@ engine: knitr
 ::: callout-important
 ## 写作说明 / Note
 
-本文由 **AI（Trae Agent）** 检索、整理并撰写，**尚未经过人工逐条校对**。文中所有数字都来自随文附带的十二个 Python 脚本的真实运行结果（`experiments/01_history.py` 至 `12_repair.py`），可在普通 CPU 上重跑；所有图由脚本直接生成。跨物种寿命表是从 AnAge/HAGR 与原始文献中手工摘录的小样本，不是系统抽样；证据矩阵与网络连边是作者对文献的判读，不是荟萃分析。文中不讨论任何公司、企业家或个人，也不对任何在研技术作欺诈指控。所有"细胞"与"人体"模型都是玩具模型，不构成临床结论。
+本文由 **AI（Trae Agent）** 检索、整理并撰写，**尚未经过人工逐条校对**。文中所有数字都来自随文附带的十五个 Python 脚本的真实运行结果（`experiments/01_history.py` 至 `15_timing.py`），可在普通 CPU 上重跑；所有图由脚本直接生成。跨物种寿命表是从 AnAge/HAGR 与原始文献中手工摘录的小样本，不是系统抽样；证据矩阵与网络连边是作者对文献的判读，不是荟萃分析。文中不讨论任何公司、企业家或个人，也不对任何在研技术作欺诈指控。所有"细胞"与"人体"模型都是玩具模型，不构成临床结论。
 
-This article was researched and written by an **AI system (Trae Agent)** and has **not been proofread line by line by a human**. Every number comes from an actual run of the twelve Python scripts shipped with the post (`experiments/01_history.py` … `12_repair.py`), which run on an ordinary CPU, and all figures are produced by those scripts. The cross-species lifespan table is a small hand-curated sample from AnAge/HAGR and the primary literature, not a systematic sample. The evidence matrix and the network edges are the author's reading of the literature, not a meta-analysis. No company, entrepreneur or individual is discussed, and no accusation of fraud is made about any programme. Every "cell" and "human" model here is a toy and supports no clinical conclusion.
+This article was researched and written by an **AI system (Trae Agent)** and has **not been proofread line by line by a human**. Every number comes from an actual run of the fifteen Python scripts shipped with the post (`experiments/01_history.py` … `15_timing.py`), which run on an ordinary CPU, and all figures are produced by those scripts. The cross-species lifespan table is a small hand-curated sample from AnAge/HAGR and the primary literature, not a systematic sample. The evidence matrix and the network edges are the author's reading of the literature, not a meta-analysis. No company, entrepreneur or individual is discussed, and no accusation of fraud is made about any programme. Every "cell" and "human" model here is a toy and supports no clinical conclusion.
 :::
 
 ::: {.callout-note collapse="true"}
@@ -286,6 +286,26 @@ Finally, label the four kinds of knowledge once more, because the article's reli
 
 More than two thousand years ago, people pinned the hope of immortality on a single pill. Today we can name dozens of molecular processes of ageing, extend lifespan in mice, rejuvenate cells in a dish, and state mathematically what "zero death risk" would require. But understanding a part and re-mastering a whole life remain different things. **Real progress is not saying "rejuvenation" more loudly; it is saying more precisely what, exactly, we have reversed.**
 
+## 11. 补充分析：人口学、时钟分歧与干预时机 / Supplementary analyses: demography, clock disagreement and timing
+
+三张补充图不改变正文结论，但补上三个容易被忽略的量化背景。第一张是人口学：日本出生时预期寿命从 1950 年的 `r f(met$demography$japan_1950, 1)` 岁升到 2023 年的 `r f(met$demography$japan_2023, 1)` 岁，全球从 `r f(met$demography$world_1950, 1)` 岁升到 `r f(met$demography$world_2023, 1)` 岁；但每十年的增益在下降，日本从 1950–1960 年的 `r f(met$demography$japan_max_decadal_gain, 1)` 年/十年降到 2010–2020 年的约 1.8 年/十年，2020–2023 年甚至转为负值。把这条曲线与"十年内系统性逆转"的叙事放在一起，就会发现后者需要解释的不仅是生物学，还有人口学。
+
+The three supplementary figures do not change the conclusions, but they add quantitative background that is easy to skip. The first is demography: Japanese life expectancy at birth rose from `r f(met$demography$japan_1950, 1)` years in 1950 to `r f(met$demography$japan_2023, 1)` in 2023, and the world from `r f(met$demography$world_1950, 1)` to `r f(met$demography$world_2023, 1)`; but the gain per decade has fallen, from `r f(met$demography$japan_max_decadal_gain, 1)` years per decade in 1950–1960 to about 1.8 in 2010–2020, and negative in 2020–2023. Put this curve next to "systemic reversal within a decade" and the claim has to explain not only biology but demography.
+
+![**图 13**　（a）1950–2023 年日本、美国与全球的出生时预期寿命；数值取自 UN WPP 2024 的四舍五入值。（b）按十年折算的年化增益；日本的峰值从 6.5 年/十年降到 2010–2020 年的 1.8 年/十年，美国最后十年为负。这是人口学背景，不是对未来的预测。 | **Figure 13.** (a) Life expectancy at birth in Japan, the United States and the world, 1950–2023; values are rounded from UN WPP 2024. (b) Annualised gain per decade; Japan's peak falls from 6.5 to 1.8 years per decade by 2010–2020, and the US last decade is negative. This is demographic background, not a forecast.](figures/fig-demography.png){fig-align="center" width="100%"}
+
+第二张是时钟分歧。我用同一个十维状态训练了五个"类时钟"（面板大小取真实时钟的 CpG 数：Hannum 71、DunedinPACE 173、Horvath 353、PhenoAge 513、GrimAge 1030），它们的残差两两相关平均 `r f(met$clock_zoo$mean_pairwise_residual_correlation, 2)`（范围 `r f(met$clock_zoo$min_pairwise, 2)`–`r f(met$clock_zoo$max_pairwise, 2)`），但在 `r pct(met$clock_zoo$discordant_sign_fraction)` 的个体上，两个时钟给出的"更年轻/更老"方向相反。**模型结果**：五个都"预测得不错"的时钟，在个体层面可以互相矛盾；这正好说明为什么单一读数不能作为返老还童的判决。
+
+The second is clock disagreement. I trained five "clock-like" models on the same ten-dimensional state (panel sizes taken from the real clocks: Hannum 71, DunedinPACE 173, Horvath 353, PhenoAge 513, GrimAge 1030). Their residuals correlate at `r f(met$clock_zoo$mean_pairwise_residual_correlation, 2)` on average (range `r f(met$clock_zoo$min_pairwise, 2)`–`r f(met$clock_zoo$max_pairwise, 2)`), but in `r pct(met$clock_zoo$discordant_sign_fraction)` of individuals the two clocks point in opposite directions. **Model output**: five clocks that all "predict well" can contradict each other at the level of a person — which is exactly why a single reading cannot be the verdict on rejuvenation.
+
+![**图 14**　（a）五个模拟时钟的"年龄加速"残差两两相关；平均 `r f(met$clock_zoo$mean_pairwise_residual_correlation, 2)`，最低 `r f(met$clock_zoo$min_pairwise, 2)`。（b）Horvath 类与 GrimAge 类残差的散点；在 `r pct(met$clock_zoo$discordant_sign_fraction)` 的人身上，一个说更年轻、另一个说更老。CpG 数是真实面板大小，权重是模拟的。 | **Figure 14.** (a) Pairwise correlations of age-acceleration residuals among five simulated clocks; mean `r f(met$clock_zoo$mean_pairwise_residual_correlation, 2)`, minimum `r f(met$clock_zoo$min_pairwise, 2)`. (b) Residuals of the Horvath-like and GrimAge-like clocks; in `r pct(met$clock_zoo$discordant_sign_fraction)` of people one says younger and the other older. CpG counts are real panel sizes; weights are simulated.](figures/fig-clock-zoo.png){fig-align="center" width="100%"}
+
+第三张是干预时机。在同一个 Gompertz 生命表上，把死亡率永久降低 20%，如果在 30 岁开始，生命期望增加 `r f(met$timing$gain_start_30, 1)` 年；50 岁开始增加 `r f(met$timing$gain_start_50, 1)` 年；70 岁开始只剩 `r f(met$timing$gain_start_70, 1)` 年。即使把降幅提高到 50%，80 岁开始也只增加 `r f(met$timing$gain_start_80_delta_0_5, 1)` 年，而 20 岁开始可以增加 `r f(met$timing$gain_start_20_delta_0_5, 1)` 年。**数学命题的直接推论**：在指数上升的风险曲线上，同样的相对降幅，越晚使用，绝对收益越小；这也是为什么"老年才开始抗衰"在人口学上天然吃亏。
+
+The third is timing. On the same Gompertz life table, a permanent 20% mortality reduction starting at 30 adds `r f(met$timing$gain_start_30, 1)` years of life expectancy; starting at 50 adds `r f(met$timing$gain_start_50, 1)`; starting at 70 only `r f(met$timing$gain_start_70, 1)`. Even raising the reduction to 50%, starting at 80 adds only `r f(met$timing$gain_start_80_delta_0_5, 1)` years, while starting at 20 adds `r f(met$timing$gain_start_20_delta_0_5, 1)`. **A direct corollary of the mathematical proposition**: on an exponentially rising hazard, the same relative reduction yields a smaller absolute gain the later it is applied — which is why "anti-ageing only in old age" is demographically disadvantaged.
+
+![**图 15**　（a）死亡率降幅 $\delta$ 与干预起始年龄的网格，颜色为生命期望增益；同一降幅在 20 岁开始与 80 岁开始的收益相差数倍。（b）固定 $\delta=0.2$ 时，增益随起始年龄下降。Gompertz 参数与正文一致；这是算术，不是疗法模型。 | **Figure 15.** (a) Grid of mortality reduction $\delta$ and age at start, coloured by life-expectancy gain; the same reduction is worth several times more at 20 than at 80. (b) At fixed $\delta=0.2$, the gain falls with starting age. Gompertz parameters as in the text; this is arithmetic, not a therapy model.](figures/fig-timing.png){fig-align="center" width="100%"}
+
 ## 参考文献 / References
 
 1.  Medawar, P. B. (1952). *An Unsolved Problem of Biology*. H. K. Lewis, London.
@@ -331,5 +351,3 @@ More than two thousand years ago, people pinned the hope of immortality on a sin
 引用说明：第 1–33 条为期刊论文或专著，均有 DOI；第 34–38 条为经典文本与学术专著，不适用 DOI；第 39 条为临床试验注册记录。文中所有"实验证据"都可追溯到上述文献或脚本；所有"模型结果"均可由 `experiments/` 中的代码重跑；"作者假说"在文中均已标注，不作为证据使用。
 
 Citation note: items 1–33 are journal articles or monographs with DOIs; items 34–38 are classical texts and scholarly monographs, for which a DOI does not apply; item 39 is a trial registration. Every "experimental evidence" claim traces to the references or the scripts; every "model output" can be regenerated from `experiments/`; "author's hypotheses" are labelled as such and are not used as evidence.
-
-

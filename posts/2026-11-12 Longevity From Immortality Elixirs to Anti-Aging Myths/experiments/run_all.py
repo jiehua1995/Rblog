@@ -1,6 +1,6 @@
 """Run every experiment in order and rebuild all figures and metrics.
 
-    python experiments/run_all.py          # all twelve
+    python experiments/run_all.py          # all fifteen
     python experiments/run_all.py 4 9      # only 04_hallmarks.py and 09_survival.py
 """
 
@@ -25,6 +25,9 @@ SCRIPTS = [
     "10_evidence.py",
     "11_public_data.py",
     "12_repair.py",
+    "13_demography.py",
+    "14_clock_zoo.py",
+    "15_timing.py",
 ]
 
 

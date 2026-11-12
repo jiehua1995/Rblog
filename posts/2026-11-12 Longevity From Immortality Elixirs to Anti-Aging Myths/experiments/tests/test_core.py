@@ -137,6 +137,29 @@ def test_repair():
     assert m["n_with_single_pct"] == sum(1 for l in mod.LAYERS if l[1] is not None)
 
 
+def test_demography():
+    mod = load("13_demography.py", "demography")
+    m = METRICS["demography"]
+    assert close(m["japan_1950"], mod.DATA["Japan"][0][0], 0.01)
+    assert close(m["world_2023"], mod.DATA["World"][0][-1], 0.01)
+    assert m["japan_max_decadal_gain"] > 5
+
+
+def test_clock_zoo():
+    m = METRICS["clock_zoo"]
+    assert 0.3 < m["mean_pairwise_residual_correlation"] < 0.9
+    assert m["min_pairwise"] < m["max_pairwise"]
+    assert 0.1 < m["discordant_sign_fraction"] < 0.4
+
+
+def test_timing():
+    mod = load("15_timing.py", "timing")
+    m = METRICS["timing"]
+    assert close(m["gain_start_30"], mod.e0(0.2, 30) - mod.e0(), 0.02)
+    assert m["gain_start_30"] > m["gain_start_70"] > 0
+    assert m["gain_start_20_delta_0_5"] > m["gain_start_80_delta_0_5"]
+
+
 if __name__ == "__main__":
     tests = [v for k, v in sorted(globals().items()) if k.startswith("test_")]
     for t in tests:
