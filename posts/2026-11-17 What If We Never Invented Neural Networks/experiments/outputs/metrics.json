@@ -1,0 +1,50 @@
+{
+  "eco": {
+    "ablation_ci": {
+      "fixed environment": [
+        -20.581900928043563,
+        -8.80520621899377
+      ],
+      "no regulation": [
+        -12.241945221032598,
+        0.3669467730143403
+      ],
+      "no signalling": [
+        -4.352228290935535,
+        7.009690716105891
+      ],
+      "no structural mutation": [
+        -8.267080615716344,
+        3.891085296102576
+      ],
+      "random selection": [
+        39.69800539272056,
+        60.841307606670995
+      ]
+    },
+    "ablation_loss": {
+      "fixed environment": -14.494295280646128,
+      "no regulation": -5.619480174769805,
+      "no signalling": 1.451054884467041,
+      "no structural mutation": -1.968818526605034,
+      "random selection": 50.3311696724342
+    },
+    "diversity_final": 8.421111111111113,
+    "final_best": {
+      "eco": 67.69293665491396,
+      "hill": 18.3036307287755,
+      "random": 45.01880501535807
+    },
+    "final_best_sd": {
+      "eco": 9.530848561423761,
+      "hill": 25.023102863014604,
+      "random": 23.713763316343723
+    },
+    "generations": 30,
+    "genome_length_final": 12.5625,
+    "n_seeds": 20,
+    "note": "shared grid, 24x24, 20 seeds; fitness = final energy + 2 x offspring",
+    "population": 16,
+    "ticks": 35
+  }
+}

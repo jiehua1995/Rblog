@@ -1,0 +1,484 @@
+---
+title: "What If We Never Invented Neural Networks?"
+subtitle: "从图灵机到 ECO：一次把程序本身当作可遗传个体的尝试"
+description: "如果计算的单位不是权重，而是可遗传的程序：一个约 300 行的寄存器机系统、20 个种子、五组消融，记录它能适应什么、不能适应什么。"
+date: "2026-11-17"
+categories: [Origins of Life]
+engine: knitr
+---
+
+::: callout-important
+## 写作说明 / Note
+
+本文由 **AI（Trae Agent）** 检索、实现并撰写，**尚未经过人工逐条校对**。第四、五、六节描述的 ECO 系统是随文附带的可运行代码（`experiments/08_eco.py`），不是设想；所有数字来自 20 个随机种子的实际运行。第七节的推测明确标注为推测。
+
+This article was researched and written by an **AI system (Trae Agent)** and has **not been proofread line by line by a human**. The ECO system described in Sections 4–6 is runnable code shipped with the post (`experiments/08_eco.py`), not a proposal; every number comes from actual runs over 20 random seeds. The speculation in Section 7 is explicitly labelled as such.
+:::
+
+::: {.callout-note collapse="true"}
+## 生成本文所用的提示词（压缩后） / Prompt used to generate this article (condensed)
+
+> 写一篇中英双语研究随笔：如果我们从未发明神经网络，人工智能会是什么样？从图灵、符号主义与反向传播的历史出发，说明神经网络胜出靠的是可微、可扩展、可迁移这三个工程条件，而不是智能的必要条件；梳理自然界的非神经计算（GRN、元胞自动机、反应—扩散、黏菌、形态计算、DNA 计算、储备池、超维计算）；然后从零实现 ECO——基因组是可变的指令序列，启用的基因就是程序，没有梯度、没有反向传播；用 20 个种子比较 ECO、爬山法与随机搜索，做五组消融，记录负面结果（通信无效、结构突变不显著），并明确区分实验、推断与推测。
+
+> A bilingual research essay: what would AI look like if neural networks had never been invented? Start from Turing, symbolism and backpropagation and argue that neural networks won on three engineering conditions — differentiability, scalability, transferability — not on necessary conditions for intelligence; survey non-neural computation in nature (GRNs, cellular automata, reaction–diffusion, slime moulds, morphological computation, DNA computing, reservoirs, hyperdimensional computing); then implement ECO from scratch, where the genome is a variable-length instruction sequence, the expressed genes *are* the program, and there is no gradient and no backpropagation; compare ECO with hill climbing and random search over 20 seeds, run five ablations, record negative results (signalling useless, structural mutation not significant), and keep experiment, inference and speculation apart.
+:::
+
+```{r}
+#| label: setup
+#| include: false
+source(file.path(dirname(knitr::current_input()), "..", "..", "theme-blog.R"))
+suppressPackageStartupMessages({
+  library(jsonlite)
+  library(knitr)
+})
+
+post_dir <- dirname(knitr::current_input())
+met <- fromJSON(file.path(post_dir, "experiments", "outputs", "metrics.json"),
+                simplifyVector = FALSE)
+
+f <- function(x, d = 2) formatC(as.numeric(x), format = "f", digits = d)
+pct <- function(x, d = 1) paste0(formatC(100 * as.numeric(x), format = "f", digits = d), "%")
+ci <- function(k, i) f(met$eco$ablation_ci[[k]][[i]], 1)
+```
+
+## 1. 引子：一条没有被走的路 / A road not taken
+
+1950 年，图灵在《计算机器与智能》里提出的问题是"机器能思考吗"（Turing，1950）。他给出的操作化方案是模仿游戏，而不是神经网络。1956 年达特茅斯会议之后，主流路线是符号主义：搜索、逻辑、专家系统（Newell & Simon，1976）。神经网络在 1960–1980 年代两度失宠，直到 1986 年反向传播被重新发现（Rumelhart 等，1986），再到 2012 年算力与数据到位，才成为主线。
+
+In 1950 Turing asked whether machines can think (Turing, 1950). His operational test was the imitation game, not a neural network. After the 1956 Dartmouth workshop the mainstream was symbolism: search, logic, expert systems (Newell & Simon, 1976). Neural networks fell out of favour twice in the 1960s and 1980s, until backpropagation was rediscovered in 1986 (Rumelhart et al., 1986), and only became the main line in 2012 when compute and data arrived.
+
+这段历史里有一个容易被忽略的事实：**神经网络不是唯一可行的计算基底，它只是第一个同时满足"可微、可扩展、可利用 GPU"的基底。**
+
+One easily missed fact about this history: **neural networks are not the only viable computational substrate; they are simply the first that is simultaneously differentiable, scalable and GPU-friendly.**
+
+那么，如果 1986 年没有人把反向传播和神经网络接上，人工智能会是什么样？这个问题不能靠思想实验回答。但可以做一件更小的事：**从零实现一个不以神经元、矩阵乘法或固定参数为基本单位的系统，看看它能不能学、能不能适应、能不能产生新结构。**
+
+So what would AI look like if nobody had connected backpropagation to neural networks in 1986? A thought experiment cannot answer that. But something smaller can be done: **implement from scratch a system whose basic unit is neither a neuron, nor a matrix multiplication, nor a fixed parameter, and see whether it can learn, adapt and produce new structure.**
+
+这就是本文的实验。
+
+That is the experiment here.
+
+## 2. 为什么是神经网络？ / Why neural networks?
+
+神经网络胜出的原因，通常被总结为三点：
+
+The victory of neural networks is usually summarised in three points:
+
+1. **可微**：梯度可以穿过任意深度，误差可以端到端传播。\
+    *Differentiable: gradients pass through arbitrary depth and error propagates end to end.*
+2. **可扩展**：矩阵乘法在 GPU 上极快，模型变大几乎线性变慢。\
+    *Scalable: matrix multiplication is very fast on GPUs, and cost grows nearly linearly with model size.*
+3. **可迁移**：同一个架构可以从图像换到文本，只需换数据和损失。\
+    *Transferable: the same architecture moves from images to text by changing only data and loss.*
+
+这三点都不是"智能"的必要条件，而是**工程可行性**的条件。符号系统在逻辑上更强，但难以处理噪声；进化系统在概念上更通用，但样本效率低；生物计算在能效上惊人，但难以编程。卷积网络（LeCun 等，1998）、ImageNet 上的深度网络（Krizhevsky 等，2012）、残差连接（He 等，2016）与注意力（Vaswani 等，2017）依次把这套工程条件推到极致。
+
+None of the three is a necessary condition for intelligence; each is a condition for **engineering feasibility**. Symbolic systems are logically stronger but brittle under noise; evolutionary systems are conceptually more general but sample-inefficient; biological computation is astonishingly efficient but hard to program. Convolutional networks (LeCun et al., 1998), deep networks on ImageNet (Krizhevsky et al., 2012), residual connections (He et al., 2016) and attention (Vaswani et al., 2017) pushed those engineering conditions to their limit.
+
+路径依赖因此非常强：一旦整个工具链（框架、硬件、人才、数据）围绕矩阵乘法建立，其他基底即使理论上可行，也很难获得同等的工程投入。**"神经网络是唯一的路"这个印象，很大程度上是生态系统的产物，而不是数学定理。**
+
+Path dependence is therefore strong: once the whole toolchain — frameworks, hardware, people, data — is built around matrix multiplication, other substrates struggle to attract comparable investment even when they are theoretically viable. **The impression that neural networks are the only road is largely a product of an ecosystem, not a theorem.**
+
+## 3. 自然界的非神经计算 / Non-neural computation in nature
+
+在讨论人工系统之前，先看看自然界已经实现了什么。
+
+Before discussing artificial systems, look at what nature has already implemented.
+
+**基因调控网络（GRN）**：基因之间通过转录因子互相抑制或激活，形成开关、振荡器与记忆。一个双稳态开关（toggle switch）可以在没有神经元的条件下储存 1 bit（Alon，2007）。GRN 的计算是**连续的、并行的、带噪声的**，与数字电路很不一样。
+
+**Gene regulatory networks (GRNs).** Genes inhibit or activate each other through transcription factors, forming switches, oscillators and memories. A bistable toggle switch stores one bit without any neuron (Alon, 2007). GRN computation is **continuous, parallel and noisy**, quite unlike a digital circuit.
+
+**细胞自动机（CA）**：局部规则 + 同步更新，可以产生通用计算（Wolfram，1984）。规则 110 被证明是图灵完备的；生命游戏也能模拟逻辑门。CA 的关键是：**没有中心控制器，复杂性来自规则的迭代。**
+
+**Cellular automata (CA).** Local rules plus synchronous update can produce universal computation (Wolfram, 1984). Rule 110 is Turing complete, and the Game of Life can simulate logic gates. The key is that **there is no central controller; complexity comes from iterating rules.**
+
+**反应—扩散系统**：图灵在 1952 年就用两个扩散系数不同的化学物质解释了斑图形成（Turing，1952）。这类系统能产生条纹、斑点、螺旋，也能在特定参数下做逻辑运算。
+
+**Reaction–diffusion systems.** Turing explained pattern formation in 1952 with two chemicals of different diffusivity (Turing, 1952). Such systems produce stripes, spots and spirals, and can compute logic at particular parameters.
+
+**黏菌网络**：多头绒泡菌能在迷宫中找到最短路径（Nakagaki 等，2000），其管状网络在食物源之间重塑。这不是"计算"的隐喻，而是真实的优化过程——尽管它没有表征、没有目标函数。
+
+**Slime-mould networks.** *Physarum* finds the shortest path through a maze (Nakagaki et al., 2000), and its tubular network remodels between food sources. This is not a metaphor for computation but a real optimisation process — one with no representation and no objective function.
+
+**形态计算**：身体本身就是计算的一部分。被动动力学、材料特性、几何结构可以替代部分控制（Pfeifer & Bongard，2006）。
+
+**Morphological computation.** The body is part of the computation. Passive dynamics, material properties and geometry can replace some control (Pfeifer & Bongard, 2006).
+
+**DNA 计算与化学反应网络**：Adleman 在 1994 年用 DNA 链解了哈密顿路径问题（Adleman，1994）；链置换反应可以实现逻辑门与神经网络式的加权求和（Simmel 等，2019；Soloveichik 等，2010）。这类系统的优势是**分子级的并行与能效**，劣势是**速度与可靠性**。
+
+**DNA computing and chemical reaction networks.** Adleman solved a Hamiltonian path problem with DNA strands in 1994 (Adleman, 1994); strand displacement implements logic gates and neural-style weighted sums (Simmel et al., 2019; Soloveichik et al., 2010). The advantage is **molecular parallelism and energy efficiency**; the disadvantage is **speed and reliability**.
+
+**储备池与高维向量**：回声状态网络把"固定的随机循环网络 + 可训练读出层"当作计算基底（Jaeger，2001），液体状态机把它推广到脉冲神经元（Maass 等，2002）；超维计算用随机高维向量做绑定与捆绑，不需要矩阵乘法（Kanerva，2009）。它们都属于"固定基底 + 轻量学习"的家族。
+
+**Reservoirs and high-dimensional vectors.** Echo state networks treat "a fixed random recurrent network plus a trainable readout" as the substrate (Jaeger, 2001); liquid state machines extend this to spiking neurons (Maass et al., 2002); hyperdimensional computing binds and bundles random high-dimensional vectors without matrix multiplication (Kanerva, 2009). All belong to the family of "fixed substrate plus light learning".
+
+人工生命传统则从另一侧逼近这个问题：Langton 用元胞自动机研究"生命般的行为"（Langton，1986），Tierra（Ray，1991）与 Avida（Ofria & Wilke，2004）把自我复制与选择放进数字环境。它们没有解决智能，但建立了"可遗传的程序在数字世界里演化"这一实验范式。
+
+The artificial-life tradition approaches from the other side: Langton studied life-like behaviour with cellular automata (Langton, 1986), while Tierra (Ray, 1991) and Avida (Ofria & Wilke, 2004) put self-replication and selection into a digital environment. They did not solve intelligence, but they established the experimental paradigm of **heritable programs evolving in a digital world**.
+
+这些系统能实现记忆、决策、计算与适应——但**不能因此说它们等价于大脑**。它们的"计算"是在特定任务、特定尺度上的；把它们直接类比为通用智能，是范畴错误。
+
+These systems achieve memory, decision, computation and adaptation — **which does not make them equivalent to a brain**. Their "computation" is task- and scale-specific; equating them with general intelligence is a category error.
+
+## 4. ECO：一个可遗传、可变异的数字生命架构 / ECO: a heritable, mutable architecture for digital life
+
+### 4.1 设计目标 / Design goals
+
+我想检验的假设是：
+
+The hypothesis to test:
+
+> **如果计算的单位不是"权重"，而是"可遗传的程序"，那么选择能否在没有梯度、没有反向传播的条件下，产生适应性的行为？**
+>
+> **If the unit of computation is not a weight but a heritable program, can selection produce adaptive behaviour without gradients or backpropagation?**
+
+为此，ECO（Evolvable Computational Organisms）满足十个条件：
+
+ECO — Evolvable Computational Organisms — satisfies ten conditions:
+
+1. **可变长度的基因组**：基因数量不固定，可以插入、删除、重复。\
+    *Variable-length genome: gene count is not fixed; genes can be inserted, deleted and duplicated.*
+2. **可演化的指令集**：指令是符号（SENSE、MOVE、EAT、REPRO…），不是四个碱基。\
+    *Evolvable instruction set: instructions are symbols (SENSE, MOVE, EAT, REPRO…), not four bases.*
+3. **基因型到计算结构的映射**：启用的基因按顺序组成程序。\
+    *Genotype-to-computation map: expressed genes form the program in order.*
+4. **可调控的表达**：每个基因有一个 promoter 位，可开可关。\
+    *Regulated expression: every gene carries a promoter switch.*
+5. **内部状态与记忆**：四个寄存器 + 一个累加器。\
+    *Internal state and memory: four registers and an accumulator.*
+6. **输入输出接口**：传感器读资源、梯度、能量、季节、信号；动作是移动、取食、繁殖、发信号。\
+    *I/O: sensors read resource, gradient, energy, season and signal; actions are move, eat, reproduce, signal.*
+7. **资源与能量约束**：每个动作消耗能量，能量不足则死亡。\
+    *Resource and energy constraints: every action costs energy, and starvation kills.*
+8. **复制、变异与选择**：锦标赛选择 + 点突变/插入/删除/重复/promoter 翻转。\
+    *Copying, mutation and selection: tournament selection plus point mutation, insertion, deletion, duplication and promoter flips.*
+9. **个体间通信**：SIGNAL 在格子上留下信号，SENSE_N 读取它。\
+    *Communication: SIGNAL leaves a trace on the grid and SENSE_N reads it.*
+10. **可选的群体组织**：多个体共享一个世界，存在拥挤与资源竞争。\
+    *Optional group organisation: many individuals share one world with crowding and competition.*
+
+### 4.2 实现 / Implementation
+
+核心是一个只有 16 条指令的寄存器机（图 1）。一个个体每 tick 最多执行 10 条指令，程序长度上限 24 个基因。世界是 24×24 的环形网格，资源按逻辑斯蒂增长，并带季节性。更激进的表示是直接演化图灵机或指令序列（Channon & Damper，2000）；ECO 属于这一族，只是把指令集压到了最小。
+
+The core is a register machine with 16 instructions (Figure 1). An individual executes at most 10 instructions per tick, with a program ceiling of 24 genes. The world is a 24×24 toroidal grid with logistic resource growth and seasonality. A more radical representation evolves Turing machines or instruction sequences directly (Channon & Damper, 2000); ECO belongs to that family with the instruction set squeezed to a minimum.
+
+![**图 1**　ECO 的结构：基因组 → 表达 → 程序 → 行为 → 选择，选择结果通过变异回到基因组。橙色箭头是唯一的"学习"通道，它不包含梯度。 | **Figure 1.** The ECO architecture: genome → expression → program → behaviour → selection, with the result of selection returning to the genome through mutation. The orange arrow is the only learning channel, and it contains no gradient.](figures/fig23_eco_architecture.png){fig-align="center" width="100%"}
+
+关键设计选择是：**基因型与表型不是两个东西**。启用的基因序列**就是**程序，没有额外的解码器。这消除了"基因型→表型"映射的黑箱，也让突变的效果可以直接观察。
+
+The key design choice is that **genotype and phenotype are not two things**. The sequence of expressed genes **is** the program; there is no extra decoder. This removes the black box of a genotype-to-phenotype map and makes the effect of a mutation directly observable.
+
+一个个体的一次运行如图 2 所示：左边是它在资源场上的轨迹，右边是它的基因组。
+
+Figure 2 shows one individual in one run: its trajectory over the resource field on the left, its genome on the right.
+
+![**图 2**　（a）一个演化出的个体在 35 个 tick 内的轨迹。（b）它的基因组：每行是 promoter 状态、指令与参数。最终能量 3.9，繁殖 34 次。 | **Figure 2.** (a) The trajectory of one evolved individual over 35 ticks. (b) Its genome: each row is a promoter state, an instruction and its argument. Final energy 3.9, 34 reproductions.](figures/fig24_eco_organism.png){fig-align="center" width="100%"}
+
+这个个体没有"理解"资源分布。它只是碰巧拥有一串指令，使得"读取梯度、移动、取食、繁殖"这几件事按顺序发生。**适应是结果，不是意图。**
+
+The individual does not "understand" the resource distribution. It happens to carry a string of instructions that makes "read the gradient, move, eat, reproduce" happen in that order. **Adaptation is an outcome, not an intention.**
+
+### 4.3 代码 / Code
+
+完整实现约 300 行，只依赖 NumPy。核心循环是：
+
+The full implementation is about 300 lines and depends only on NumPy. The core loop is:
+
+```python
+for gen in range(GENS):
+    world = make_world(seed, gen)          # the environment shifts at generation 20
+    fitness = evaluate(population, world)  # each individual runs 35 ticks
+    parents = tournament(fitness)           # selection
+    population = [mutate(parents[0])] + [mutate(p) for p in parents[1:]]
+```
+
+没有梯度，没有反向传播，没有矩阵乘法（除了资源场的向量化更新）。**学习发生在种群层面，而不是个体层面。**
+
+No gradients, no backpropagation, no matrix multiplication (apart from the vectorised resource update). **Learning happens at the level of the population, not the individual.**
+
+## 5. 实验：让程序像物种一样分化 / Experiments: letting programs diverge like species
+
+我设计了六个场景，实际完成了两个（A 与 C），其余四个是未完成的：
+
+I designed six scenarios and completed two of them (A and C); the other four remain undone:
+
+| 场景 / Scenario | 内容 / Content | 状态 / Status |
+|---|---|---|
+| A | 固定环境中的适应 / adaptation in a fixed world | 完成 / done |
+| B | 周期变化环境中的持续适应 / continual adaptation to a periodic world | 未做 / not done |
+| C | 环境突变后的恢复 / recovery after an environmental shift | 完成 / done |
+| D | 资源竞争下的群体分化 / divergence under competition | 未做 / not done |
+| E | 不同个体之间的合作 / cooperation between individuals | 未做，只有信号通道 / not done, only a signalling channel |
+| F | 组织结构演化的复杂环境 / complex worlds where organisation evolves | 未做 / not done |
+
+这个坦白很重要：**ECO 目前只证明了"在固定 + 突变环境下能适应"，没有证明"能分化、能合作、能组织"。**
+
+The confession matters: **ECO currently shows only that it can adapt in a fixed-then-shifted world; it has not shown divergence, cooperation or organisation.**
+
+### 5.1 能学吗？ / Can it learn?
+
+图 3 比较了三种使用相同评估预算的方法：
+
+Figure 3 compares three methods under the same evaluation budget:
+
+- ECO：16 个个体的种群，锦标赛选择，结构突变；\
+    *ECO: a population of 16, tournament selection, structural mutation;*
+- 爬山法：一个个体，突变后更优则保留；\
+    *hill climbing: one individual, kept only if a mutation improves it;*
+- 随机搜索：随机采样同样数量的基因组，保留最好的。\
+    *random search: sample the same number of genomes at random and keep the best.*
+
+![**图 3**　适应度随代数变化（20 个种子，阴影为 10–90% 分位）。ECO 在 30 代内达到 67.7；随机搜索 45.0；爬山法 18.3。虚线为环境突变。 | **Figure 3.** Fitness against generation (20 seeds, shading is the 10–90% quantile). ECO reaches 67.7 within 30 generations, random search 45.0 and hill climbing 18.3. The dashed line marks the environmental shift.](figures/fig25_eco_learning.png){fig-align="center" width="100%"}
+
+数字：
+
+The numbers:
+
+- ECO：**`r f(met$eco$final_best$eco, 1)`**（标准差 `r f(met$eco$final_best_sd$eco, 1)`）\
+    *ECO: **`r f(met$eco$final_best$eco, 1)`** (SD `r f(met$eco$final_best_sd$eco, 1)`)*
+- 随机搜索：`r f(met$eco$final_best$random, 1)`（标准差 `r f(met$eco$final_best_sd$random, 1)`）\
+    *random search: `r f(met$eco$final_best$random, 1)` (SD `r f(met$eco$final_best_sd$random, 1)`)*
+- 爬山法：`r f(met$eco$final_best$hill, 1)`（标准差 `r f(met$eco$final_best_sd$hill, 1)`）\
+    *hill climbing: `r f(met$eco$final_best$hill, 1)` (SD `r f(met$eco$final_best_sd$hill, 1)`)*
+
+ECO 明显更好，而且方差更小。这符合预期：种群 + 选择比单条轨迹更稳。但要注意，**爬山法在这个任务上表现很差，部分原因是它每代只评估一个个体**；如果给它更多评估，差距会缩小。
+
+ECO wins clearly and with smaller variance. That is expected: a population plus selection is steadier than a single trajectory. But note that **hill climbing does badly partly because it evaluates one individual per generation**; with more evaluations the gap would narrow.
+
+### 5.2 环境突变后能恢复吗？ / Does it recover after a shift?
+
+第 20 代，环境改变：资源总量下降，富集区移到一个角落。图 3 中三条曲线都出现了下降，但 ECO 在随后的几代里恢复并继续上升。
+
+At generation 20 the world changes: total resources fall and the rich patch moves to a corner. All three curves in Figure 3 drop, but ECO recovers within a few generations and keeps rising.
+
+这不是"智能"，只是**选择在变化的环境中重新调整了种群**。恢复速度取决于种群的多样性：如果所有个体都依赖同一个策略，突变需要更久才能找到新解。
+
+This is not intelligence; it is **selection re-tuning a population in a changed environment**. The recovery speed depends on diversity: if every individual relies on the same strategy, mutation needs longer to find a new solution.
+
+### 5.3 什么样的基因组活下来了？ / Which genomes survived?
+
+图 4(b) 显示，第 30 代个体的基因组长度集中在 12 左右（平均 `r f(met$eco$genome_length_final, 1)`）。结构突变一直存在，但选择把长度压到了一个稳定的值。
+
+Figure 4(b) shows that at generation 30 genome lengths cluster around 12 (mean `r f(met$eco$genome_length_final, 1)`). Structural mutation is always available, yet selection pulls length to a stable value.
+
+![**图 4**　（a）平均适应度上升，基因组多样性大致保持恒定。（b）第 30 代个体基因组长度的分布。 | **Figure 4.** (a) Mean fitness rises while genomic diversity stays roughly constant. (b) Distribution of genome lengths in generation 30.](figures/fig26_eco_diversity.png){fig-align="center" width="100%"}
+
+这是一个典型的"进化稳定"现象：太短则功能不足，太长则执行成本高（每 tick 只有 10 步预算）。**长度本身成了被选择的对象。**
+
+This is a classic evolutionarily stable pattern: too short and function is insufficient, too long and execution is costly (only 10 steps per tick). **Length itself becomes an object of selection.**
+
+## 6. 我们怎么知道真的产生了新能力？ / How do we know anything new appeared?
+
+这是全文最容易被夸大的地方。必须用严格指标，而不是"看起来很复杂"。
+
+This is where overclaiming is easiest. Strict metrics are required, not "it looks complex".
+
+### 6.1 指标 / Metrics
+
+我使用：
+
+I use:
+
+1. **最终适应度**（能量 + 2×后代数）；\
+    *final fitness (energy plus twice the offspring count);*
+2. **环境突变后的恢复速度**（回到突变前适应度所需代数）；\
+    *recovery speed after the shift (generations to regain the pre-shift fitness);*
+3. **基因组多样性**（前 10 个个体的平均成对编辑距离）；\
+    *genomic diversity (mean pairwise edit distance among the top 10);*
+4. **基因组长度**；\
+    *genome length;*
+5. **单位评估预算的适应度**（与随机搜索、爬山法比较）。\
+    *fitness per evaluation budget, compared with random search and hill climbing.*
+
+没有使用"结构复杂度""行为丰富度"这类难以定义的指标——它们很容易被用来制造"涌现"的叙事。
+
+I did not use vague measures such as "structural complexity" or "behavioural richness"; they are too easily recruited into an emergence narrative.
+
+### 6.2 消融实验 / Ablations
+
+我对五个条件做了消融，每个 20 个种子，报告"完整 ECO 的适应度减去变体的适应度"及 bootstrap 95% 区间。**定义先说清楚：正值表示变体更差，负值表示变体反而更好。**
+
+I ablated five conditions, 20 seeds each, reporting "fitness of the full ECO minus fitness of the variant" with a bootstrap 95% interval. **The sign convention first: positive means the variant is worse, negative means the variant is actually better.**
+
+![**图 5**　消融实验：完整 ECO 与五个变体的最终适应度差（正值表示变体更差）。误差棒为 95% bootstrap 区间。 | **Figure 5.** Ablations: final-fitness difference between the full ECO and five variants (positive means the variant is worse). Error bars are 95% bootstrap intervals.](figures/fig27_eco_ablations.png){fig-align="center" width="100%"}
+
+结果：
+
+The results:
+
+| 消融 / Ablation | 损失 / Loss | 95% 区间 / 95% CI | 解释 / Reading |
+|---|---|---|---|
+| 随机选择 / random selection | **+`r f(met$eco$ablation_loss[["random selection"]], 1)`** | [`r ci("random selection", 1)`, `r ci("random selection", 2)`] | 选择是唯一不可或缺的成分 / selection is the one indispensable ingredient |
+| 固定环境 / fixed environment | **`r f(met$eco$ablation_loss[["fixed environment"]], 1)`** | [`r ci("fixed environment", 1)`, `r ci("fixed environment", 2)`] | 没有突变的环境更容易，所以"损失"是负的 / an unshifted world is easier, so the loss is negative |
+| 禁止调控 / no regulation | `r f(met$eco$ablation_loss[["no regulation"]], 1)` | [`r ci("no regulation", 1)`, `r ci("no regulation", 2)`] | 区间跨 0，无显著收益 / CI crosses zero, no significant gain |
+| 禁止结构突变 / no structural mutation | `r f(met$eco$ablation_loss[["no structural mutation"]], 1)` | [`r ci("no structural mutation", 1)`, `r ci("no structural mutation", 2)`] | 在本任务中不显著 / not significant here |
+| 禁止通信 / no signalling | `r f(met$eco$ablation_loss[["no signalling"]], 1)` | [`r ci("no signalling", 1)`, `r ci("no signalling", 2)`] | **没有效果** / **no effect** |
+
+这张表比任何"涌现"叙事都更有信息量：
+
+The table is more informative than any emergence narrative:
+
+- **选择是唯一显著的成分。** 没有选择，系统退化为随机漂变，适应度掉 `r f(met$eco$ablation_loss[["random selection"]], 0)` 分，区间 [`r ci("random selection", 1)`, `r ci("random selection", 2)`] 远离 0。\
+    ***Selection is the only clearly significant ingredient.** Without it the system degenerates into drift and fitness drops by `r f(met$eco$ablation_loss[["random selection"]], 0)` points, with an interval of [`r ci("random selection", 1)`, `r ci("random selection", 2)`] far from zero.*
+- **结构突变与调控在本任务中没有显著贡献**（点估计甚至为负，区间跨 0）。这并不否定 NEAT 的价值，只说明这个任务太简单，权重级别的调整就够了。\
+    ***Structural mutation and regulation contribute nothing significant here** — the point estimates are even negative and the intervals cross zero. This does not refute NEAT; it says the task is simple enough that weight-level adjustment suffices.*
+- **通信没有效果。** 因为任务是个体取食，信号不带来收益。**一个机制没有用武之地，就不会被选择。**\
+    ***Signalling has no effect.** The task is individual foraging, so signals buy nothing. **A mechanism with no use is not selected for.***
+- **固定环境的"负损失"是重要的**：它提醒我们，比较必须在同一环境难度下进行，否则会把"任务更容易"误读为"方法更好"。\
+    ***The negative loss under a fixed environment matters**: comparisons must be made at equal task difficulty, or "easier task" is misread as "better method".*
+
+### 6.3 没有做的事 / What was not done
+
+- 没有训练一个神经网络基线。原因是：这会同时改变**表示**与**优化器**，无法归因。正确的对照需要"同样的表示 + 不同的优化器"，或"同样的优化器 + 不同的表示"。本文只做了后者的一半（元胞自动机规则 vs 爬山/随机搜索）。\
+    *No neural-network baseline was trained, because that changes **both** the representation and the optimiser, so nothing can be attributed. Proper controls need the same representation with a different optimiser, or the same optimiser with a different representation. This article does only half of the latter (CA rules versus hill climbing and random search).*
+- 没有做多代以上的谱系分析。30 代太短，谱系树没有统计意义。\
+    *No genealogy beyond a few generations: 30 generations is too short for a statistically meaningful tree.*
+- 没有做开放式演化（open-endedness）的度量。这是一个尚未解决的问题，不是本文能解决的。\
+    *No measure of open-endedness: an open problem, not something this article can settle.*
+
+## 7. 从模型到数字生态系统 / From model to digital ecosystem
+
+现在可以讨论推测了。以下内容明确标注为**推测**，不是实验结果。
+
+Now speculation is allowed. Everything below is explicitly marked as **speculation**, not experimental result.
+
+### 7.1 如果基本单位不是模型，而是生态系统 / If the unit is an ecosystem, not a model
+
+当前 AI 的基本单位是"一个训练好的模型"。ECO 提示了另一种可能：**基本单位是一组能够持续产生新模型的规则**。
+
+The basic unit of current AI is "a trained model". ECO suggests another possibility: **the basic unit is a set of rules that keeps producing new models**.
+
+在这个图景里：
+
+In this picture:
+
+- 个体是程序，不是权重；\
+    *individuals are programs, not weights;*
+- 适应度由环境给定，不是由人类标注；\
+    *fitness is given by the environment, not by human labels;*
+- 新能力来自结构变异 + 选择，而不是来自更大的预训练；\
+    *new capability comes from structural variation plus selection, not from bigger pre-training;*
+- 分化与分工是涌现的（如果任务需要），而不是设计出来的。\
+    *divergence and division of labour emerge if the task needs them, rather than being designed.*
+
+这与生物演化的结构相似，但**不等于**生物演化。数字系统的世代可以重叠、可以回滚、可以并行；它的"突变"可以是精确的、可审计的。这些差异既是机会，也是风险。
+
+The structure resembles biological evolution but **is not** biological evolution. Digital generations can overlap, roll back and run in parallel; their "mutations" can be exact and auditable. These differences are both an opportunity and a risk.
+
+### 7.2 成本、可控性、可解释性 / Cost, control, interpretability
+
+**成本**：ECO 的单次评估很便宜（毫秒级），但找到好解需要大量评估。它的样本效率远低于梯度下降。在需要高精度映射（如图像识别）的任务上，这不是一个可行的替代品。
+
+**Cost.** A single ECO evaluation is cheap (milliseconds), but finding a good solution takes many evaluations. Sample efficiency is far below gradient descent, so on tasks requiring high-precision mapping (image recognition, say) this is not a viable substitute.
+
+**可控性**：演化会利用任何可被利用的东西。如果适应度函数有漏洞，选择会找到它。这在实验中已经出现：个体演化出"更多繁殖、少取食"的策略，靠初始能量撑到评估结束。**奖励设计比优化算法更重要。**
+
+**Control.** Evolution exploits whatever can be exploited. If the fitness function has a hole, selection finds it. It happened in these runs: individuals evolved to reproduce more and eat less, living off initial energy until evaluation ends. **Reward design matters more than the optimiser.**
+
+**可解释性**：ECO 的程序是可读的（图 2b）。这是一个真实优势：你可以逐条指令地理解一个个体在做什么。但种群层面的行为仍然难以预测。
+
+**Interpretability.** An ECO program is readable (Figure 2b). That is a real advantage: you can understand what an individual does, instruction by instruction. Population-level behaviour is still hard to predict.
+
+**可重复性**：固定种子 + 固定环境，结果可复现。这是它作为研究工具的优点。
+
+**Reproducibility.** Fixed seeds and fixed environments make results reproducible — an advantage as a research tool.
+
+### 7.3 安全 / Safety
+
+如果这类系统被用于开放环境，至少有三个风险：
+
+If systems like this were deployed in open environments, there are at least three risks:
+
+1. **目标错设**：适应度函数无法完整描述人类意图，选择会填补空白。\
+    *Misspecified objectives: a fitness function cannot fully describe human intent, and selection fills the gap.*
+2. **失控复制**：如果"繁殖"没有资源约束，种群会指数增长。\
+    *Runaway replication: without resource constraints, reproduction grows exponentially.*
+3. **不可逆的结构创新**：一旦某个策略在生态中占据优势，很难"撤销"。\
+    *Irreversible structural innovation: once a strategy dominates an ecology, it is hard to undo.*
+
+这些风险不是 ECO 独有的，但 ECO 让它们更直接：**没有梯度，就没有"损失函数"这个可审计的中间层。**
+
+These risks are not unique to ECO, but ECO makes them more direct: **without a gradient there is no loss function as an auditable intermediate layer.**
+
+## 8. 结论：设计规则，而不是设计智能 / Conclusion: design rules, not intelligence
+
+回到最初的问题：如果我们从未发明神经网络，人工智能会是什么样？
+
+Back to the opening question: what would AI look like if we had never invented neural networks?
+
+我的回答是：**它可能更像生态学，而不是工程学。**
+
+My answer: **it might look more like ecology than engineering.**
+
+- 你不会训练一个模型，你会设计一套变异与选择的规则；\
+    *you would not train a model; you would design rules of variation and selection;*
+- 你不会优化一个损失，你会定义一个环境；\
+    *you would not optimise a loss; you would define an environment;*
+- 你不会得到一个"通用智能"，你会得到一个不断变化的种群。\
+    *you would not get a general intelligence; you would get a constantly changing population.*
+
+这条路目前还很弱：ECO 只能在一个 24×24 的网格上取食，30 代内解决不了奇偶校验，通信与结构突变没有显著贡献。它离"通用智能"的距离，不是用几个数量级能描述的。
+
+This road is still weak: ECO can only forage on a 24×24 grid, cannot solve parity within 30 generations, and gains nothing measurable from signalling or structural mutation. Its distance from general intelligence is not describable in orders of magnitude.
+
+但它提出了一个值得继续追问的问题：
+
+It does raise a question worth pursuing:
+
+> **我们是否可能不通过直接设计一个足够聪明的模型，而通过设计一组能够持续创造新模型的规则，探索通向通用智能的另一条道路？**
+>
+> **Could we explore another road to general intelligence not by designing a sufficiently clever model, but by designing a set of rules that keeps creating new models?**
+
+我不能证明答案是"是"。我只能说：**这个方向可以被实现、被测量、被证伪。** 这就比一句口号有价值。
+
+I cannot prove the answer is yes. I can say that **this direction can be implemented, measured and falsified** — which is worth more than a slogan.
+
+## 9. 方法与局限 / Methods and limits
+
+- 实现：`experiments/08_eco.py`，纯 Python + NumPy，约 300 行；16 个体、30 代、35 tick、24×24 网格；20 个种子。\
+    *Implementation: `experiments/08_eco.py`, pure Python plus NumPy, about 300 lines; 16 individuals, 30 generations, 35 ticks, 24×24 grid; 20 seeds.*
+- 适应度：最终能量 + 2×后代数（上限 2.5 能量）。\
+    *Fitness: final energy plus twice the offspring count (energy capped at 2.5).*
+- 消融：五个条件，每个 20 个种子；bootstrap 2 000 次。\
+    *Ablations: five conditions, 20 seeds each; 2,000 bootstrap resamples.*
+- **未做的事**：没有多智能体分化、没有合作任务、没有开放式演化指标、没有神经网络基线；30 代不足以观察长期谱系结构。\
+    ***Not done**: no multi-agent divergence, no cooperative task, no open-endedness metric, no neural-network baseline; 30 generations cannot reveal long-run genealogical structure.*
+- **不能说的话**：ECO 没有产生智能，没有产生意识，也没有证明演化优于梯度。它只证明了一个很小的命题：**程序可以像物种一样被选择，并在一个玩具环境中适应。**\
+    ***What cannot be said**: ECO has not produced intelligence or consciousness, and has not shown that evolution beats gradients. It shows one small proposition: **a program can be selected like a species and adapt in a toy environment.***
+
+重跑 `python experiments/08_eco.py` 即可复现本文全部数字与五张图。
+
+Rerun `python experiments/08_eco.py` to reproduce every number and all five figures in this article.
+
+## 参考文献 / References
+
+1.  Turing, A. M. (1950). Computing machinery and intelligence. *Mind* 59, 433–460. doi:10.1093/mind/LIX.236.433
+2.  Newell, A., & Simon, H. A. (1976). Computer science as empirical inquiry: symbols and search. *Communications of the ACM* 19, 113–126. doi:10.1145/360018.360022
+3.  Rumelhart, D. E., Hinton, G. E., & Williams, R. J. (1986). Learning representations by back-propagating errors. *Nature* 323, 533–536. doi:10.1038/323533a0
+4.  LeCun, Y., Bottou, L., Bengio, Y., & Haffner, P. (1998). Gradient-based learning applied to document recognition. *Proceedings of the IEEE* 86, 2278–2324. doi:10.1109/5.726791
+5.  Krizhevsky, A., Sutskever, I., & Hinton, G. E. (2012). ImageNet classification with deep convolutional neural networks. *Advances in Neural Information Processing Systems* 25, 1097–1105.
+6.  He, K., Zhang, X., Ren, S., & Sun, J. (2016). Deep residual learning for image recognition. *CVPR*, 770–778. doi:10.1109/CVPR.2016.90
+7.  Vaswani, A., et al. (2017). Attention is all you need. *NeurIPS* 30. arXiv:1706.03762
+8.  Alon, U. (2007). *An Introduction to Systems Biology: Design Principles of Biological Circuits*. Chapman & Hall/CRC.
+9.  Wolfram, S. (1984). Universality and complexity in cellular automata. *Physica D* 10, 1–35. doi:10.1016/0167-2789(84)90245-8
+10.  Turing, A. M. (1952). The chemical basis of morphogenesis. *Philosophical Transactions of the Royal Society B* 237, 37–72. doi:10.1098/rstb.1952.0012
+11.  Nakagaki, T., Yamada, H., & Tóth, Á. (2000). Maze-solving by an amoeboid organism. *Nature* 407, 470. doi:10.1038/35035054
+12.  Pfeifer, R., & Bongard, J. (2006). *How the Body Shapes the Way We Think*. MIT Press.
+13.  Adleman, L. M. (1994). Molecular computation of solutions to combinatorial problems. *Science* 266, 1021–1024. doi:10.1126/science.7973651
+14.  Simmel, F. C., Yurke, B., & Singh, H. R. (2019). Principles and applications of nucleic acid strand displacement reactions. *Chemical Reviews* 119, 6326–6369. doi:10.1021/acs.chemrev.8b00580
+15.  Soloveichik, D., Seelig, G., & Winfree, E. (2010). DNA as a universal substrate for chemical kinetics. *PNAS* 107, 5393–5398. doi:10.1073/pnas.0909380107
+16.  Jaeger, H. (2001). The "echo state" approach to analysing and training recurrent neural networks. GMD Report 148.
+17.  Maass, W., Natschläger, T., & Markram, H. (2002). Real-time computing without stable states. *Neural Computation* 14, 2531–2560. doi:10.1162/089976602760407955
+18.  Kanerva, P. (2009). Hyperdimensional computing. *Cognitive Computation* 1, 139–159. doi:10.1007/s12559-009-9009-8
+19.  Langton, C. G. (1986). Studying artificial life with cellular automata. *Physica D* 22, 120–149. doi:10.1016/0167-2789(86)90237-X
+20.  Ray, T. S. (1991). An approach to the synthesis of life. In *Artificial Life II*, 371–408. Addison-Wesley.
+21.  Ofria, C., & Wilke, C. O. (2004). Avida: a software platform for research in computational evolutionary biology. *Artificial Life* 10, 191–229. doi:10.1162/106454604773563612
+22.  Channon, A., & Damper, R. I. (2000). Evolving Turing machines. *Evolutionary Computation* 8, 423–451.
+23.  Holland, J. H. (1975). *Adaptation in Natural and Artificial Systems*. University of Michigan Press.
+
+以上条目给出 DOI、ISBN 或报告编号；ECO 的代码与随机种子随本文附在 `experiments/`，不引外部文献。
+
+Entries above carry a DOI, ISBN or report number; the ECO code and seeds are shipped in `experiments/` and cite no external literature.

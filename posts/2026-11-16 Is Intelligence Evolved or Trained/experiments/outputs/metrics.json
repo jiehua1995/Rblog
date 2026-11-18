@@ -1,0 +1,83 @@
+{
+  "division": {
+    "n_seeds": 20,
+    "note": "reward is q_k * sqrt(n_k); one agent is limited to one patch per round",
+    "reward": {
+      "adaptive": 4.012028310797147,
+      "fixed": 3.971920891508055,
+      "heritable": 3.865468762837156,
+      "homogeneous": 3.1202459701962253,
+      "single-one-patch": 2.7949432312382925,
+      "single-split": 3.971920891508055
+    },
+    "reward_sd": {
+      "adaptive": 0.49359091638332947,
+      "fixed": 0.5174580020170233,
+      "heritable": 0.5027905234448942,
+      "homogeneous": 0.3351059834947399,
+      "single-one-patch": 0.3647131014605882,
+      "single-split": 0.5174580020170233
+    },
+    "rounds": 40
+  },
+  "ecosystem": {
+    "diversity_post": 0.1348112252714898,
+    "diversity_pre": 0.18642835232892574,
+    "n_seeds": 20,
+    "n_steps": 600,
+    "pop_post_shift": 133.30250000000007,
+    "pop_pre_shift": 116.455,
+    "pop_trough": 49.25,
+    "recovery_ratio": 1.1446696148726982
+  },
+  "optimizers": {
+    "budget": 4000,
+    "convex_bowl": {
+      "gradient_steps": 261.0,
+      "selection_evals": 1376.0
+    },
+    "final_loss_static": {
+      "gradient": 17.990626270166917,
+      "selection": 0.331561304079848
+    },
+    "n_seeds": 20,
+    "shift_rates": [
+      0,
+      200,
+      500,
+      1000,
+      2000
+    ],
+    "staircase_loss": {
+      "gradient": 31.2,
+      "selection": 2.2
+    },
+    "tracking_error": {
+      "gradient": [
+        39.49409681739826,
+        26.319230068533688,
+        28.36622496548772,
+        30.45876152583268,
+        32.281179825031074
+      ],
+      "selection": [
+        4.333008678260481,
+        7.496036292977529,
+        5.89040803582112,
+        5.89040803582112,
+        5.15714712002293
+      ]
+    }
+  },
+  "structure": {
+    "archive_best": 0.8,
+    "archive_coverage": 0.6721938775510204,
+    "archive_size": 527,
+    "ca_evaluations": 8000,
+    "mean_connections_parity": 18.05,
+    "mean_connections_xor": 14.7,
+    "n_seeds": 20,
+    "parity_solved_by_gen80": 0.0,
+    "xor_solved_by_gen80": 0.85
+  }
+}
