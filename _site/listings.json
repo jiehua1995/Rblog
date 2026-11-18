@@ -1,7 +1,12 @@
 [
   {
-    "listing": "/index.html",
+    "listing": "/articles.html",
     "items": [
+      "/posts/2026-11-18 The Correlation Floor An Anatomy of Random Forests/index.html",
+      "/posts/2026-11-18 Which Correlation A Field Guide to Forty-Three Coefficients/index.html",
+      "/posts/2026-11-17 What If We Never Invented Neural Networks/index.html",
+      "/posts/2026-11-16 Is Intelligence Evolved or Trained/index.html",
+      "/posts/2026-11-15 Is the LLM the Final Road to AGI/index.html",
       "/posts/2026-11-12 From Molecules to Cells Can Microphysics Derive Life/index.html",
       "/posts/2026-11-12 Longevity From Immortality Elixirs to Anti-Aging Myths/index.html",
       "/posts/2026-11-06 Simulating Life The Final Sanctuary of Artificial Intelligence/index.html",
@@ -29,8 +34,13 @@
     ]
   },
   {
-    "listing": "/articles.html",
+    "listing": "/index.html",
     "items": [
+      "/posts/2026-11-18 The Correlation Floor An Anatomy of Random Forests/index.html",
+      "/posts/2026-11-18 Which Correlation A Field Guide to Forty-Three Coefficients/index.html",
+      "/posts/2026-11-17 What If We Never Invented Neural Networks/index.html",
+      "/posts/2026-11-16 Is Intelligence Evolved or Trained/index.html",
+      "/posts/2026-11-15 Is the LLM the Final Road to AGI/index.html",
       "/posts/2026-11-12 From Molecules to Cells Can Microphysics Derive Life/index.html",
       "/posts/2026-11-12 Longevity From Immortality Elixirs to Anti-Aging Myths/index.html",
       "/posts/2026-11-06 Simulating Life The Final Sanctuary of Artificial Intelligence/index.html",
