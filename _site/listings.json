@@ -1,7 +1,8 @@
 [
   {
-    "listing": "/index.html",
+    "listing": "/articles.html",
     "items": [
+      "/posts/2026-11-20 What Stays Constant An Anatomy of Normalization/index.html",
       "/posts/2026-11-18 Predicting in Latent Space An Anatomy of JEPA/index.html",
       "/posts/2026-11-18 The Correlation Floor An Anatomy of Random Forests/index.html",
       "/posts/2026-11-18 Which Correlation A Field Guide to Forty-Three Coefficients/index.html",
@@ -35,8 +36,9 @@
     ]
   },
   {
-    "listing": "/articles.html",
+    "listing": "/index.html",
     "items": [
+      "/posts/2026-11-20 What Stays Constant An Anatomy of Normalization/index.html",
       "/posts/2026-11-18 Predicting in Latent Space An Anatomy of JEPA/index.html",
       "/posts/2026-11-18 The Correlation Floor An Anatomy of Random Forests/index.html",
       "/posts/2026-11-18 Which Correlation A Field Guide to Forty-Three Coefficients/index.html",
