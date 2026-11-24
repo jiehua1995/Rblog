@@ -62,3 +62,4 @@ posts/*/results/
 # Python bytecode
 __pycache__/
 *.pyc
+posts/*/outputs/*.rds

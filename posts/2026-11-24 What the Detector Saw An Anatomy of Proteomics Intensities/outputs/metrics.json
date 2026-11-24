@@ -1,0 +1,278 @@
+{
+  "e00": {
+    "n_protein_groups": 1570,
+    "n_protein_clean": 1537,
+    "n_peptides": 11357,
+    "n_runs": 6,
+    "n_ups": 44,
+    "expected_lfc": 1.56559718,
+    "pep_log2_range": 14.45221101,
+    "pep_missing": 0.44919433,
+    "prot_missing_raw": 0.15582303,
+    "prot_missing_lfq": 0.43938408,
+    "pep_per_protein_median": 5,
+    "seq_found": 1554,
+    "n_obs_median": 22,
+    "n_obs_range": [
+      1,
+      276
+    ]
+  },
+  "e01": {
+    "peptide": "LVNELTEFAK",
+    "peptide_mass": 1162.62338935,
+    "precursor_mz": 582.31897068,
+    "area_2sigma_5isotopes": 0.80747293,
+    "area_1sigma_1isotope": 0.25837082,
+    "area_2sigma_1isotope": 0.41529277,
+    "auc_agc_low_max": 2000,
+    "saturated_ratio_10_cap10": 4.56013642,
+    "isotopologue_share_mono": 0.45585853
+  },
+  "e03": {
+    "example_true_loading": [0, 1, 2],
+    "example_recovered": [-0.02, 1.011, 2.009],
+    "real_lfq_cor": 0.64338924,
+    "real_lfq_rank": 0.87949621,
+    "real_lfq_n": 5130,
+    "real_lfq_slope": 0.57906729,
+    "bench": [
+      {
+        "method": "Intensity",
+        "n_eligible": 1253,
+        "n_ups": 30,
+        "ups_error": 0.69855158,
+        "yeast_error": 0.15458613
+      },
+      {
+        "method": "LFQ (MaxQuant)",
+        "n_eligible": 800,
+        "n_ups": 11,
+        "ups_error": 0.53511404,
+        "yeast_error": 0.08512382
+      },
+      {
+        "method": "LFQ (this post)",
+        "n_eligible": 1447,
+        "n_ups": 39,
+        "ups_error": 0.32519381,
+        "yeast_error": 0.08131054
+      },
+      {
+        "method": "Top3",
+        "n_eligible": 1249,
+        "n_ups": 30,
+        "ups_error": 0.31483923,
+        "yeast_error": 0.12403488
+      },
+      {
+        "method": "sum of peptides",
+        "n_eligible": 1249,
+        "n_ups": 30,
+        "ups_error": 0.72358079,
+        "yeast_error": 0.15303431
+      }
+    ],
+    "sim_rmse": [
+      {
+        "miss": 0,
+        "method": "MaxLFQ",
+        "rmse": 0.31729139,
+        "retained": 1
+      },
+      {
+        "miss": 0,
+        "method": "mean log",
+        "rmse": 0.31432108,
+        "retained": 1
+      },
+      {
+        "miss": 0,
+        "method": "sum of peptides",
+        "rmse": 0.31884191,
+        "retained": 1
+      },
+      {
+        "miss": 0.05,
+        "method": "MaxLFQ",
+        "rmse": 0.33195107,
+        "retained": 0.9985
+      },
+      {
+        "miss": 0.05,
+        "method": "mean log",
+        "rmse": 0.31965143,
+        "retained": 0.987
+      },
+      {
+        "miss": 0.05,
+        "method": "sum of peptides",
+        "rmse": 0.38148491,
+        "retained": 0.987
+      },
+      {
+        "miss": 0.1,
+        "method": "MaxLFQ",
+        "rmse": 0.34618337,
+        "retained": 0.9975
+      },
+      {
+        "miss": 0.1,
+        "method": "mean log",
+        "rmse": 0.32609718,
+        "retained": 0.9695
+      },
+      {
+        "miss": 0.1,
+        "method": "sum of peptides",
+        "rmse": 0.43110061,
+        "retained": 0.9695
+      },
+      {
+        "miss": 0.2,
+        "method": "MaxLFQ",
+        "rmse": 0.36574829,
+        "retained": 0.987
+      },
+      {
+        "miss": 0.2,
+        "method": "mean log",
+        "rmse": 0.3349406,
+        "retained": 0.919
+      },
+      {
+        "miss": 0.2,
+        "method": "sum of peptides",
+        "rmse": 0.47958315,
+        "retained": 0.919
+      },
+      {
+        "miss": 0.35,
+        "method": "MaxLFQ",
+        "rmse": 0.38207346,
+        "retained": 0.96
+      },
+      {
+        "miss": 0.35,
+        "method": "mean log",
+        "rmse": 0.34257423,
+        "retained": 0.8185
+      },
+      {
+        "miss": 0.35,
+        "method": "sum of peptides",
+        "rmse": 0.5337306,
+        "retained": 0.8185
+      }
+    ],
+    "shared_bias_full": 0.5849625
+  },
+  "e02": {
+    "pep_dynamic_range_log2": 9.51783245,
+    "prot_dynamic_range_log2": 11.9183239,
+    "pep_missing": 0.44919433,
+    "prot_missing": 0.15582303,
+    "median_cv_a": 0.20343618,
+    "cor_run_median": 0.95904718,
+    "peptide_dev_sd": 1.56557789,
+    "run_median_range": [
+      18.13974359,
+      18.3513653
+    ]
+  },
+  "e07": {
+    "tmt_surviving_4x": [
+      1,
+      0.85,
+      0.75,
+      0.625,
+      0.5
+    ],
+    "dda_max": 0.85,
+    "sc_vs_lfq_cor": 0.86813977,
+    "sc_ups_error": 0.98063468,
+    "lfq_ups_error": 0.573854
+  },
+  "e05": {
+    "nobs_vs_length_slope": 0.93909588,
+    "nobs_median": 22,
+    "nobs_range": [
+      1,
+      276
+    ],
+    "intensity_length_slope": 1.00488023,
+    "ibaq_length_slope": -0.00046966,
+    "intensity_length_r2": 0.68663711,
+    "ibaq_length_r2": 5.15990381e-07,
+    "readout_spearman": [
+      {
+        "readout": "raw sum",
+        "rho": 0.98562051
+      },
+      {
+        "readout": "iBAQ",
+        "rho": 0.99483383
+      },
+      {
+        "readout": "Top3",
+        "rho": 0.99548803
+      },
+      {
+        "readout": "spectral count",
+        "rho": 0.99315298
+      },
+      {
+        "readout": "NSAF",
+        "rho": 0.95804164
+      },
+      {
+        "readout": "emPAI",
+        "rho": 0.7560661
+      }
+    ],
+    "readout_dynamic_range": [
+      {
+        "readout": "raw sum",
+        "range_log10": 8.96249083
+      },
+      {
+        "readout": "iBAQ",
+        "range_log10": 9.23039272
+      },
+      {
+        "readout": "Top3",
+        "range_log10": 8.23417883
+      },
+      {
+        "readout": "spectral count",
+        "range_log10": 5.7218477
+      },
+      {
+        "readout": "NSAF",
+        "range_log10": 6.34892196
+      },
+      {
+        "readout": "emPAI",
+        "range_log10": 2.62081272
+      }
+    ],
+    "flyability_bias_sd": [
+      {
+        "sd_fly": 0.3,
+        "sd_bias": 0.12713147
+      },
+      {
+        "sd_fly": 0.7,
+        "sd_bias": 0.29664009
+      },
+      {
+        "sd_fly": 1.1,
+        "sd_bias": 0.46614871
+      }
+    ],
+    "copy_number_range": [
+      17685476.81143616,
+      514424042.57939893
+    ]
+  }
+}
