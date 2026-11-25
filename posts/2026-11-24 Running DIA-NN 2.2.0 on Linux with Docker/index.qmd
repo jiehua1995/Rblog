@@ -4,6 +4,8 @@ subtitle: "用 Docker 在 Linux 上运行 DIA-NN 2.2.0：英文原文与中文�
 description: "在 Ubuntu 18.04 上通过 Docker 运行 DIA-NN 2.2.0 的完整步骤：下载官方学术版、编写 Dockerfile、构建镜像、验证版本，以及一次挂载真实 raw 数据的 DIA 分析。本文中文为作者英文原文的翻译。"
 author: "Jie Hua"
 date: "2026-11-24"
+image: /images/diann-2.2.0-icon.png
+image-alt: "DIA-NN 项目图标"
 categories: [Proteomics]
 engine: knitr
 ---
@@ -33,6 +35,15 @@ suppressPackageStartupMessages({
   library(dplyr)
   library(knitr)
 })
+```
+
+```{r}
+#| label: fig-diann-icon
+#| echo: false
+#| out-width: "160px"
+#| fig-align: center
+#| fig-cap: "DIA-NN 官方项目图标，取自 [github.com/vdemichev/DiaNN](https://github.com/vdemichev/DiaNN)。 | The official DIA-NN project icon, from [github.com/vdemichev/DiaNN](https://github.com/vdemichev/DiaNN)."
+knitr::include_graphics(file.path(dirname(knitr::current_input()), "..", "..", "images", "diann-2.2.0-icon.png"))
 ```
 
 ## 1. 测试环境 / Tested environment
