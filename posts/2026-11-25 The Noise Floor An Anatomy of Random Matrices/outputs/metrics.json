@@ -1,0 +1,224 @@
+{
+  "e00": {
+    "airway_genes": 24706,
+    "airway_samples": 8,
+    "pbmc_genes": 11139,
+    "pbmc_cells": 2700,
+    "cptac_proteins": 1101,
+    "cptac_runs": 6
+  },
+  "e01": {
+    "lam_lo_g0.25": 0.25,
+    "lam_hi_g0.25": 2.25,
+    "lam_lo_g2": 0.17157288,
+    "lam_hi_g2": 5.82842712,
+    "lam_lo_g6": 2.10102051,
+    "lam_hi_g6": 11.89897949,
+    "observed_max_g0.25": 2.24959706,
+    "observed_max_g6": 11.73672276
+  },
+  "e03": {
+    "edge_scaling_slope": -0.6452155,
+    "edge_sizes": [
+      50,
+      100,
+      200,
+      400,
+      800
+    ],
+    "edge_sd": [
+      0.22546745,
+      0.14478146,
+      0.09693944,
+      0.05167899,
+      0.04033084
+    ]
+  },
+  "e04": {
+    "bbp_gamma": 4,
+    "bbp_threshold": 2,
+    "bbp_top_at_ell_1": 8.90059182,
+    "bbp_top_theory_at_ell_1": 9,
+    "bbp_top_at_ell_5": 10.57795578,
+    "bbp_top_theory_at_ell_5": 10.8,
+    "bbp_cos2_at_ell_1": 0.00598414,
+    "bbp_cos2_at_ell_5": 0.43201118
+  },
+  "e05": {
+    "detection_gammas": [
+      0.5,
+      1,
+      2,
+      4,
+      8
+    ],
+    "detection_thresholds": [
+      0.70710678,
+      1,
+      1.41421356,
+      2,
+      2.82842712
+    ]
+  },
+  "e06": {
+    "airway_p": 24706,
+    "airway_n": 8,
+    "airway_gamma": 3088.25,
+    "airway_lam_plus": 3200.39405067,
+    "airway_floor_share": 0.12953914,
+    "airway_pc1_share": 0.26861204,
+    "airway_pc2_share": 0.18638724,
+    "airway_pc1_ratio": 2.07359751,
+    "airway_k_parallel": 3,
+    "airway_null95_share": 0.14726184,
+    "airway_pc1_dex_cor": 0.96058639,
+    "airway_observed_share": [
+      0.26861204,
+      0.18638724,
+      0.17855337,
+      0.12590981,
+      0.08510441,
+      0.07926655,
+      0.07616657
+    ]
+  },
+  "e07": {
+    "pbmc_p": 2000,
+    "pbmc_n": 1200,
+    "pbmc_gamma": 1.66666667,
+    "pbmc_lam_plus": 5.24865556,
+    "pbmc_floor_share": 0.00262433,
+    "pbmc_pc1_share": 0.04361541,
+    "pbmc_pc1_ratio": 16.61965085,
+    "pbmc_k_parallel": 14,
+    "pbmc_k_capped_at_25": false
+  },
+  "e08": {
+    "cptac_p": 1101,
+    "cptac_n": 6,
+    "cptac_gamma": 183.5,
+    "cptac_lam_plus": 211.59243437,
+    "cptac_floor_share": 0.19218205,
+    "cptac_pc1_share": 0.32440888,
+    "cptac_pc1_ratio": 1.68802905,
+    "cptac_k_parallel": 2
+  },
+  "e09": {
+    "pc1_observed": [0.26861204, 0.04361541, 0.32440888],
+    "pc1_floor": [0.12953914, 0.00262433, 0.19218205],
+    "labels": ["airway", "PBMC 3k", "CPTAC"]
+  },
+  "e10": [
+    {
+      "k_true": 0,
+      "rule": "null",
+      "k_hat": 0.075
+    },
+    {
+      "k_true": 0,
+      "rule": "kaiser",
+      "k_hat": 86.1
+    },
+    {
+      "k_true": 0,
+      "rule": "elbow",
+      "k_hat": 3.3
+    },
+    {
+      "k_true": 1,
+      "rule": "null",
+      "k_hat": 1.05
+    },
+    {
+      "k_true": 1,
+      "rule": "kaiser",
+      "k_hat": 69.5
+    },
+    {
+      "k_true": 1,
+      "rule": "elbow",
+      "k_hat": 1
+    },
+    {
+      "k_true": 2,
+      "rule": "null",
+      "k_hat": 2.05
+    },
+    {
+      "k_true": 2,
+      "rule": "kaiser",
+      "k_hat": 57.775
+    },
+    {
+      "k_true": 2,
+      "rule": "elbow",
+      "k_hat": 2
+    },
+    {
+      "k_true": 3,
+      "rule": "null",
+      "k_hat": 3
+    },
+    {
+      "k_true": 3,
+      "rule": "kaiser",
+      "k_hat": 49.5
+    },
+    {
+      "k_true": 3,
+      "rule": "elbow",
+      "k_hat": 3
+    },
+    {
+      "k_true": 5,
+      "rule": "null",
+      "k_hat": 5
+    },
+    {
+      "k_true": 5,
+      "rule": "kaiser",
+      "k_hat": 41.15
+    },
+    {
+      "k_true": 5,
+      "rule": "elbow",
+      "k_hat": 5
+    }
+  ],
+  "e11": {
+    "gd_tau": 45.65693039,
+    "gd_ratio_best": 0.80512821,
+    "mse_at_gd": 0.02372906,
+    "mse_best": 0.02372906,
+    "mse_at_zero": 0.99994381
+  },
+  "e12": {
+    "lw_delta": 0.92032832,
+    "risk_at_lw": 12.84401319,
+    "risk_at_oracle": 12.8217279,
+    "risk_at_zero": 186.1061386,
+    "oracle_delta": 0.94
+  },
+  "e13": {
+    "n": [
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8
+    ],
+    "floor": [
+      0.50903781,
+      0.3407201,
+      0.25640255,
+      0.20573089,
+      0.17190176,
+      0.1477069,
+      0.12953914
+    ],
+    "pc1_share": 0.26861204,
+    "min_n_for_pc1": 4
+  }
+}
