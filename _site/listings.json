@@ -1,8 +1,9 @@
 [
   {
-    "listing": "/articles.html",
+    "listing": "/index.html",
     "items": [
       "/posts/2026-11-25 The Noise Floor An Anatomy of Random Matrices/index.html",
+      "/posts/2026-11-25 Two Grammars of Data An Anatomy of R and Python/index.html",
       "/posts/2026-11-25 Why the Loop Is Slow An Anatomy of Memory and Vectorisation/index.html",
       "/posts/2026-11-24 Running DIA-NN 2.2.0 on Linux with Docker/index.html",
       "/posts/2026-11-24 What the Detector Saw An Anatomy of Proteomics Intensities/index.html",
@@ -40,9 +41,10 @@
     ]
   },
   {
-    "listing": "/index.html",
+    "listing": "/articles.html",
     "items": [
       "/posts/2026-11-25 The Noise Floor An Anatomy of Random Matrices/index.html",
+      "/posts/2026-11-25 Two Grammars of Data An Anatomy of R and Python/index.html",
       "/posts/2026-11-25 Why the Loop Is Slow An Anatomy of Memory and Vectorisation/index.html",
       "/posts/2026-11-24 Running DIA-NN 2.2.0 on Linux with Docker/index.html",
       "/posts/2026-11-24 What the Detector Saw An Anatomy of Proteomics Intensities/index.html",

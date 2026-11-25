@@ -58,6 +58,7 @@ renv/
 # Post-level inputs and experiment outputs (downloadable / regenerable)
 posts/*/data/
 posts/*/results/
+posts/*/figures/_tmp_*
 
 # Python bytecode
 __pycache__/

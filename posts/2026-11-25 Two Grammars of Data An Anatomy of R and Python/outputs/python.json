@@ -1,0 +1,179 @@
+{
+  "alias_numpy": {
+    "is_view": true,
+    "parent": [
+      0.0,
+      99.0,
+      2.0,
+      3.0,
+      4.0
+    ]
+  },
+  "alias_pandas": {
+    "array_is_readonly": true,
+    "parent_after_column_write": 1.72946605388257,
+    "write_result": "ValueError: assignment destination is read-only"
+  },
+  "bool_index": {
+    "error": "IndexError: boolean index did not match indexed array along axis 0; size of axis is 3 but size of corresponding boolean axis is 4",
+    "result": null
+  },
+  "bool_index_ok": [
+    0.0,
+    2.0
+  ],
+  "broadcast_scalar_vec": {
+    "result": [
+      11.0,
+      12.0,
+      13.0,
+      14.0
+    ]
+  },
+  "cancel": {
+    "exact": 1000.0,
+    "kahan": 1000.0,
+    "kahan_abs": 0.0,
+    "n": 1020,
+    "naive": 0.0,
+    "naive_abs": 1000.0,
+    "numpy": 896.0,
+    "numpy_abs": 104.0
+  },
+  "groupby_rows": 1000,
+  "indexing": {
+    "py_drop_first_head": [
+      -0.743439,
+      -0.117091,
+      1.254577
+    ],
+    "py_first": 1.72946605388257,
+    "py_last": 0.868582505229606,
+    "py_len": 200000,
+    "py_second_to_fourth": [
+      -0.743439,
+      -0.117091,
+      1.254577
+    ]
+  },
+  "memory": {
+    "cat_category": 200293,
+    "cat_object": 10733618,
+    "frame_category": 8653294,
+    "frame_object": 29333806,
+    "grp_category": 453133,
+    "grp_object": 10600320,
+    "n": 200000
+  },
+  "missing": {
+    "dropna_len": 2,
+    "isna": [
+      false,
+      true,
+      false
+    ],
+    "max": null,
+    "mean": null,
+    "nanmax": 3.0,
+    "nanmean": 2.0,
+    "nansum": 4.0,
+    "pandas_max": 3.0,
+    "pandas_mean": 2.0,
+    "pandas_sum": 4.0,
+    "sort": [
+      1.0,
+      3.0,
+      null
+    ],
+    "sum": null
+  },
+  "missing_chr": {
+    "max": "NaN",
+    "mean": "NaN",
+    "nanmax": "3",
+    "nanmean": "2",
+    "nansum": "4",
+    "pandas_max": "3",
+    "pandas_mean": "2",
+    "pandas_sum": "4",
+    "sum": "NaN"
+  },
+  "ols": {
+    "bse": [
+      0.002234363579493204,
+      0.0022350187441705794,
+      0.002236797402004642
+    ],
+    "coef": [
+      1.0002745188054742,
+      2.0017032256302385,
+      -1.501332526507212
+    ],
+    "names": [
+      "Intercept",
+      "x",
+      "z"
+    ],
+    "nobs": 200000,
+    "pvalues": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "rsquared": 0.8622199487658356,
+    "tvalues": [
+      447.6775973193922,
+      895.6091445994003,
+      -671.1973668968417
+    ]
+  },
+  "recycle_numpy": {
+    "error": "ValueError: operands could not be broadcast together with shapes (4,) (2,) ",
+    "result": null
+  },
+  "render": {
+    "mpl_s": 0.07394580000254791,
+    "plotnine_s": 0.18283140000130516
+  },
+  "speed": {
+    "groupby_mean_s": 0.011839499999041436,
+    "loop_sum_s": 0.005642799998895498,
+    "memory_bytes": 29333806,
+    "memory_cat_bytes": 10733618,
+    "merge_s": 0.01961239999945974,
+    "n": 200000,
+    "n_groups": 1000,
+    "np_sum_s": 8.910000178730115e-05,
+    "pivot_s": 0.02877230000012787,
+    "sort_s": 0.012122700001782505
+  },
+  "sums": {
+    "exact": 7364482.5445452565,
+    "kahan": 7364482.5445452565,
+    "kahan_rel": 0.0,
+    "n": 1000000,
+    "naive": 7364482.544545485,
+    "naive_rel": 3.0983036404885876e-14,
+    "numpy": 7364482.5445452565,
+    "numpy_rel": 0.0
+  },
+  "ttest": {
+    "mean_alpha": -0.005246042353461793,
+    "mean_beta": 0.0009309216250456409,
+    "n_alpha": 66789,
+    "n_beta": 66514,
+    "p": 0.259123709384999,
+    "t": -1.1284695290031248
+  },
+  "versions": {
+    "machine": "Intel64 Family 6 Model 167 Stepping 1, GenuineIntel",
+    "matplotlib": "3.11.0",
+    "numpy": "2.4.6",
+    "pandas": "3.0.3",
+    "platform": "Windows-11-10.0.26300-SP0",
+    "plotnine": "0.15.9",
+    "python": "3.13.13",
+    "scipy": "1.18.0",
+    "statsmodels": "0.15.0"
+  }
+}

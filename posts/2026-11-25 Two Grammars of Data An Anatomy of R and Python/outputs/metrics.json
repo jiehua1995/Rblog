@@ -1,0 +1,445 @@
+{
+  "e00": {
+    "n": 200000,
+    "n_groups": 1000,
+    "n_cats": 3,
+    "bytes": 17879828,
+    "cols": [
+      "id",
+      "grp",
+      "cat",
+      "x",
+      "y",
+      "z",
+      "val"
+    ],
+    "sums_n": 1000000,
+    "small_n": 120
+  },
+  "e01_index": {
+    "r_second_to_fourth": [
+      -0.743439,
+      -0.117091,
+      1.254577
+    ],
+    "r_first": 1.7294660539,
+    "r_last": 0.86858250523,
+    "r_drop_first_head": [
+      -0.743439,
+      -0.117091,
+      1.254577
+    ],
+    "r_len": 200000
+  },
+  "e01_missing": {
+    "na_sum": "NA",
+    "na_sum_rm": "4",
+    "na_mean": "NA",
+    "na_mean_rm": "2",
+    "na_max": "NA",
+    "na_max_rm": "3",
+    "nan_sum": "NaN",
+    "nan_sum_rm": "4",
+    "nan_mean_rm": "2",
+    "is_na_of_nan": true,
+    "is_nan_of_na": false,
+    "sort_na": [
+      "1",
+      "3"
+    ],
+    "sort_nan": [
+      "1",
+      "3"
+    ],
+    "which_na": [
+      1,
+      2
+    ]
+  },
+  "e01_copy": {
+    "parent_after_child_write": 1,
+    "child_after_write": 99,
+    "parent_after_function_call": 1
+  },
+  "e01_recycle": {
+    "len4": [
+      2,
+      4,
+      4,
+      6
+    ],
+    "len3": [
+      2,
+      4,
+      4
+    ],
+    "len3_warning": "长的对象长度不是短的对象长度的整倍数",
+    "bool_recycled": [
+      1,
+      3
+    ]
+  },
+  "e01_groupby": {
+    "rows": 1000,
+    "max_abs_diff_mean_dt_dplyr": 1.3322676296e-15,
+    "max_abs_diff_mean_dt_py": 1.5543122345e-15,
+    "max_abs_diff_sd_dt_py": 4.4408920985e-16,
+    "same_counts": true,
+    "rows_tibble": 1000,
+    "first_mean": 1.1689486526
+  },
+  "e02_speed": [
+    {
+      "task": "sum",
+      "impl": "R loop",
+      "s": 0.0663054,
+      "ms": 66.3054,
+      "label": "66.3"
+    },
+    {
+      "task": "sum",
+      "impl": "R base",
+      "s": 0.0001368,
+      "ms": 0.1368,
+      "label": "0.14"
+    },
+    {
+      "task": "sum",
+      "impl": "dplyr",
+      "s": 0.0010497,
+      "ms": 1.0497,
+      "label": "1.0"
+    },
+    {
+      "task": "sum",
+      "impl": "pandas",
+      "s": 8.9100001787e-05,
+      "ms": 0.089100001787,
+      "label": "0.09"
+    },
+    {
+      "task": "group\nmean",
+      "impl": "R base",
+      "s": 0.0145094,
+      "ms": 14.5094,
+      "label": "14.5"
+    },
+    {
+      "task": "group\nmean",
+      "impl": "data.table",
+      "s": 0.0053735,
+      "ms": 5.3735,
+      "label": "5.4"
+    },
+    {
+      "task": "group\nmean",
+      "impl": "dplyr",
+      "s": 0.0138443,
+      "ms": 13.8443,
+      "label": "13.8"
+    },
+    {
+      "task": "group\nmean",
+      "impl": "pandas",
+      "s": 0.011839499999,
+      "ms": 11.839499999,
+      "label": "11.8"
+    },
+    {
+      "task": "sort",
+      "impl": "R base",
+      "s": 0.0067837,
+      "ms": 6.7837,
+      "label": "6.8"
+    },
+    {
+      "task": "sort",
+      "impl": "data.table",
+      "s": 0.0128212,
+      "ms": 12.8212,
+      "label": "12.8"
+    },
+    {
+      "task": "sort",
+      "impl": "dplyr",
+      "s": 0.0154845,
+      "ms": 15.4845,
+      "label": "15.5"
+    },
+    {
+      "task": "sort",
+      "impl": "pandas",
+      "s": 0.012122700002,
+      "ms": 12.1227000018,
+      "label": "12.1"
+    },
+    {
+      "task": "left\njoin",
+      "impl": "R base",
+      "s": 0.0188258,
+      "ms": 18.8258,
+      "label": "18.8"
+    },
+    {
+      "task": "left\njoin",
+      "impl": "data.table",
+      "s": 0.0113486,
+      "ms": 11.3486,
+      "label": "11.3"
+    },
+    {
+      "task": "left\njoin",
+      "impl": "dplyr",
+      "s": 0.0196339,
+      "ms": 19.6339,
+      "label": "19.6"
+    },
+    {
+      "task": "left\njoin",
+      "impl": "pandas",
+      "s": 0.019612399999,
+      "ms": 19.6123999995,
+      "label": "19.6"
+    },
+    {
+      "task": "pivot",
+      "impl": "R base",
+      "s": 0.0078806,
+      "ms": 7.8806,
+      "label": "7.9"
+    },
+    {
+      "task": "pivot",
+      "impl": "data.table",
+      "s": 0.0070556,
+      "ms": 7.0556,
+      "label": "7.1"
+    },
+    {
+      "task": "pivot",
+      "impl": "dplyr",
+      "s": 0.0122139,
+      "ms": 12.2139,
+      "label": "12.2"
+    },
+    {
+      "task": "pivot",
+      "impl": "pandas",
+      "s": 0.0287723,
+      "ms": 28.7723000001,
+      "label": "28.8"
+    }
+  ],
+  "e02_ratios": {
+    "n": 200000,
+    "sum_pandas_over_base": 0.65131580254,
+    "sum_loop_over_sum": 484.6885964912,
+    "group_best_over_worst": 0.37034612045,
+    "sort_best_over_worst": 1.787033625,
+    "merge_best_over_worst": 0.60282165964,
+    "pivot_best_over_worst": 0.89531253965,
+    "py_sum_ms": 0.089100001787,
+    "r_sum_ms": 0.1368
+  },
+  "e02_memory": {
+    "mem": [
+      {
+        "col": "grp (1000 水平)",
+        "impl": "R character",
+        "mb": 1.5793304443
+      },
+      {
+        "col": "grp (1000 水平)",
+        "impl": "R factor",
+        "mb": 0.82438659668
+      },
+      {
+        "col": "cat (3 水平)",
+        "impl": "R character",
+        "mb": 1.5260848999
+      },
+      {
+        "col": "cat (3 水平)",
+        "impl": "R factor",
+        "mb": 0.76354217529
+      },
+      {
+        "col": "grp (1000 水平)",
+        "impl": "pandas object",
+        "mb": 10.1092529297
+      },
+      {
+        "col": "grp (1000 水平)",
+        "impl": "pandas category",
+        "mb": 0.43214130402
+      },
+      {
+        "col": "cat (3 水平)",
+        "impl": "pandas object",
+        "mb": 10.2363758087
+      },
+      {
+        "col": "cat (3 水平)",
+        "impl": "pandas category",
+        "mb": 0.19101428986
+      }
+    ],
+    "frame_datatable_mb": 9.9739532471,
+    "frame_factor_mb": 8.4564666748,
+    "frame_pandas_mb": 27.9748973846,
+    "frame_pandas_category_mb": 8.2524242401
+  },
+  "e03_ols": {
+    "table": [
+      {
+        "term": "Intercept",
+        "coef_r": 1.0002745188,
+        "se_r": 0.0022343635795,
+        "t_r": 447.6775973194,
+        "coef_py": 1.0002745188,
+        "se_py": 0.0022343635795,
+        "t_py": 447.6775973194,
+        "coef_abs": 2.6645352591e-15,
+        "coef_rel": 2.6638039948e-15,
+        "se_rel": 1.9409592645e-16
+      },
+      {
+        "term": "x",
+        "coef_r": 2.0017032256,
+        "se_r": 0.0022350187442,
+        "t_r": 895.6091445994,
+        "coef_py": 2.0017032256,
+        "se_py": 0.0022350187442,
+        "t_py": 895.6091445994,
+        "coef_abs": 2.6645352591e-14,
+        "coef_rel": 1.3311340188e-14,
+        "se_rel": 1.0284068586e-14
+      },
+      {
+        "term": "z",
+        "coef_r": -1.5013325265,
+        "se_r": 0.002236797402,
+        "t_r": -671.1973668968,
+        "coef_py": -1.5013325265,
+        "se_py": 0.002236797402,
+        "t_py": -671.1973668968,
+        "coef_abs": 1.1102230246e-15,
+        "coef_rel": 7.3949175484e-16,
+        "se_rel": 1.9388473386e-16
+      }
+    ],
+    "names_match": true,
+    "r2_r": 0.86221994877,
+    "r2_py": 0.86221994877,
+    "r2_rel": 0,
+    "n": 200000
+  },
+  "e03_ttest": {
+    "r_t": -1.128469529,
+    "r_p": 0.25912370939,
+    "py_t": -1.128469529,
+    "py_p": 0.25912370938,
+    "abs_diff_t": 1.1102230246e-15,
+    "abs_diff_p": 1.0547118734e-15,
+    "n_alpha": 66789,
+    "n_beta": 66514
+  },
+  "e03_sums": {
+    "scale": [
+      {
+        "n": 1000,
+        "loop": 4.579062152e-16,
+        "rsum": 0,
+        "kahan": 0,
+        "py_loop": 4.579062152e-16,
+        "py_numpy": 0,
+        "py_kahan": 0
+      },
+      {
+        "n": 3000,
+        "loop": 1.2745709681e-15,
+        "rsum": 0,
+        "kahan": 0,
+        "py_loop": 1.2745709681e-15,
+        "py_numpy": 0,
+        "py_kahan": 0
+      },
+      {
+        "n": 10000,
+        "loop": 1.9074448763e-15,
+        "rsum": 0,
+        "kahan": 0,
+        "py_loop": 1.9074448763e-15,
+        "py_numpy": 0,
+        "py_kahan": 0
+      },
+      {
+        "n": 30000,
+        "loop": 3.3406174923e-15,
+        "rsum": 0,
+        "kahan": 0,
+        "py_loop": 3.3406174923e-15,
+        "py_numpy": 0,
+        "py_kahan": 0
+      },
+      {
+        "n": 100000,
+        "loop": 7.2438216338e-15,
+        "rsum": 0,
+        "kahan": 0,
+        "py_loop": 7.2438216338e-15,
+        "py_numpy": 0,
+        "py_kahan": 0
+      },
+      {
+        "n": 300000,
+        "loop": 1.1825304813e-14,
+        "rsum": 0,
+        "kahan": 0,
+        "py_loop": 1.1825304813e-14,
+        "py_numpy": 0,
+        "py_kahan": 0
+      }
+    ],
+    "eps": 2.2204460493e-16,
+    "ns_per_element": {
+      "r_loop": 16.4314,
+      "r_sum": 0.6813,
+      "py_loop": 97.3139999951,
+      "py_numpy": 2.1234999986
+    },
+    "full": {
+      "n": 1000000,
+      "exact": 7364482.5445452565,
+      "r_sum": 7364482.5445452565,
+      "r_loop": 7364482.5445454847,
+      "r_kahan": 7364482.5445452565,
+      "py_naive": 7364482.5445454847,
+      "py_numpy": 7364482.5445452565,
+      "r_sum_rel": 0,
+      "r_loop_rel": 3.0983036405e-14,
+      "r_kahan_rel": 0,
+      "py_naive_rel": 3.0983036405e-14,
+      "py_numpy_rel": 0,
+      "py_kahan_rel": 0
+    },
+    "cancel": {
+      "n": 1020,
+      "r_sum": 1000,
+      "r_loop": 0,
+      "r_kahan": 1000,
+      "exact": 1000,
+      "py_naive": 0,
+      "py_numpy": 896,
+      "py_kahan": 1000
+    }
+  },
+  "e04_plots": {
+    "n_points": 120,
+    "ggplot_save_s": 0.2166993,
+    "mpl_save_s": 0.073945800003,
+    "plotnine_save_s": 0.1828314,
+    "ggplot_over_mpl": 2.9305153233,
+    "plotnine_over_ggplot": 0.84371015505
+  }
+}
