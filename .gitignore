@@ -63,3 +63,6 @@ posts/*/results/
 __pycache__/
 *.pyc
 posts/*/outputs/*.rds
+
+# Rcpp sourceCpp build cache
+.rcpp-cache/
