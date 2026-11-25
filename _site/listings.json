@@ -1,7 +1,8 @@
 [
   {
-    "listing": "/index.html",
+    "listing": "/articles.html",
     "items": [
+      "/posts/2026-11-24 Running DIA-NN 2.2.0 on Linux with Docker/index.html",
       "/posts/2026-11-24 What the Detector Saw An Anatomy of Proteomics Intensities/index.html",
       "/posts/2026-11-20 What Stays Constant An Anatomy of Normalization/index.html",
       "/posts/2026-11-18 Predicting in Latent Space An Anatomy of JEPA/index.html",
@@ -37,8 +38,9 @@
     ]
   },
   {
-    "listing": "/articles.html",
+    "listing": "/index.html",
     "items": [
+      "/posts/2026-11-24 Running DIA-NN 2.2.0 on Linux with Docker/index.html",
       "/posts/2026-11-24 What the Detector Saw An Anatomy of Proteomics Intensities/index.html",
       "/posts/2026-11-20 What Stays Constant An Anatomy of Normalization/index.html",
       "/posts/2026-11-18 Predicting in Latent Space An Anatomy of JEPA/index.html",
