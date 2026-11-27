@@ -1,0 +1,42 @@
+tool,year,lang,category,input,resolution,method,cite
+RepeatMasker,1996,Perl,annotation,assembly,family,homology,Smit 1996
+TRF,1999,C,satellite,assembly,locus,periodicity,Benson 1999
+RECON,2002,C,discovery,assembly,family,clustering,Bao 2002
+RepeatScout,2005,C++,discovery,assembly,family,kmer,Price 2005
+Piler,2005,C,discovery,assembly,family,suffix,Edgar 2005
+LTR_FINDER,2007,C++,structure,assembly,family,structure,Xu 2007
+LTRharvest,2008,C,structure,assembly,family,structure,Ellinghaus 2008
+LTRdigest,2009,C,structure,assembly,family,structure,Steinbiss 2009
+TEclass,2009,C++,classify,library,family,ml,Abrusan 2009
+MITE-Hunter,2010,Perl,structure,assembly,family,structure,Han 2010
+RetroSeq,2013,Perl,insertion,short reads,locus,discordant,Keane 2013
+HelitronScanner,2014,Java,structure,assembly,family,ml,Xiong 2014
+PASTEC,2014,Python,classify,library,family,rules,Hoede 2014
+TEtranscripts,2015,Python,expression,short reads,family,em,Jin 2015
+TEcount,2015,Python,expression,short reads,family,em,Jin 2015
+PoPoolationTE2,2016,Python,insertion,pool seq,locus,coverage,Kofler 2016
+TEMP,2014,Python,insertion,pool seq,locus,discordant,Zhuang 2014
+SINE_Scan,2017,C++,structure,assembly,family,structure,Mao 2017
+TEtools,2017,R,expression,short reads,family,counting,Lerat 2017
+MELT,2017,Java,insertion,short reads,locus,discordant,Gardner 2017
+Mobster,2017,Java,insertion,short reads,locus,tsd,Kroon 2017
+LTR_retriever,2018,Perl,annotation,assembly,family,structure,Ou 2018
+SalmonTE,2018,Python,expression,short reads,family,quasimap,Jeong 2018
+SQuIRE,2019,Python,expression,short reads,locus,em,Yang 2019
+Telescope,2019,Python,expression,short reads,locus,em,Bendall 2019
+REdiscoverTE,2019,R,expression,short reads,family,em,Kong 2019
+EDTA,2019,Perl,annotation,assembly,family,hybrid,Ou 2019
+TIR-Learner,2019,Python,structure,assembly,family,structure,Su 2019
+StainedGlass,2019,C++,satellite,assembly,locus,identity,Vollger 2019
+ExpansionHunter,2019,C++,satellite,short reads,locus,graphalign,Dolzhenko 2019
+RepeatModeler2,2020,Perl,discovery,assembly,family,hybrid,Flynn 2020
+RepeatExplorer2,2020,Python,discovery,short reads,family,graph,Novak 2020
+DeepTE,2020,Python,classify,library,family,ml,Yan 2020
+L1EM,2020,Python,expression,short reads,locus,em,L1EM 软件
+TLDR,2020,C++,insertion,long reads,locus,alignment,Ewing 2020
+scTE,2021,Python,expression,single cell,family,em,He 2021
+TERL,2021,Python,classify,library,family,ml,da Cruz 2021
+Earl Grey,2022,Python,annotation,assembly,family,hybrid,Baril 2022
+TransposonUltimate,2022,Python,classify,library,family,ml,Riehl 2022
+HumAS-HMMER,2022,Python,satellite,assembly,locus,hmm,Altemose 2022
+McClintock,2023,Python,discovery,assembly,family,hybrid,Nelson 2023

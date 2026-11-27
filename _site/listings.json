@@ -1,7 +1,8 @@
 [
   {
-    "listing": "/index.html",
+    "listing": "/articles.html",
     "items": [
+      "/posts/2026-11-27 A Field Guide to Transposable Element Tools/index.html",
       "/posts/2026-11-25 The Noise Floor An Anatomy of Random Matrices/index.html",
       "/posts/2026-11-25 Two Grammars of Data An Anatomy of R and Python/index.html",
       "/posts/2026-11-25 Why the Loop Is Slow An Anatomy of Memory and Vectorisation/index.html",
@@ -41,8 +42,9 @@
     ]
   },
   {
-    "listing": "/articles.html",
+    "listing": "/index.html",
     "items": [
+      "/posts/2026-11-27 A Field Guide to Transposable Element Tools/index.html",
       "/posts/2026-11-25 The Noise Floor An Anatomy of Random Matrices/index.html",
       "/posts/2026-11-25 Two Grammars of Data An Anatomy of R and Python/index.html",
       "/posts/2026-11-25 Why the Loop Is Slow An Anatomy of Memory and Vectorisation/index.html",
