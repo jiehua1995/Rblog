@@ -1,7 +1,7 @@
 ---
 title: "A Field Guide to Transposable Element Tools"
 subtitle: "转座子与重复序列分析工具的全景：从注释到表达，从短读到长读"
-description: "把 41 个转座子（TE）与重复序列分析工具放进同一张表：谁靠同源比对、谁靠结构特征、谁靠从头聚类、谁靠深度学习，各自吃什么输入、给出家族级还是位点级答案。再用目录本身当数据集，画出这个领域三十年的工具增长、语言更替与子领域出现的时间。"
+description: "从零讲清 DNA、重复序列与它为什么让计算机为难，再把 41 个转座子（TE）与重复序列分析工具放进同一张表：谁靠同源比对、谁靠结构特征、谁靠从头聚类、谁靠深度学习，各自吃什么输入、给出家族级还是位点级答案。用目录本身当数据集画出这个领域三十年的工具增长与语言更替，末尾给一份「若从三代测序重做一个工具」的设计草案。"
 author: "Jie Hua"
 date: "2026-11-27"
 categories: [Annotation, Tooling]
@@ -89,17 +89,95 @@ n_lang <- function(k) sum(tl$lang2 == k)
 f <- function(x, dig = 0) formatC(as.numeric(x), format = "f", digits = dig)
 ```
 
-## 1. 为什么重复序列要单独一套方法 / Why repeats need their own methods
+## 1. 从零开始：DNA、基因与基因组 / From zero: DNA, genes and genomes
 
-人类基因组里约一半是重复序列，玉米与小麦都在 85% 左右[4,5,6]。这些序列不是垃圾：它们携带启动子、增强子与沉默子，在胚胎发育、免疫与肿瘤里被重新启用[10]；L1 的插入可以打断基因并造成疾病[9]；反转录转座子的爆发直接决定基因组大小。T2T 组装完成后大家才看清，过去二十年所有参考基因组里缺失的，主要就是这些区域[7,8]。
+最小的事实：DNA 是一串由四种碱基组成的线性文本，字母表只有 {A, C, G, T}。人类基因组单倍体约 31 亿个字母（3.1 Gbp）；每个碱基沿 B 型螺旋上升约 0.34 纳米，所以一套染色体拉直后约 1 米，二倍体细胞里约 2 米，而细胞核直径只有 6 微米。
 
-About half of the human genome is repetitive, and both maize and wheat sit near 85% [4,5,6]. These sequences are not junk: they carry promoters, enhancers and silencers that are reactivated during development, immunity and cancer [10]; an L1 insertion can interrupt a gene and cause disease [9]; and bursts of retrotransposition set genome size directly. Only after the T2T assembly did it become clear that what the previous two decades of reference genomes were missing is exactly these regions [7,8].
+The smallest fact: DNA is a linear text over a four-letter alphabet, {A, C, G, T}. The human genome is about 3.1 billion letters per haploid copy (3.1 Gbp); each base rises ~0.34 nm along the B-form helix, so one haploid set is about a metre long, a diploid cell holds about two metres, and the nucleus is six micrometres across.
 
-技术上的难处可以用一句话说清：**重复序列破坏了「一条读段只属于一个位置」这个假设**。一段 100 bp 的读段如果完全落在 Alu 共识序列内部，它在基因组里可能有几十万个几乎等价的落点；比对器只能给出一个 MAPQ 0 的随机答案，或者干脆丢掉。于是所有下游问题——变异检测、表达定量、组装——都必须换成「先识别重复，再决定怎么分配」的思路。这正是这一整类工具存在的理由，两篇综述把它梳理得比本文系统得多[2,3]。
+基因是这段文本里能被读出来的一段：蛋白编码基因先转录成 RNA，再翻译成蛋白；也有不编码蛋白、本身就有功能的 RNA 基因。人类只有约 2 万个蛋白编码基因，外显子加起来不到基因组的 2%。剩下的 98% 曾被称为「垃圾 DNA」，后来发现大部分有调控、结构或演化功能——其中最大的一块，就是本文的主角。
 
-The technical difficulty fits in one sentence: **repeats break the assumption that a read belongs to exactly one place**. A 100 bp read lying entirely inside an Alu consensus may have hundreds of thousands of near-equivalent placements; the aligner either reports a MAPQ 0 guess or throws it away. Every downstream question — variant calling, expression, assembly — therefore has to be rephrased as "identify the repeat first, then decide how to allocate". That is the reason this whole class of tools exists, and two reviews cover it far more systematically than this post can [2,3].
+A gene is a stretch of that text that gets read out: a protein-coding gene is transcribed into RNA and then translated; there are also RNA genes that function without translation. Humans have only about 20,000 protein-coding genes, whose exons add up to under 2% of the genome. The remaining 98% was once called "junk DNA"; much of it turned out to be regulatory, structural or evolutionary — and the largest block of it is the subject of this article.
 
-## 2. 先分类，再谈工具 / Classify first, then choose a tool
+测序解决的是「怎么把这段文本读出来」。机器一次只能读一小段：二代测序（Illumina）读 100–300 bp，三代测序（PacBio、Oxford Nanopore）读 10–100 kb。把许多**读段（read）**拼回基因组叫**组装（assembly）**，把读段放回一条已知的**参考基因组**上叫**比对（alignment）**。参考基因组不是某个人的完整序列，而是一条代表性序列——这正是重复序列最容易出问题的地方。
+
+Sequencing is the problem of reading that text. Machines read one fragment at a time: short-read sequencing (Illumina) gives 100–300 bp, long-read sequencing (PacBio, Oxford Nanopore) gives 10–100 kb. Piecing many **reads** back into a genome is **assembly**; putting reads onto a known **reference genome** is **alignment**. A reference genome is not one person's complete sequence but a representative one — which is exactly where repeats cause trouble.
+
+## 2. 从零开始：什么是重复序列 / From zero: what a repeat is
+
+「重复序列」就是基因组里同一段（或非常相似的）序列出现了多次。按排列方式只有两类，而这两类的算法后果完全不同。
+
+A "repeat" is a sequence that occurs more than once, or in many similar copies. There are only two arrangements, and their algorithmic consequences are completely different.
+
+第一类是**串联重复（tandem repeat）**：拷贝首尾相接，像 `ATATATAT…`。按重复单元长度分：1–6 bp 的叫微卫星（microsatellite / STR），几十 bp 的叫小卫星，上百到上千 bp、成串可达几兆碱基的叫卫星 DNA（satellite），着丝粒的 alpha satellite 属于这一类；核糖体 RNA 基因成百上千拷贝串成簇（rDNA）；染色体末端的端粒是 `TTAGGG` 重复几千次。串联重复的特点是「周期 × 拷贝数」，它不破坏序列的唯一性，但会让比对器在周期性上打滑。
+
+The first is the **tandem repeat**: copies head-to-tail, like `ATATATAT…`. By unit length: 1–6 bp units are microsatellites (STRs), tens of bp are minisatellites, hundreds to thousands of bp in arrays up to megabases are satellite DNA — the alpha satellites of centromeres belong here; ribosomal RNA genes sit in tandem arrays of hundreds of copies (rDNA); telomeres are `TTAGGG` repeated thousands of times. What characterises a tandem repeat is "period × copy number": it does not destroy uniqueness so much as make aligners slip on the periodicity.
+
+第二类是**散在重复（interspersed repeat）**：同一段序列散落在各处，拷贝彼此不相邻。这一类就是**转座元件（transposable element, TE）**，也叫「跳跃基因」。它们约占人类基因组的一半，是本文真正要讨论的东西。
+
+The second is the **interspersed repeat**: the same sequence scattered around, copies not adjacent. These are **transposable elements (TEs)**, "jumping genes". They make up roughly half of the human genome and are what this article is really about.
+
+TE 的生物学机制只有两条。**Class I 逆转录转座子**走「复制—粘贴」：元件转录成 RNA，由自己编码的逆转录酶反转录成 DNA，再插到新位置；原来的拷贝留着，所以拷贝数只增不减。**Class II DNA 转座子**走「剪切—粘贴」：转座酶把元件切下来插到别处；拷贝数不变，位置变了。变种是 Helitron，用滚环复制，只复制一条链。
+
+TEs have only two mechanisms. **Class I retrotransposons** use copy-and-paste: the element is transcribed into RNA, its own reverse transcriptase turns that RNA back into DNA, and the DNA is inserted elsewhere; the original copy stays, so copy number only grows. **Class II DNA transposons** use cut-and-paste: a transposase excises the element and inserts it elsewhere; the copy number stays, the position changes. The variant is the Helitron, which replicates by rolling circle and copies one strand only.
+
+三个必须懂的名词。**自主 / 非自主**：自主元件自带酶（LINE 带 ORF1/ORF2，DNA 转座子带转座酶），非自主元件丢了酶，只能借用别人的机器；人类最成功的非自主元件是 **Alu**（约 300 bp，约 110 万个拷贝，占基因组约 11%），它借的是 LINE 的 ORF2。**共识 / 家族 / 亚家族**：一个家族的全部拷贝都是同一祖先的突变后代，对齐后得到一条「共识序列」；「Alu 家族」指的是这条共识，不是某个具体拷贝，越像共识的拷贝通常越年轻。**TSD（目标位点重复）**：插入时在两侧留下的 4–20 bp 重复，是「这里插入过东西」的化石证据；LTR 元件两侧还有一对长末端重复，两者之间发生同源重组就会留下一个「单独 LTR（solo LTR）」。
+
+Three terms you need. **Autonomous vs non-autonomous**: autonomous elements carry their own enzymes (LINEs carry ORF1/ORF2, DNA transposons a transposase), while non-autonomous ones have lost them and borrow someone else's machinery; the most successful human non-autonomous element is **Alu** (~300 bp, ~1.1 million copies, ~11% of the genome), which borrows LINE's ORF2. **Consensus / family / subfamily**: all copies of a family are mutant descendants of one ancestor, and aligning them gives a "consensus sequence"; the "Alu family" means that consensus, not any single copy, and copies closer to the consensus are usually younger. **TSD (target site duplication)**: the 4–20 bp duplication left on both flanks at insertion, fossil evidence that something landed here; LTR elements also carry a pair of long terminal repeats, and homologous recombination between them leaves a "solo LTR".
+
+给个尺度：人类基因组里 LINE 约 17%（L1 约 50 万个拷贝，真正还会跳的不到 100 个），Alu 约 11%，LTR 元件约 8%，DNA 转座子约 3%，加上卫星与其它，合计约一半[2]。玉米与小麦更高，约 85%——玉米基因组在几百万年里被 TE 撑大了一倍[5]。
+
+For scale: LINEs are ~17% of the human genome (about 500,000 L1 copies, fewer than 100 still active), Alu ~11%, LTR elements ~8%, DNA transposons ~3%; with satellites and the rest, about half [2]. Maize and wheat go higher, near 85% — the maize genome roughly doubled in size within a few million years because of TEs [5].
+
+## 3. 为什么值得研究 / Why it matters
+
+三条生物学理由，加一条工程理由。
+
+Three biological reasons, plus one engineering reason.
+
+**演化**：基因组大小与生物复杂度不成正比（洋葱的基因组比人的大五倍），这个「C 值悖论」的主要解释就是 TE 的扩增与删除。TE 是基因组可塑性的发动机：它们带来新的调控序列、新的剪接位点、新的外显子，也带来不等交换与缺失。
+
+**Evolution**: genome size does not track organismal complexity (an onion genome is five times the human one), and the main explanation for this "C-value paradox" is TE expansion and deletion. TEs are the engine of genome plasticity: they bring new regulatory sequences, splice sites and exons, and they also bring unequal crossing-over and deletions.
+
+**功能**：宿主并不是被动地被寄生。演化把 TE 驯化成了自己的零件：哺乳动物胎盘的合胞体蛋白来自一个 ERV 的包膜基因；RAG1/RAG2（V(D)J 重组的核心）来自一个 Transib 转座子；许多干扰素诱导的增强子是 MER41 这类 ERV 的 LTR。另一面是防御：生殖细胞用 piRNA 把 TE 的转录压住，这条通路本身就是军备竞赛的产物。
+
+**Function**: the host is not passively parasitised. Evolution domesticates TEs into its own parts: the syncytins of the mammalian placenta come from an ERV envelope gene; RAG1/RAG2, the core of V(D)J recombination, come from a Transib transposon; many interferon-induced enhancers are LTRs of ERVs such as MER41. The other side is defence: germ cells silence TE transcription with piRNAs, a pathway that is itself a product of the arms race.
+
+**医学**：L1 在肿瘤里重新活跃，造成插入突变与基因组不稳定；Alu 之间的同源重组造成致病的大片段缺失（例如 NF1 微缺失）；插入突变约占人类致病突变的千分之一量级；神经发育中的 L1 体细胞插入让每个神经元的基因组都略有不同。反过来，TE 也是工具：Sleeping Beauty、piggyBac、Tol2 是常用的基因递送载体。
+
+**Medicine**: L1 reactivates in tumours, causing insertional mutations and genome instability; recombination between Alus causes pathogenic large deletions (the NF1 microdeletion, for instance); insertional mutations account for on the order of a tenth of a percent of human disease alleles; and somatic L1 insertions during neurodevelopment make every neuron's genome slightly different. Conversely, TEs are tools: Sleeping Beauty, piggyBac and Tol2 are standard gene-delivery vectors.
+
+**工程**：这是本文的落脚点。重复序列让所有「把读段放回基因组」的步骤变脏——比对器给出 MAPQ 0，变异检测漏报或错报，表达定量把多映射读段随便分给某个拷贝，组装在重复区塌缩。T2T 组装之前，人类参考基因组缺的 8% 几乎全是这些区域[7,8]。所以重复序列分析不是冷门方向，而是任何基因组学流程都必须过的一关。
+
+**Engineering**: this is the point of the article. Repeats contaminate every step that puts a read back on the genome: aligners emit MAPQ 0, variant callers miss or invent calls, expression quantification hands multi-mapping reads to an arbitrary copy, assemblies collapse in repeat regions. Before T2T, the 8% missing from the human reference was almost entirely these regions [7,8]. Repeat analysis is therefore not a niche; it is a gate every genomics pipeline has to pass.
+
+## 4. 计算机视角：为什么这件事难 / The computer-science view
+
+换成算法语言：基因组是一个长度 $3.1\times10^9$ 的字符串 $S$，读段是它的一个带错误的子串，比对就是「允许错配的子串搜索」。为了不每次从头扫 31 亿个字符，工具建索引——后缀数组、FM-index，或者 k-mer 哈希表（把每个长度 $k$ 的短词映射到它出现的位置）。k-mer 是这一行的基本单位：$k=21$ 时有 $4^{21}\approx4.4\times10^{12}$ 种可能，足够把绝大多数短词唯一化。
+
+In algorithmic terms: the genome is a string $S$ of length $3.1\times10^9$, a read is a substring of it with errors, and alignment is "substring search allowing mismatches". To avoid scanning 3.1 billion characters every time, tools build indexes — suffix arrays, FM-indexes, or hash tables of k-mers (mapping every word of length $k$ to the positions where it occurs). The k-mer is the unit of this trade: at $k=21$ there are $4^{21}\approx4.4\times10^{12}$ possible words, enough to make almost every short word unique.
+
+重复序列在这个框架里制造三种彼此独立的代价。
+
+Repeats create three independent costs in this framework.
+
+**第一，搜索空间膨胀。** 一条完全落在某个家族内部的读段，和该家族的每一个拷贝都完美匹配。人类有 110 万个 Alu 拷贝，一条纯 Alu 读段就有 110 万个等价落点。比对器只能挑一个，并把 MAPQ 置 0 表示「不可信」；而下游软件经常不看 MAPQ。
+
+**First, the search space explodes.** A read lying entirely inside a family matches every copy of that family perfectly. With 1.1 million Alu copies, a pure Alu read has 1.1 million equally good placements. The aligner picks one and sets MAPQ 0 meaning "do not trust this" — and downstream software frequently ignores MAPQ.
+
+**第二，索引与内存。** 31 亿个碱基按 2 bit 存是 750 MB；但一个 31-mer 索引每条要 8 字节以上，动辄几十 GB。于是有了压缩：minimizer 只采样一部分 k-mer（每 $w$ 个窗口取最小的那个，索引缩小约 $w$ 倍），FM-index 把后缀数组压到每碱基约 1 字节。你在工具参数里看到的 `-w 10 -k 19` 就是这两个数字。三代数据更极端：30× 覆盖的人基因组是 900 亿个碱基的读段，所以长读段工具几乎都用 minimizer 而不用全 k-mer 表。
+
+**Second, index and memory.** 3.1 billion bases at 2 bits is 750 MB; but a 31-mer index costs 8+ bytes per entry and easily runs to tens of GB. Hence compression: minimizers sample only some k-mers (the smallest in every window of $w$, shrinking the index by about $w$), and FM-indexes compress the suffix array to roughly a byte per base. The `-w 10 -k 19` you see in tool flags are exactly these two numbers. Long-read data is more extreme: a 30× human genome is 90 billion bases of reads, which is why long-read tools almost always use minimizers rather than full k-mer tables.
+
+**第三，统计上的不可辨识。** 就算你愿意枚举所有落点，问题仍然欠定：一条读段的来源在数学上不唯一，任何「分配」都是模型假设。这就是为什么表达定量分「家族级」与「位点级」，而后者只能靠 EM 这类概率模型给后验——它不是一个观测值。
+
+**Third, statistical non-identifiability.** Even if you enumerate every placement, the question stays under-determined: a read's origin is not unique, so any "allocation" is a model assumption. That is why expression quantification splits into family level and locus level, and why the latter can only be a posterior from something like EM — not an observation.
+
+这三种代价对应三类解法，也正是后面所有工具的分类：**换索引**（更快的比对器）、**换搜索**（用结构签名直接找元件，不必逐条比对）、**换问题**（放弃位点级只报家族级，或者用长读段让位点变得唯一）。记住这句话，后面每看一个工具，先问它换的是哪一个。
+
+These three costs map onto three families of cures, which is exactly the taxonomy of every tool that follows: **change the index** (a faster aligner), **change the search** (find elements by structural signature instead of pairwise alignment), **change the question** (give up locus resolution and report families, or use long reads so that loci become unique). Keep that sentence in mind: for each tool below, ask which one it changed.
+
+## 5. 先分类，再谈工具 / Classify first, then choose a tool
 
 所有工具都建立在同一套分类上：Wicker 等人 2007 年提出的统一分类系统[1]。它按**转座机制**分两大类，再按**结构特征**分目与超科。分类不是学术洁癖——每一种类型都有自己可被算法捕捉的「签名」，工具之间真正的差别，是它们各自认哪几种签名。
 
@@ -121,7 +199,11 @@ flowchart TD
 
 Each signature maps to a set of detectable features: LTR elements carry **two long terminal repeats plus a primer binding site (PBS), a polypurine tract (PPT) and a target site duplication (TSD)**; TIR elements carry **terminal inverted repeats plus a TSD**; Helitrons carry **a 5′ TC and a 3′ CTAG hairpin**; SINEs carry **a tRNA-derived head (A box / B box) and a 3′ tail**; LINEs carry **ORF1/ORF2 domains and a poly-A tail**. Structure-based tools look for combinations of these features; homology-based tools search a known family library instead.
 
-## 3. 三条技术路线 / Three technical routes
+## 6. 三条技术路线 / Three technical routes
+
+第 4 节说重复序列带来三种代价，三条路线就是三种「换」的具体做法：同源比对是**换掉搜索空间**（拿一条库当索引，不再逐条比对全基因组），从头发现是**换掉唯一性假设**（不问「这条读段属于哪里」，只问「哪些片段过量」），结构特征则是**换掉比对本身**（直接找签名，根本不搜索）。三者赌的东西不同，所以失败方式也不同。
+
+Section 4 named three costs; the three routes are three concrete ways of "changing" something. Homology **changes the search space** (use a library as the index instead of aligning against the whole genome), de novo **changes the uniqueness assumption** (never ask "where does this read belong", only "which fragments are over-represented"), and structure **changes the act of comparison** (look for a signature directly, without searching at all). They bet on different things, so they fail differently.
 
 ```{r}
 #| label: tbl-routes
@@ -142,21 +224,21 @@ kable(t1, row.names = FALSE, align = "l",
 
 The three routes are not exclusive; modern pipelines are hybrids. EDTA calls LTR, TIR and Helitron structurally, falls back on RepeatModeler for the rest, then filters globally [22]; Earl Grey and McClintock splice the same three kinds of evidence [44,45]. The point of knowing the routes is that when you see a "TE fraction", you should ask which route and which library produced it — they can differ by ten percentage points.
 
-## 4. 同源注释：RepeatMasker 与它的库 / Homology: RepeatMasker and its libraries
+## 7. 同源注释：RepeatMasker 与它的库 / Homology: RepeatMasker and its libraries
 
 RepeatMasker 是这个领域的地基，1996 年至今仍在维护（<https://www.repeatmasker.org>）。它的实现是「搜索 + 分类」两步：先把序列与一个重复库做局部比对，再把每个命中归到库里最相似的那条记录上。搜索引擎可以换：最早的 `cross_match` 是 Smith-Waterman，后来加入 `RMBlast`（针对重复序列调过参数的 NCBI BLAST），再后来加入 `nhmmer`，可以直接搜 Dfam 的 HMM 模型[12]。输出 `.out`（逐条比对）、`.gff`、`.masked`（软屏蔽或硬屏蔽序列）、`.tbl`（按家族汇总）。
 
 RepeatMasker is the foundation of the field and has been maintained since 1996 (<https://www.repeatmasker.org>). Its implementation is "search, then classify": align the sequence locally against a repeat library, then assign each hit to the most similar record. The search engine is swappable: the original `cross_match` is Smith-Waterman, `RMBlast` is an NCBI BLAST tuned for repeats, and `nhmmer` searches the HMM profiles of Dfam directly [12]. It writes `.out` (per-hit alignments), `.gff`, `.masked` (soft- or hard-masked sequence) and `.tbl` (per-family summary).
 
-两个库决定了它的上限。**Dfam** 用 profile HMM 描述家族，适合远缘与短片段；**Repbase** 是历史最久的收集，但近年已不再免费公开发布新版本，这直接导致老流程不可复现。所以任何认真的项目都会先建一个**物种特异库**，而那需要第 5 节的方法。
+两个库决定了它的上限。**Dfam** 用 profile HMM 描述家族，适合远缘与短片段；**Repbase** 是历史最久的收集，但近年已不再免费公开发布新版本，这直接导致老流程不可复现。所以任何认真的项目都会先建一个**物种特异库**，而那需要第 8 节的方法。
 
-Two libraries set its ceiling. **Dfam** describes families as profile HMMs, which suits diverged and short fragments; **Repbase** is the oldest collection but no longer distributes new releases freely, which is exactly why old pipelines are hard to reproduce. Any serious project therefore builds a **species-specific library** first — and that needs the methods of section 5.
+Two libraries set its ceiling. **Dfam** describes families as profile HMMs, which suits diverged and short fragments; **Repbase** is the oldest collection but no longer distributes new releases freely, which is exactly why old pipelines are hard to reproduce. Any serious project therefore builds a **species-specific library** first — and that needs the methods of section 8.
 
 RepeatMasker 还附带一个被低估的功能：**divergence landscape**。`calcDivergenceFromAlign.pl` 把每条比对换算成 Kimura 二参数距离（并做 CpG 校正），`createRepeatLandscape.pl` 再把「各家族在不同 divergence 区间的基因组占比」画成曲线。横轴是从现在往回的时间，纵轴是量——曲线的峰就是一次爆发。这张图是整个 TE 领域最有信息量的单张图，因为它同时告诉你「有什么」和「什么时候进来的」。
 
 RepeatMasker ships an underrated feature: the **divergence landscape**. `calcDivergenceFromAlign.pl` converts each alignment into a Kimura two-parameter distance (with CpG correction), and `createRepeatLandscape.pl` plots the genome fraction of each family against divergence. The x axis is time going backwards, the y axis is amount — a peak is a burst. It is the single most informative plot in the field, because it answers "what is there" and "when did it arrive" at once.
 
-## 5. 从头发现：没有库怎么办 / De novo discovery
+## 8. 从头发现：没有库怎么办 / De novo discovery
 
 当物种没有像样的库时，只能从序列自身把重复「找出来」。四种经典算法的差别在于用什么统计量定义「过量」：
 
@@ -194,7 +276,7 @@ flowchart LR
 
 The shared weakness of these pipelines is **consensus quality**: a de novo consensus can glue two adjacent elements into one (chimera), or split one family into a dozen (fragmentation). The first makes RepeatMasker report families that never existed; the second makes "number of families" meaningless. Both EDTA and Earl Grey therefore keep an interface for manual review and a curated library.
 
-## 6. 结构驱动：把签名写成算法 / Structure-driven: signatures as algorithms
+## 9. 结构驱动：把签名写成算法 / Structure-driven: signatures as algorithms
 
 结构工具不依赖库，只依赖签名，因此灵敏度高、假阳性也高。
 
@@ -217,7 +299,7 @@ Structural tools depend on signatures rather than libraries, which buys sensitiv
 
 The shared flaw of structural tools is **over-calling**: LTRharvest reports many candidates with LTRs but no internal structure, and raw TIR-Learner output far exceeds real elements. The correct use of this layer is therefore almost always "loosen the threshold to collect candidates, then tighten with LTR_retriever or manual rules". EDTA hard-codes this lesson: structural tools propose, filters decide.
 
-## 7. 分类器：这一步最不可靠 / Classifiers: the weakest link
+## 10. 分类器：这一步最不可靠 / Classifiers: the weakest link
 
 拿到共识序列之后，还要回答「它属于哪一类」。三条实现路线：
 
@@ -234,7 +316,7 @@ Once a consensus exists, the next question is "what class is it". Three implemen
 
 Classification is the weakest link for three structural reasons: the training labels come from Repbase and inherit its biases; classes are severely imbalanced (LTR and DNA transposons dominate); and many real elements are **non-autonomous**, retaining only their terminal signatures, which defeats any classifier built on internal structure. In practice: treat the class as a hint, curate family names by hand, and use structural tools separately for non-autonomous elements (MITEs, SINEs).
 
-## 8. 从基因组到转录组：表达定量 / From genome to transcriptome
+## 11. 从基因组到转录组：表达定量 / From genome to transcriptome
 
 第二大类问题不是「在哪里」，而是「表达多少」。这一层全部围绕同一个数学困难：**一条落在重复内部的读段，可能来自几千个位点**，如何分配决定了你能得到什么。
 
@@ -261,7 +343,7 @@ The second big question is not "where" but "how much". This layer is entirely ab
 
 There is an **identifiability boundary** worth stating plainly: family-level (subfamily-level) expression is identifiable, because all copies of a family share sequence and the reads simply sum; locus-level expression is **not identifiable** unless each locus carries a unique anchor or heterozygous marker. The locus-level numbers from SQuIRE and Telescope are posterior allocations under model assumptions, not observations. Treating them as "the expression of that copy" is the most common misuse in this layer.
 
-## 9. 插入多态：个体之间差在哪 / Insertion polymorphism
+## 12. 插入多态：个体之间差在哪 / Insertion polymorphism
 
 第三个问题：这个 TE 在某个体里到底插没插进去。短读段只能靠**间接信号**：一头锚在唯一序列、另一头落在 TE 里的不一致读段对（discordant pair），或者跨越断点的分裂读段（split read）。
 
@@ -284,7 +366,7 @@ The third question: is this TE inserted in this individual or not. Short reads c
 
 **Why long reads change the game**: short-read insertion detection is statistical inference (I saw indirect evidence, so I infer an insertion), whereas long reads are direct observation (I saw the insertion). The price is coverage and cost, plus the error rate of long reads in high-repeat regions.
 
-## 10. 卫星与串联重复：另一类问题 / Satellites and tandem repeats
+## 13. 卫星与串联重复：另一类问题 / Satellites and tandem repeats
 
 卫星 DNA 与 TE 的数学结构不同：它不是「同一段序列散落在多处」，而是「同一段序列首尾相接重复很多次」。所以比对类工具在这里基本失效，需要的是**周期性检测**与**同一性轨迹**。
 
@@ -299,7 +381,7 @@ Satellite DNA differs mathematically from TEs: it is not "the same sequence scat
 - **ExpansionHunter**（C++）：把短串联重复（STR）建成图，再用读段在图上游走，输出各等位基因的长度[49]。\
     *Builds a graph of the short tandem repeat and walks reads through it to genotype allele lengths [49].*
 
-## 11. 谁用什么语言写 / Who writes these tools in what
+## 14. 谁用什么语言写 / Who writes these tools in what
 
 把目录按语言统计一遍，会看到一条非常清晰的时代曲线。
 
@@ -369,7 +451,7 @@ ggplot(grid, aes(year, acc, colour = category)) +
   labs(x = "年份 / year", y = "累计工具数 / cumulative tools")
 ```
 
-## 12. 工具的方法学地图 / A methodological map
+## 15. 工具的方法学地图 / A methodological map
 
 把 41 个工具按「方法族 × 子领域」交叉，可以看清哪一格是空的。
 
@@ -417,7 +499,92 @@ ggplot(tl, aes(category, fill = input)) +
   labs(x = NULL, y = "工具数 / tools")
 ```
 
-## 13. 怎么选 / How to choose
+## 16. 如果从三代测序数据重做一个工具 / If you were to build one from long reads
+
+下面是一个设计草案，我没有实现它；但每一步都能在现有工具里找到先例，把它串起来恰好说明这个领域为什么有 `r n_tool` 个工具而不是一个。
+
+Here is a design sketch that I have not implemented; every step has precedent in existing tools, and stringing them together is exactly why this field has `r n_tool` tools instead of one.
+
+设定：输入是 PacBio HiFi 或 ONT 的长读段（10–100 kb），**不做组装**，直接从读段给出「这个样本里有哪些非参考的 TE 插入」。为什么值得重做：短读段的插入检测本质是间接推断，而长读段可以一条读段跨过整个插入，把推断变成观测。现有 TLDR 已经证明这条路可行，但工具仍然集中在「二倍体、人类、Alu/L1/SVA」这一格[43]。
+
+Setup: input is PacBio HiFi or ONT long reads (10–100 kb), **without assembly**, and the output is "which non-reference TE insertions this sample carries". Why rebuild: short-read insertion calling is indirect inference, while one long read can span the whole insertion and turn inference into observation. TLDR already shows the route works, but existing tools concentrate on one cell — diploid human, Alu/L1/SVA [43].
+
+先定输出契约，再写代码。这一条比任何算法都重要：输出的每一行必须能回答「哪条染色体、什么位置、哪个家族、哪条链、TSD 是什么、几条读段支持、基因型是什么」。把它定成 BED9+ 的一张表，后面每一步都为它服务。
+
+Define the output contract before writing code. This matters more than any algorithm: every row must answer "which chromosome, what position, which family, which strand, what TSD, how many reads support it, what genotype". Fix it as a BED9+ table and let every step serve it.
+
+```{mermaid}
+flowchart TD
+    R["长读段 / long reads"] --> A["比对到软屏蔽参考<br/>minimap2 -x map-hifi"]
+    A --> S["拆分比对 + 软剪切<br/>得到断点候选"]
+    S --> C["两侧不唯一时<br/>用 TSD 与覆盖度兜底"]
+    C --> L["局部组装<br/>5–20 条读段的一致性"]
+    S --> L
+    L --> T["比对 TE 库<br/>家族、方向、截断"]
+    T --> G["基因型与单倍型<br/>ref / ins 读段计数"]
+    G --> OUT["BED9+ 输出"]
+```
+
+**1）参考侧的准备。** 参考基因组用**软屏蔽**版本（RepeatMasker 的 `-xsmall`，重复区小写），让比对器知道哪些区域不该给高 MAPQ；同时准备一份 TE 家族库（每条亚家族一条共识，EDTA 或 Dfam 都行）。这一步决定了「插入能被认出多少」——库外的家族只能标 unknown。
+
+**1) Prepare the reference side.** Use a **soft-masked** reference (RepeatMasker `-xsmall`, repeats in lower case) so the aligner knows where not to award high MAPQ, and keep a TE family library (one consensus per subfamily; EDTA or Dfam both work). This step sets the ceiling on how many insertions can be named — families outside the library can only be "unknown".
+
+**2）比对与候选。** 长读段比对器（minimap2 的 `map-hifi` / `map-ont`）给出两类信号：**拆分比对**（一条读段被切成两段，分别落在同一位置的两侧，中间那段没比上）与**软剪切**（读段两端没比上的部分）。前者是「这里有插入」的直接证据，后者就是插入序列本身。还有一条弱信号：跨越断点的读段堆叠（coverage 的骤降或骤升），在两侧都不唯一时用它兜底。
+
+**2) Align and collect candidates.** A long-read aligner (minimap2 `map-hifi` / `map-ont`) emits two signals: **split alignments** (one read cut into two pieces landing on either side of the same locus, with the middle unmapped) and **soft clips** (unmapped read ends). The first is direct evidence that an insertion exists, the second is the inserted sequence itself. A weaker third signal — coverage stacking across the breakpoint — is the fallback when neither flank is unique.
+
+**3）局部组装。** 候选断点 ±100 bp 内通常有 5–20 条支持读段。把它们截出来做一次小规模一致性（`spoa` 或 `abPOA` 这类 partial-order alignment），得到的序列同时给出精确断点、插入序列与两侧的 TSD。这一步把「有插入」变成「插入是什么」，是精度的主要来源。
+
+**3) Local assembly.** Around a candidate breakpoint (±100 bp) there are usually 5–20 supporting reads. Cut them out and build a small consensus (`spoa` or `abPOA`, that is, partial-order alignment); the result gives the exact breakpoint, the inserted sequence and the flanking TSD. This step turns "there is an insertion" into "here is the insertion" and is where most of the accuracy comes from.
+
+**4）分类与方向。** 把组装出的插入序列比对回 TE 库（`asm5` 预设，或对 LTR 用 HMMER 找结构域），得到家族、亚家族、插入方向、5′/3′ 截断程度。**截断与方向必须输出**：一个 5′ 截断的 L1 和一个完整的 L1 在生物学上是两件事。
+
+**4) Classify and orient.** Align the assembled insertion back to the TE library (`asm5` preset, or an HMMER domain search for LTRs) to get family, subfamily, orientation and 5′/3′ truncation. **Truncation and orientation must be emitted**: a 5′-truncated L1 and a full-length one are different biological objects.
+
+**5）基因型与单倍型。** 数「带插入的读段」与「只覆盖参考等位基因的读段」，比值就是等位分数；再用读段上的杂合位点做定相（whatshap），把插入分到父源或母源。这一步长读段优势最大：短读段只能给「有 / 无」，长读段能给「哪一条染色体上有」。
+
+**5) Genotype and phase.** Count insertion-carrying reads against reads covering only the reference allele; the ratio is the allele fraction. Then phase with heterozygous sites on the same reads (whatshap) to assign each insertion to the paternal or maternal haplotype. This is where long reads shine: short reads give presence/absence, long reads give "on which chromosome".
+
+**6）两个方向都要报。** 同一套机器反过来跑：参考基因组里有一个 TE、样本里没有，就是一次缺失（TE deletion）。只报插入的工具会漏掉一半的结构变异。
+
+**6) Report both directions.** Run the same machinery in reverse: a TE present in the reference but absent from the sample is a deletion. Tools that report only insertions miss half of the structural variation.
+
+工程上还有几个决定成败的选择：
+
+A few engineering choices decide success or failure:
+
+```{r}
+#| label: tbl-design
+#| echo: false
+t3 <- data.frame(
+  choice = c("索引 / index", "候选 / candidates", "精修 / refinement",
+             "分类 / classification", "输出 / output", "并行 / parallelism"),
+  a = c("全 k-mer 哈希", "只用拆分比对", "不做", "比对库",
+        "只报插入", "按染色体"),
+  b = c("minimizer 采样", "拆分 + 软剪切 + 覆盖度", "局部一致性组装",
+        "HMM 结构域", "插入 + 缺失 + 未定家族", "按读段块 streaming"),
+  cost = c("内存省 10×、灵敏度略降", "召回升、假阳性升", "时间 ×3、精度大幅升",
+           "慢；对远端 LTR 更好", "下游好用、实现更严", "省内存、需确定性合并"),
+  check.names = FALSE
+)
+names(t3) <- c("决策 / choice", "选项 A / option A", "选项 B / option B", "代价 / cost")
+kable(t3, row.names = FALSE, align = "l",
+      caption = "写这个工具时要先做的六个选择 | six choices to make before coding")
+```
+
+评价只有一条路：**模拟**。用已知的参考基因组，按真实分布（家族、长度、divergence、TSD、嵌套）注入插入，再按真实错误模型生成长读段，才有 ground truth 可以算召回与精确；然后用 GIAB 的 HG002 与 MELT 的 CEU 三人组做真实数据的外部校验。指标至少四个：断点 ±100 bp 的召回与精确、家族级准确率、基因型一致性、每小时处理的碱基数与峰值内存。消融必须做：去掉局部组装、去掉 TSD 检查、HiFi 换 ONT，各掉多少。
+
+There is only one way to evaluate: **simulation**. Inject insertions into a known reference following realistic distributions (family, length, divergence, TSD, nesting), simulate long reads with a real error model, and you have ground truth for recall and precision; then validate on real data with GIAB's HG002 and MELT's CEU trio. Report at least four numbers: recall and precision at ±100 bp, family-level accuracy, genotype concordance, and bases per hour with peak RAM. Ablations are mandatory: drop local assembly, drop the TSD check, swap HiFi for ONT, and measure what each costs.
+
+最后是失败模式，写工具的人必须提前想清楚：着丝粒与卫星阵列里的插入（两侧都不唯一）、嵌套 TE（一个元件插在另一个里）、L1 的 3′ 转导（插入末端带着一段独特的宿主序列，容易被误判成新家族）、参考偏好（带参考等位基因的读段比对得更好，导致缺失被低估）、以及库里没有的家族。
+
+Finally the failure modes, which the author must think through in advance: insertions inside centromeric satellites (neither flank unique), nested TEs (an element inside another), L1 3′ transduction (the insertion ends in a unique stretch of host sequence and is easily mistaken for a new family), reference bias (reads carrying the reference allele align better, so deletions are underestimated), and families absent from the library.
+
+七步做完，正好对应七个可以单独发表的贡献点；也正好解释了为什么这个领域有 `r n_tool` 个工具：每一格都有人做，但很少有人把七格一起做对。
+
+Those seven steps are also seven things one could publish separately, and they explain why the field has `r n_tool` tools: every cell has someone working in it, but few people get all seven right at once.
+
+## 17. 怎么选 / How to choose
 
 ```{mermaid}
 flowchart TD
@@ -437,7 +604,7 @@ flowchart TD
 
 Four lessons follow from the structure above. **First, the library sets the ceiling.** However good RepeatMasker is, it can only find what the library contains; when no species library exists, time spent on EDTA or RepeatModeler2 buys far more than tuning RepeatMasker. **Second, run structural tools loose, then filter hard.** Trusting LTRharvest's raw output yields many false positives; the right use is a permissive threshold followed by LTR_retriever or manual rules. **Third, only trust family-level expression.** Locus-level numbers are posterior allocations under weak identifiability — good for trends, not for publishing as quantities. **Fourth, long reads are not "more accurate short reads", they change the question.** Inference becomes observation, and assembly quality becomes the only critical variable.
 
-## 14. 常见的坑 / Pitfalls
+## 18. 常见的坑 / Pitfalls
 
 ```{r}
 #| label: tbl-pitfalls
@@ -456,7 +623,7 @@ kable(t2, row.names = FALSE, align = "l",
       caption = "八个最常见的坑 | the eight most common traps")
 ```
 
-## 15. 目录本身作为数据集 / The catalogue as a data set
+## 19. 目录本身作为数据集 / The catalogue as a data set
 
 ```{r}
 #| label: tbl-genome
@@ -490,7 +657,7 @@ kable(mk(g2), row.names = FALSE, align = "lllll",
 
 The catalogue is of course incomplete — every subfield has another dozen smaller tools. It is more like **a map for orientation**: when a new TE tool appears, asking which cell it lands in (what input, what resolution, which method family) is faster than reading the abstract.
 
-## 16. 复现 / Reproducing
+## 20. 复现 / Reproducing
 
 所有图都由两个 chunk 生成：`catalog.csv` 是唯一的数据源（`r n_tool` 行，包含工具名、年份、语言、子领域、输入、分辨率、方法、引用），图与表都是它的投影。想加一个工具，只需在 CSV 里加一行，所有计数与图会自动更新。
 
